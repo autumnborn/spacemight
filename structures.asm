@@ -1,16 +1,15 @@
-struct PLAYER {
+struct PLAYER
 	speed db ?
 	weapon db ?
 	health dw ?
-}
+ends
 struct ENEMY
-{
 	type db ?
 	speed db ?
 	weapon db ?
 	health dw ?
 	timer dd ?
-}
+ends
 
 ; Array of structure macroses
 macro DIM var, size, type
@@ -27,6 +26,7 @@ macro DIM var, size, type
 macro GetDimIndexAddr var, type, index
 {
   mov eax, sizeof.#type
+  ; mov ecx, index
   imul eax, index
   lea eax, [var+eax]
 }
@@ -34,6 +34,7 @@ macro GetDimIndexAddr var, type, index
 macro GetDimFieldAddr var, type, index, field
 {
   mov eax, sizeof.#type
+  ; mov ecx, index
   imul eax, index
   lea eax, [var+type#.#field+eax]
 } 
