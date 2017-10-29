@@ -34,6 +34,7 @@ section '.code' code readable executable
     cmp eax,0
     je exit
     stdcall plr_draw, player
+    stdcall plr_ctrl, player
     invoke TranslateMessage, msg
     invoke DispatchMessage, msg
     jmp .msg_loop

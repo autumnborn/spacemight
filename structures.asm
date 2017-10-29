@@ -9,6 +9,7 @@ struct PLAYER
 	weapon db ?
 	health dw ?
 	p POINT
+	lrud db ?
 ends
 
 struct ENEMY
