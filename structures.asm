@@ -1,14 +1,23 @@
+;
+struct BITMAPINFO
+  bmiHeader BITMAPINFOHEADER
+  bmiColors dd 2 dup(0) 
+ends
+
 struct PLAYER
 	speed db ?
 	weapon db ?
 	health dw ?
+	p POINT
 ends
+
 struct ENEMY
 	type db ?
 	speed db ?
 	weapon db ?
 	health dw ?
 	timer dd ?
+	p POINT
 ends
 
 ; Array of structure macroses
