@@ -23,12 +23,17 @@ section '.data' data readable writeable
 section '.code' code readable executable
   start:
   	include 'form.asm'
+  
+  	mov [player.p.x], 100
+  	mov [player.p.y], 100
+  	
+
 
   .msg_loop:
     invoke GetMessage, msg, NULL, 0, 0
     cmp eax,0
     je exit
-
+    stdcall plr_draw, player
     invoke TranslateMessage, msg
     invoke DispatchMessage, msg
     jmp .msg_loop
@@ -38,6 +43,7 @@ section '.code' code readable executable
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
+  	include 'playermeth.asm'
 
 section '.idata' import data readable
 	include 'imports.inc'
