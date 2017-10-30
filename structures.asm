@@ -4,12 +4,22 @@ struct BITMAPINFO
   bmiColors dd 2 dup(0) 
 ends
 
+struct ACTIONFLAGS
+	left db ?
+	right db ?
+	up db ?
+	down db ?
+	fire db ?
+ends
+
 struct PLAYER
 	speed db ?
 	weapon db ?
 	health dw ?
+	timer dd ?
 	p POINT
-	lrud db ?
+	size POINT
+	act ACTIONFLAGS
 ends
 
 struct ENEMY
@@ -19,6 +29,7 @@ struct ENEMY
 	health dw ?
 	timer dd ?
 	p POINT
+	size POINT
 ends
 
 ; Array of structure macroses
