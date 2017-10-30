@@ -17,6 +17,17 @@ proc plr_wakeup uses ebx, pPlr:DWORD
 	ret
 endp
 
+proc plr_destructor uses ebx, pPlr:DWORD
+	mov ebx, [pPlr]
+	mov eax, [ebx+PLAYER.timer]
+	test eax, eax
+	jz @F
+	invoke timeKillEvent, eax
+	mov [ebx+PLAYER.timer], 0
+  @@:
+  	ret
+endp
+
 proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 
@@ -40,7 +51,6 @@ proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 
 	ret
 endp
-
 
 
 

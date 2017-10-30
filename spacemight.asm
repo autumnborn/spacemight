@@ -31,7 +31,6 @@ section '.code' code readable executable
   	mov [player.size.y], 100
   	stdcall plr_wakeup, player
 
-
   .msg_loop:
     invoke GetMessage, msg, NULL, 0, 0
     cmp eax,0
@@ -46,6 +45,7 @@ section '.code' code readable executable
 
 
   exit:
+  	stdcall plr_destructor, player
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
