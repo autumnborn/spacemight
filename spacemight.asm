@@ -3,7 +3,8 @@ entry start
 
 include 'win32a.inc'
 include 'macro\if.inc'
-include 'structures.asm'
+include 'equates.inc'
+include 'structures.inc'
 
 section '.data' data readable writeable
 	wClass db "SpaceMightWindow", 0
@@ -19,8 +20,6 @@ section '.data' data readable writeable
 	paint PAINTSTRUCT
 	player PLAYER
 	errmsg db "Error", 0
-	DIB_RGB_COLORS = 0
-	TIME_PERIODIC = 1
 
 section '.code' code readable executable
   start:

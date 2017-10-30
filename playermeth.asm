@@ -12,12 +12,12 @@ endp
 
 proc plr_wakeup uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
-	invoke timeSetEvent, 30, 10, plr_TimeProc, ebx, TIME_PERIODIC 
+	invoke timeSetEvent, PLR_TIMER_DELAY, PLR_TIMER_RESOL, plr_TimeProc, ebx, TIME_PERIODIC 
 	mov [ebx+PLAYER.timer], eax
 	ret
 endp
 
-proc plr_TimeProc, uID, uMsg, dwUser, dw1, dw2
+proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 
 	.if [ebx+PLAYER.act.left]<>0
