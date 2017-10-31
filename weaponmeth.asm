@@ -7,7 +7,7 @@ proc wpn_init uses ebx ecx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
 	mov [ebx+WEAPON.type], cl
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl
-	
+
 	.if [type]=W_SIMPLE
 		mov [ebx+WEAPON.size.x], 5
 		mov [ebx+WEAPON.size.y], 10
@@ -19,9 +19,20 @@ proc wpn_init uses ebx ecx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
 	ret
 endp
 
-proc wpn_draw uses ebx ecx, pWpn:DWORD
+proc wpn_draw uses ebx ecx edx, pWpn:DWORD
+	invoke BeginPaint, [hwnd], paint
+	
 	mov ebx, [pWpn]
-	invoke SetPixel, [hdc], [ebx+WEAPON.p.x], [ebx+WEAPON.p.y], 0FF0000h
+	mov ecx, [ebx+WEAPON.p.x]
+	mov edx, [ebx+WEAPON.p.y]
+	sub ecx, [ebx+WEAPON.size.x]
+	sub edx, [ebx+WEAPON.size.y]
+	push ebx ecx edx
+	invoke SetPixel, [hdc], [ebx+WEAPON.p.x], [ebx+WEAPON.p.y], 0
+	pop edx ecx ebx 
+	invoke SetPixel, [hdc], [ebx+WEAPON.p.x], edx, 0FF0000h
+	
+	invoke EndPaint, [hwnd], paint
 	ret
 endp
 

@@ -13,10 +13,7 @@ section '.data' data readable writeable
 	hwnd dd ?
 	msg MSG
 	hdc dd ?
-	dib dd ?
-	memDC dd ?
-	pvBits dd ?
-	bmInfo BITMAPINFO <sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>
+	screen SCRINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paint PAINTSTRUCT
 	player PLAYER
 	errmsg db "Error", 0
@@ -36,8 +33,7 @@ section '.code' code readable executable
     invoke GetMessage, msg, NULL, 0, 0
     cmp eax,0
     je exit
-    ; stdcall plr_draw, player
-    ; stdcall plr_ctrl, player
+
     stdcall _control
 
     invoke TranslateMessage, msg

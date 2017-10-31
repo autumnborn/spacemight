@@ -3,16 +3,18 @@ proc plr_init uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov [ebx+PLAYER.size.x], 32
 	mov [ebx+PLAYER.size.y], 32
-	;mov [ebx+PLAYER.weapon], W_SIMPLE
-	;mov [ebx+PLAYER.wpn], W_SIMPLE
 	lea eax, [ebx+PLAYER.wpn]
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
 	ret
 endp
 
 proc plr_draw uses ebx, pPlr:DWORD
+	invoke BeginPaint, [hwnd], paint
+	
 	mov ebx, [pPlr]
 	invoke SetPixel, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], 0FFFFFFh
+
+	invoke EndPaint, [hwnd], paint
 	ret
 endp
 

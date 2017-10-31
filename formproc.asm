@@ -30,13 +30,13 @@
   proc _bgPaint
    
     invoke CreateCompatibleDC, [hdc]
-    mov [memDC], eax
-    invoke CreateDIBSection, [hdc], bmInfo, DIB_RGB_COLORS, pvBits, NULL, NULL
-    mov [dib], eax
-    invoke SelectObject, [memDC], eax
-    invoke BitBlt, [hdc], 0, 0, 640, 480, [memDC], 0, 0, SRCCOPY
-    invoke DeleteObject, [dib]
-    invoke ReleaseDC, NULL, [dib]
+    mov [screen.memDC], eax
+    invoke CreateDIBSection, [hdc], screen.bmInfo, DIB_RGB_COLORS, screen.pvBits, NULL, NULL
+    mov [screen.dib], eax
+    invoke SelectObject, [screen.memDC], eax
+    invoke BitBlt, [hdc], 0, 0, 640, 480, [screen.memDC], 0, 0, SRCCOPY
+    invoke DeleteObject, [screen.dib]
+    invoke ReleaseDC, [hwnd], [screen.dib]
     
     ret
   endp

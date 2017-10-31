@@ -1,7 +1,14 @@
 ;
 struct BITMAPINFO
-  bmiHeader BITMAPINFOHEADER
-  bmiColors dd 2 dup(0) 
+	bmiHeader BITMAPINFOHEADER
+	bmiColors dd 2 dup(0) 
+ends
+
+struct SCRINFO
+	dib dd ?
+	memDC dd ?
+	pvBits dd ?
+	bmInfo BITMAPINFO
 ends
 
 struct ACTIONFLAGS

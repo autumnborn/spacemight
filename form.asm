@@ -21,5 +21,6 @@
     jmp exit
   
   @@:
+    mov [hwnd], eax
     invoke GetWindowDC, eax
     mov [hdc], eax
