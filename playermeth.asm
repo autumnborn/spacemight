@@ -1,6 +1,12 @@
 ; player unit methods
 proc plr_init uses ebx, pPlr:DWORD
-
+	mov ebx, [pPlr]
+	mov [ebx+PLAYER.size.x], 32
+	mov [ebx+PLAYER.size.y], 32
+	;mov [ebx+PLAYER.weapon], W_SIMPLE
+	;mov [ebx+PLAYER.wpn], W_SIMPLE
+	lea eax, [ebx+PLAYER.wpn]
+	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
 	ret
 endp
 
@@ -46,6 +52,12 @@ proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	.if [ebx+PLAYER.act.down]<>0
 		inc [ebx+PLAYER.p.y] 
 	.endif
+
+	.if [ebx+PLAYER.act.fire]<>0
+		lea eax, [ebx+PLAYER.wpn]
+		stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
+	.endif
+
 
 	stdcall plr_draw, ebx
 

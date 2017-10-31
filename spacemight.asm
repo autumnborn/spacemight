@@ -16,7 +16,7 @@ section '.data' data readable writeable
 	dib dd ?
 	memDC dd ?
 	pvBits dd ?
-	bmInfo BITMAPINFO <sizeof.BITMAPINFOHEADER, 640, 480, 1, 32>
+	bmInfo BITMAPINFO <sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>
 	paint PAINTSTRUCT
 	player PLAYER
 	errmsg db "Error", 0
@@ -29,6 +29,7 @@ section '.code' code readable executable
   	mov [player.p.y], 100
   	mov [player.size.x], 100
   	mov [player.size.y], 100
+  	stdcall plr_init, player
   	stdcall plr_wakeup, player
 
   .msg_loop:
@@ -50,6 +51,7 @@ section '.code' code readable executable
 
   	include 'formproc.asm'
   	include 'playermeth.asm'
+  	include 'weaponmeth.asm'
 
   	proc _control uses ebx ecx edx 
 
@@ -95,6 +97,17 @@ section '.code' code readable executable
 	  .endif
 	  .if al <> [player.act.down]
 	  	not [player.act.down]
+	  .endif
+	  	  
+	  push ebx ecx edx
+	  invoke GetAsyncKeyState, VK_SPACE
+	  pop edx ecx ebx 
+	  and eax, 8000h
+	  .if eax<>0
+	  	mov al, -1
+	  .endif
+	  .if al <> [player.act.fire]
+	  	not [player.act.fire]
 	  .endif
 	  
 

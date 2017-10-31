@@ -12,6 +12,16 @@ struct ACTIONFLAGS
 	fire db ?
 ends
 
+struct WEAPON
+	parent dd ?
+	type db ?	
+	damage dw ?
+	direct db ?
+	timer dd ?
+	p POINT
+	size POINT
+ends
+
 struct PLAYER
 	speed db ?
 	weapon db ?
@@ -20,6 +30,7 @@ struct PLAYER
 	p POINT
 	size POINT
 	act ACTIONFLAGS
+	wpn WEAPON
 ends
 
 struct ENEMY
@@ -30,6 +41,7 @@ struct ENEMY
 	timer dd ?
 	p POINT
 	size POINT
+	wpn WEAPON
 ends
 
 ; Array of structure macroses
