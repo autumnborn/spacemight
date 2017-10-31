@@ -54,8 +54,10 @@ proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	.endif
 
 	.if [ebx+PLAYER.act.fire]<>0
-		lea eax, [ebx+PLAYER.wpn]
-		stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
+		.if [ebx+PLAYER.wpn.timer]=0 
+			lea eax, [ebx+PLAYER.wpn]
+			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
+		.endif
 	.endif
 
 
