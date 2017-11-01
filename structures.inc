@@ -1,10 +1,11 @@
 ;
+; n.b. bitm RGB(n)
 struct BITMAPINFO
 	bmiHeader BITMAPINFOHEADER
 	bmiColors dd 2 dup(0) 
 ends
 
-struct SCRINFO
+struct DIBINFO
 	dib dd ?
 	memDC dd ?
 	pvBits dd ?
@@ -38,6 +39,7 @@ struct PLAYER
 	size POINT
 	act ACTIONFLAGS
 	wpn WEAPON
+	img DIBINFO
 ends
 
 struct ENEMY
@@ -78,3 +80,26 @@ macro GetDimFieldAddr var, type, index, field
   imul eax, index
   lea eax, [var+type#.#field+eax]
 } 
+
+macro IMG_MEMCOPY pDest, pSrc, bCount
+{
+	local beginl
+    
+    mov edi, pDest
+    mov esi, pSrc
+ 	
+  beginl:
+    lodsd
+    test al, al
+  	jnz @F
+  	add edi, 4
+  	jmp chk
+  @@:	
+    ror eax, 8 ;argb to rgba
+    stosd
+  chk:  
+    dec bCount
+    test bCount, bCount
+    jnz beginl
+  	  
+}

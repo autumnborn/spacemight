@@ -3,17 +3,44 @@ proc plr_init uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov [ebx+PLAYER.size.x], 32
 	mov [ebx+PLAYER.size.y], 32
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biPlanes], 1
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biBitCount], 32
+
+	mov eax, [ebx+PLAYER.size.x]
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biWidth], eax
+	mov eax, [ebx+PLAYER.size.y]
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biHeight], eax
+	
 	lea eax, [ebx+PLAYER.wpn]
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
 	ret
 endp
 
-proc plr_draw uses ebx, pPlr:DWORD
+proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
-	
 	mov ebx, [pPlr]
-	invoke SetPixel, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], 0FFFFFFh
+	
+	invoke CreateCompatibleDC, [hdc]
+    mov [ebx+PLAYER.img.memDC], eax
+    lea ecx, [ebx+PLAYER.img.bmInfo]
+    lea edx, [ebx+PLAYER.img.pvBits]
+    invoke CreateDIBSection, [hdc], ecx, DIB_RGB_COLORS, edx, NULL, NULL
+    mov [ebx+PLAYER.img.dib], eax
+    
+    invoke SelectObject, [ebx+PLAYER.img.memDC], eax
 
+    mov ecx, [ebx+PLAYER.size.x]
+    imul ecx, [ebx+PLAYER.size.x]
+    ; imul ecx, 4
+    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
+
+    
+    mov ecx, [ebx+PLAYER.size.x]
+    mov edx, [ebx+PLAYER.size.y]
+	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
+  	invoke DeleteObject, [ebx+PLAYER.img.dib]
+    invoke ReleaseDC, [hwnd], [ebx+PLAYER.img.dib]
 	invoke EndPaint, [hwnd], paint
 	ret
 endp

@@ -13,19 +13,26 @@ section '.data' data readable writeable
 	hwnd dd ?
 	msg MSG
 	hdc dd ?
-	screen SCRINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
+	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paint PAINTSTRUCT
 	player PLAYER
 	errmsg db "Error", 0
+	image file "img\sm_plr_32x32x32_raw.bmp"
 
 section '.code' code readable executable
   start:
   	include 'form.asm'
-  
+    invoke CreateCompatibleDC, [hdc]
+    mov [screen.memDC], eax
+    invoke CreateDIBSection, [hdc], screen.bmInfo, DIB_RGB_COLORS, screen.pvBits, NULL, NULL
+    mov [screen.dib], eax
+    invoke SelectObject, [screen.memDC], eax
+
   	mov [player.p.x], 100
   	mov [player.p.y], 100
   	mov [player.size.x], 100
   	mov [player.size.y], 100
+
   	stdcall plr_init, player
   	stdcall plr_wakeup, player
 
@@ -43,6 +50,8 @@ section '.code' code readable executable
 
   exit:
   	stdcall plr_destructor, player
+  	invoke DeleteObject, [screen.dib]
+    invoke ReleaseDC, [hwnd], [screen.dib]
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
