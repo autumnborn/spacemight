@@ -22,16 +22,12 @@ section '.data' data readable writeable
 section '.code' code readable executable
   start:
   	include 'form.asm'
-    invoke CreateCompatibleDC, [hdc]
-    mov [screen.memDC], eax
-    invoke CreateDIBSection, [hdc], screen.bmInfo, DIB_RGB_COLORS, screen.pvBits, NULL, NULL
+    stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
-    invoke SelectObject, [screen.memDC], eax
 
-  	mov [player.p.x], 100
-  	mov [player.p.y], 100
-  	mov [player.size.x], 100
-  	mov [player.size.y], 100
+  	mov [player.p.x], 304
+  	mov [player.p.y], 224
+ 
 
   	stdcall plr_init, player
   	stdcall plr_wakeup, player
@@ -50,15 +46,14 @@ section '.code' code readable executable
 
   exit:
   	stdcall plr_destructor, player
-  	invoke DeleteObject, [screen.dib]
-    invoke ReleaseDC, [hwnd], [screen.dib]
+   	stdcall _deleteDIB, [screen.dib]
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
   	include 'playermeth.asm'
   	include 'weaponmeth.asm'
 
-  	proc _control uses ebx ecx edx 
+  proc _control uses ebx ecx edx 
 
 	  push ebx ecx edx
 	  invoke GetAsyncKeyState, VK_LEFT
@@ -115,10 +110,34 @@ section '.code' code readable executable
 	  	not [player.act.fire]
 	  .endif
 	  
-
 	@@:
 	  ret
-  	endp
+  endp
+
+ 
+  ; bmInfo - ptr to BITMAPINFO
+  ; pvBits - ptr to var for ptr to bitmap bits
+  ; memDC  - ptr to var for handle to a memory device context
+  ; return dib-handle, pvBits ptr to bitmap bits
+  proc _createDIB uses ebx, bmInfo:DWORD, pvBits:DWORD, memDC:DWORD
+    invoke CreateCompatibleDC, [hdc]
+    mov ebx, [memDC]
+    mov [ebx], eax
+    push ebx
+    invoke CreateDIBSection, [hdc], [bmInfo], DIB_RGB_COLORS, [pvBits], NULL, NULL    
+    pop ebx
+    push eax
+    invoke SelectObject, [ebx], eax
+    pop eax
+    ret
+  endp
+
+  ; dib - dib handle returned _createDIB
+  proc _deleteDIB, dib:DWORD
+  	invoke DeleteObject, [dib]
+    invoke ReleaseDC, [hwnd], [dib]
+  	ret
+  endp 
 
 section '.idata' import data readable
 	include 'imports.inc'

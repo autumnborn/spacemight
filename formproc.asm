@@ -1,20 +1,20 @@
 
-  proc WindowProc hwnd,wmsg,wparam,lparam
+  proc WindowProc hWnd, wMsg, wParam, lParam
       push ebx esi edi
-      cmp [wmsg],WM_DESTROY
+      cmp [wMsg],WM_DESTROY
       je .wmdestroy
 
-      cmp [wmsg], WM_PAINT
+      cmp [wMsg], WM_PAINT
       je .wmpaint
 
     .defwndproc:
-      invoke DefWindowProc,[hwnd],[wmsg],[wparam],[lparam]
+      invoke DefWindowProc,[hWnd],[wMsg],[wParam],[lParam]
       jmp .finish
 
     .wmpaint:
-       invoke BeginPaint, [hwnd], paint 
+       invoke BeginPaint, [hWnd], paint 
        stdcall _bgPaint
-       invoke EndPaint, [hwnd], paint
+       invoke EndPaint, [hWnd], paint
        xor eax, eax
        jmp .finish
 

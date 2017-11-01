@@ -17,6 +17,7 @@ proc plr_init uses ebx, pPlr:DWORD
 	ret
 endp
 
+
 proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
