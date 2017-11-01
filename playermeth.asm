@@ -22,26 +22,23 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
 	
-	invoke CreateCompatibleDC, [hdc]
-    mov [ebx+PLAYER.img.memDC], eax
-    lea ecx, [ebx+PLAYER.img.bmInfo]
-    lea edx, [ebx+PLAYER.img.pvBits]
-    invoke CreateDIBSection, [hdc], ecx, DIB_RGB_COLORS, edx, NULL, NULL
-    mov [ebx+PLAYER.img.dib], eax
-    
-    invoke SelectObject, [ebx+PLAYER.img.memDC], eax
-
+	lea eax, [ebx+PLAYER.img.bmInfo]
+	lea ecx, [ebx+PLAYER.img.pvBits]
+	lea edx, [ebx+PLAYER.img.memDC]
+	stdcall _createDIB, eax, ecx, edx
+	mov [ebx+PLAYER.img.dib], eax
+ 
     mov ecx, [ebx+PLAYER.size.x]
     imul ecx, [ebx+PLAYER.size.x]
-    ; imul ecx, 4
     IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
-
     
     mov ecx, [ebx+PLAYER.size.x]
     mov edx, [ebx+PLAYER.size.y]
 	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
-  	invoke DeleteObject, [ebx+PLAYER.img.dib]
-    invoke ReleaseDC, [hwnd], [ebx+PLAYER.img.dib]
+
+	lea eax, [ebx+PLAYER.img.dib]
+	stdcall _deleteDIB, eax
+
 	invoke EndPaint, [hwnd], paint
 	ret
 endp
@@ -89,7 +86,6 @@ proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
 		.endif
 	.endif
-
 
 	stdcall plr_draw, ebx
 

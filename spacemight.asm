@@ -118,7 +118,7 @@ section '.code' code readable executable
   ; bmInfo - ptr to BITMAPINFO
   ; pvBits - ptr to var for ptr to bitmap bits
   ; memDC  - ptr to var for handle to a memory device context
-  ; return dib-handle, pvBits ptr to bitmap bits
+  ; return dib-handle, pvBits - ptr to bitmap bits, memDC - handle to a memory device context
   proc _createDIB uses ebx, bmInfo:DWORD, pvBits:DWORD, memDC:DWORD
     invoke CreateCompatibleDC, [hdc]
     mov ebx, [memDC]
