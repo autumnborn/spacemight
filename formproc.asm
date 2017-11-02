@@ -31,3 +31,30 @@
     invoke BitBlt, [hdc], 0, 0, SCR_WIDTH, SCR_HEIGHT, [screen.memDC], 0, 0, SRCCOPY
     ret
   endp
+
+  proc _configWnd
+    locals
+      p POINT 0,0
+      r RECT 0,0,0,0
+    endl
+
+    lea eax, [p]
+    invoke ClientToScreen, [hwnd], eax
+    lea eax, [r]
+    invoke GetWindowRect, [hwnd], eax
+    mov eax, [r.left]
+    sub [p.x], eax
+    mov eax, [r.top]
+    sub [p.y], eax
+    invoke OffsetViewportOrgEx, [hdc], [p.x], [p.y], 0
+    
+    mov eax, [p.x]
+    mov ebx, [p.y]
+    add ebx, eax ;+border
+    shl eax, 1   ;border*2
+    add eax, SCR_WIDTH    
+    add ebx, SCR_HEIGHT
+    invoke MoveWindow, [hwnd], [r.left], [r.top], eax, ebx
+
+    ret
+  endp

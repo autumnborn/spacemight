@@ -1,5 +1,4 @@
 ;
-; n.b. bitm RGB(n)
 struct BITMAPINFO
 	bmiHeader BITMAPINFOHEADER
 	bmiColors dd 2 dup(0) 
