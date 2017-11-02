@@ -46,7 +46,7 @@ section '.code' code readable executable
 
   exit:
   	stdcall plr_destructor, player
-   	stdcall _deleteDIB, [screen.dib]
+   	stdcall _deleteDIB, [screen.dib], [screen.memDC]
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
@@ -133,8 +133,9 @@ section '.code' code readable executable
   endp
 
   ; dib - dib handle returned _createDIB
-  proc _deleteDIB, dib:DWORD
+  proc _deleteDIB, dib:DWORD, memDC:DWORD
   	invoke DeleteObject, [dib]
+  	invoke ReleaseDC, [hwnd], [memDC]
   	ret
   endp 
 

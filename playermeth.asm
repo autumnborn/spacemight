@@ -11,7 +11,13 @@ proc plr_init uses ebx, pPlr:DWORD
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biWidth], eax
 	mov eax, [ebx+PLAYER.size.y]
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biHeight], eax
-	
+
+	lea eax, [ebx+PLAYER.img.bmInfo]
+	lea ecx, [ebx+PLAYER.img.pvBits]
+	lea edx, [ebx+PLAYER.img.memDC]
+	stdcall _createDIB, eax, ecx, edx
+	mov [ebx+PLAYER.img.dib], eax
+
 	lea eax, [ebx+PLAYER.wpn]
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
 	ret
@@ -21,22 +27,21 @@ proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
 	
-	lea eax, [ebx+PLAYER.img.bmInfo]
-	lea ecx, [ebx+PLAYER.img.pvBits]
-	lea edx, [ebx+PLAYER.img.memDC]
-	stdcall _createDIB, eax, ecx, edx
-	mov [ebx+PLAYER.img.dib], eax
+	; lea eax, [ebx+PLAYER.img.bmInfo]
+	; lea ecx, [ebx+PLAYER.img.pvBits]
+	; lea edx, [ebx+PLAYER.img.memDC]
+	; stdcall _createDIB, eax, ecx, edx
+	; mov [ebx+PLAYER.img.dib], eax
 	
-	; mov ecx, [ebx+PLAYER.size.x]
- ;    imul ecx, [ebx+PLAYER.size.x]
- ;    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
+
     
     mov ecx, [ebx+PLAYER.size.x]
     mov edx, [ebx+PLAYER.size.y]
 	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
 
-	lea eax, [ebx+PLAYER.img.dib]
-	stdcall _deleteDIB, eax
+	; lea eax, [ebx+PLAYER.img.dib]
+	; lea ecx, [ebx+PLAYER.img.memDC]
+	; stdcall _deleteDIB, eax, ecx
 
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -46,12 +51,7 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
 
-	lea eax, [ebx+PLAYER.img.bmInfo]
-	lea ecx, [ebx+PLAYER.img.pvBits]
-	lea edx, [ebx+PLAYER.img.memDC]
-	stdcall _createDIB, eax, ecx, edx
 
-	mov [ebx+PLAYER.img.dib], eax
  
     mov ecx, [ebx+PLAYER.size.x]
     imul ecx, [ebx+PLAYER.size.x]
@@ -59,10 +59,9 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
     
     mov ecx, [ebx+PLAYER.size.x]
     mov edx, [ebx+PLAYER.size.y]
+	; invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
 	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
 
-	lea eax, [ebx+PLAYER.img.dib]
-	stdcall _deleteDIB, eax
 
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -83,6 +82,9 @@ proc plr_destructor uses ebx, pPlr:DWORD
 	invoke timeKillEvent, eax
 	mov [ebx+PLAYER.timer], 0
   @@:
+	lea eax, [ebx+PLAYER.img.dib]
+	lea ecx, [ebx+PLAYER.img.memDC]
+	stdcall _deleteDIB, eax, ecx
   	ret
 endp
 
