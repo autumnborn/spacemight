@@ -24,22 +24,6 @@ section '.code' code readable executable
   start:
   	include 'form.asm'
 
-  	; invoke ClientToScreen, [hwnd], client
-  	; invoke GetWindowRect, [hwnd], rect
-  	; mov eax, [rect.left]
-  	; sub [client.x], eax
-  	; mov eax, [rect.top]
-  	; sub [client.y], eax
-  	; invoke OffsetViewportOrgEx, [hdc], [client.x], [client.y], 0
-  	
-  	; mov eax, [client.x]
-  	; mov ebx, [client.y]
-  	; add ebx, eax ;+border
-  	; shl eax, 1	 ;border*2
-  	; add eax, SCR_WIDTH  	
-  	; add ebx, SCR_HEIGHT
-  	; invoke MoveWindow, [hwnd], [rect.left], [rect.top], eax, ebx
-  	
   	stdcall _configWnd
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax

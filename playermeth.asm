@@ -1,3 +1,11 @@
+
+
+
+;todo merge,
+
+
+
+
 ; player unit methods
 proc plr_init uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
@@ -20,7 +28,9 @@ proc plr_init uses ebx, pPlr:DWORD
 
 	mov ecx, [ebx+PLAYER.size.x]
     imul ecx, [ebx+PLAYER.size.x]
-    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
+    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx
+
+    mov [ebx+PLAYER.speed], 4 
 
 	lea eax, [ebx+PLAYER.wpn]
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
@@ -87,7 +97,8 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	.if [ebx+PLAYER.act.left]
 		cmp dword [ecx], 0
 		jna @F
-		dec dword [ecx] 
+		movzx eax, [ebx+PLAYER.speed] 
+		sub dword [ecx], eax  
 	  @@:
 	.endif 
 
@@ -96,14 +107,16 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 		add eax, [ecx] 
 		cmp eax, SCR_WIDTH
 		jnb @F
-		inc dword [ecx] 
+		movzx eax, [ebx+PLAYER.speed]
+		add dword [ecx], eax
 	  @@:
 	.endif
 	
 	.if [ebx+PLAYER.act.up]
 		cmp dword [edx], 0
 		jna @F
-		dec dword [edx]
+		movzx eax, [ebx+PLAYER.speed]
+		sub dword [edx], eax
 	  @@:	
 	.endif 
 	
@@ -112,7 +125,8 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 		add eax, [edx] 
 		cmp eax, SCR_HEIGHT
 		jnb @F
-		inc dword [edx] 
+		movzx eax, [ebx+PLAYER.speed]
+		add dword [edx], eax
 	  @@:
 	.endif
 
