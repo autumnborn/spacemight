@@ -89,25 +89,28 @@ endp
 proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 
-	stdcall plr_clear, ebx
 
-	.if [ebx+PLAYER.act.left]<>0
+	.if dword [ebx+PLAYER.act.left]
+		stdcall plr_clear, ebx
+	.endif
+
+	.if [ebx+PLAYER.act.left]
 		dec [ebx+PLAYER.p.x] 
 	.endif 
 
-	.if [ebx+PLAYER.act.right]<>0
+	.if [ebx+PLAYER.act.right]
 		inc [ebx+PLAYER.p.x] 
 	.endif
 	
-	.if [ebx+PLAYER.act.up]<>0
+	.if [ebx+PLAYER.act.up]
 		dec [ebx+PLAYER.p.y] 
 	.endif 
 	
-	.if [ebx+PLAYER.act.down]<>0
+	.if [ebx+PLAYER.act.down]
 		inc [ebx+PLAYER.p.y] 
 	.endif
 
-	.if [ebx+PLAYER.act.fire]<>0
+	.if [ebx+PLAYER.act.fire]
 		.if [ebx+PLAYER.wpn.timer]=0 
 			lea eax, [ebx+PLAYER.wpn]
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 

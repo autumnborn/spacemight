@@ -13,10 +13,12 @@ struct DIBINFO
 ends
 
 struct ACTIONFLAGS
-	left db ?
-	right db ?
-	up db ?
-	down db ?
+	struct
+		left db ?
+		right db ?
+		up db ?
+		down db ?
+	ends
 	fire db ?
 ends
 
