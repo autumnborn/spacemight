@@ -31,10 +31,9 @@ proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
     
-
-    mov ecx, [ebx+PLAYER.size.x]
-    mov edx, [ebx+PLAYER.size.y]
-	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [screen.memDC], [ebx+PLAYER.p.x], [ebx+PLAYER.p.x], SRCCOPY
+    mov ecx, [ebx+PLAYER.p.x]
+    mov edx, [ebx+PLAYER.p.y]
+	invoke BitBlt, [hdc], ecx, edx, [ebx+PLAYER.size.x], [ebx+PLAYER.size.y], [screen.memDC], ecx, edx, SRCCOPY
 
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -43,14 +42,10 @@ endp
 proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
- 
-    ; mov ecx, [ebx+PLAYER.size.x]
-    ; imul ecx, [ebx+PLAYER.size.x]
-    ; IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
-    
-    mov ecx, [ebx+PLAYER.size.x]
-    mov edx, [ebx+PLAYER.size.y]
-	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
+
+    mov ecx, [ebx+PLAYER.p.x]
+    mov edx, [ebx+PLAYER.p.y]
+	invoke BitBlt, [hdc], ecx, edx, [ebx+PLAYER.size.x], [ebx+PLAYER.size.y], [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
 
 
 	invoke EndPaint, [hwnd], paint
@@ -78,7 +73,7 @@ proc plr_destructor uses ebx, pPlr:DWORD
   	ret
 endp
 
-proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
+proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 
 
@@ -86,20 +81,39 @@ proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 		stdcall plr_clear, ebx
 	.endif
 
+	lea ecx, [ebx+PLAYER.p.x]
+	lea edx, [ebx+PLAYER.p.y]
+
 	.if [ebx+PLAYER.act.left]
-		dec [ebx+PLAYER.p.x] 
+		cmp dword [ecx], 0
+		jna @F
+		dec dword [ecx] 
+	  @@:
 	.endif 
 
 	.if [ebx+PLAYER.act.right]
-		inc [ebx+PLAYER.p.x] 
+		mov eax, [ebx+PLAYER.size.x]
+		add eax, [ecx] 
+		cmp eax, SCR_WIDTH
+		jnb @F
+		inc dword [ecx] 
+	  @@:
 	.endif
 	
 	.if [ebx+PLAYER.act.up]
-		dec [ebx+PLAYER.p.y] 
+		cmp dword [edx], 0
+		jna @F
+		dec dword [edx]
+	  @@:	
 	.endif 
 	
 	.if [ebx+PLAYER.act.down]
-		inc [ebx+PLAYER.p.y] 
+		mov eax, [ebx+PLAYER.size.y]
+		add eax, [edx] 
+		cmp eax, SCR_HEIGHT
+		jnb @F
+		inc dword [edx] 
+	  @@:
 	.endif
 
 	.if [ebx+PLAYER.act.fire]

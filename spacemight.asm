@@ -16,12 +16,30 @@ section '.data' data readable writeable
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paint PAINTSTRUCT
 	player PLAYER
+	client POINT
+	rect RECT
 	errmsg db "Error", 0
 	image file "img\sm_plr_32x32x32_raw.bmp"
 
 section '.code' code readable executable
   start:
   	include 'form.asm'
+  	invoke ClientToScreen, [hwnd], client
+  	invoke GetWindowRect, [hwnd], rect
+  	mov eax, [rect.left]
+  	sub [client.x], eax
+  	mov eax, [rect.top]
+  	sub [client.y], eax
+  	invoke OffsetViewportOrgEx, [hdc], [client.x], [client.y], 0
+  	
+  	mov eax, [client.x]
+  	mov ebx, [client.y]
+  	add ebx, eax ;+border
+  	shl eax, 1	 ;border*2
+  	add eax, SCR_WIDTH  	
+  	add ebx, SCR_HEIGHT
+  	invoke MoveWindow, [hwnd], [rect.left], [rect.top], eax, ebx
+
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
 
@@ -53,6 +71,7 @@ section '.code' code readable executable
   	include 'playermeth.asm'
   	include 'weaponmeth.asm'
 
+  ; Keyboard handler
   proc _control uses ebx ecx edx 
 
 	  push ebx ecx edx

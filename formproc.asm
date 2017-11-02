@@ -28,9 +28,6 @@
   endp
 
   proc _bgPaint
-   
-    
-    invoke BitBlt, [hdc], 0, 0, 640, 480, [screen.memDC], 0, 0, SRCCOPY
-
+    invoke BitBlt, [hdc], 0, 0, SCR_WIDTH, SCR_HEIGHT, [screen.memDC], 0, 0, SRCCOPY
     ret
   endp
