@@ -17,8 +17,7 @@ proc plr_init uses ebx, pPlr:DWORD
 	ret
 endp
 
-
-proc plr_draw uses ebx ecx edx, pPlr:DWORD
+proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
 	
@@ -26,6 +25,32 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	lea ecx, [ebx+PLAYER.img.pvBits]
 	lea edx, [ebx+PLAYER.img.memDC]
 	stdcall _createDIB, eax, ecx, edx
+	mov [ebx+PLAYER.img.dib], eax
+	
+	; mov ecx, [ebx+PLAYER.size.x]
+ ;    imul ecx, [ebx+PLAYER.size.x]
+ ;    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx 
+    
+    mov ecx, [ebx+PLAYER.size.x]
+    mov edx, [ebx+PLAYER.size.y]
+	invoke BitBlt, [hdc], [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], ecx, edx, [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
+
+	lea eax, [ebx+PLAYER.img.dib]
+	stdcall _deleteDIB, eax
+
+	invoke EndPaint, [hwnd], paint
+	ret
+endp
+
+proc plr_draw uses ebx ecx edx, pPlr:DWORD
+	invoke BeginPaint, [hwnd], paint
+	mov ebx, [pPlr]
+
+	lea eax, [ebx+PLAYER.img.bmInfo]
+	lea ecx, [ebx+PLAYER.img.pvBits]
+	lea edx, [ebx+PLAYER.img.memDC]
+	stdcall _createDIB, eax, ecx, edx
+
 	mov [ebx+PLAYER.img.dib], eax
  
     mov ecx, [ebx+PLAYER.size.x]
@@ -63,6 +88,8 @@ endp
 
 proc plr_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
+
+	stdcall plr_clear, ebx
 
 	.if [ebx+PLAYER.act.left]<>0
 		dec [ebx+PLAYER.p.x] 

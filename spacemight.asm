@@ -135,7 +135,6 @@ section '.code' code readable executable
   ; dib - dib handle returned _createDIB
   proc _deleteDIB, dib:DWORD
   	invoke DeleteObject, [dib]
-    invoke ReleaseDC, [hwnd], [dib]
   	ret
   endp 
 
