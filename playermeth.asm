@@ -135,12 +135,18 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
 	.if [ebx+PLAYER.act.fire]
 		lea edx, [ebx+PLAYER.wpn]
-		GetDimFieldAddr edx, WEAPON, 0, timer
-		.if dword [eax]=0 
-			;GetDimIndexAddr edx, WEAPON, 0
-			lea eax, [ebx+PLAYER.wpn.i0]
-			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
+
+		xor ecx, ecx
+	  @@:
+		GetDimFieldAddr edx, WEAPON, ecx, timer
+		.if dword [eax]=0
+			GetDimIndexAddr edx, WEAPON, ecx
+			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y]
 		.endif
+		inc ecx
+		cmp ecx, [edx+WPNARR.length]
+		jnz @B 
+	
 	.endif
 
 	stdcall plr_draw, ebx
@@ -148,6 +154,8 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	ret
 endp
 
+; call destructor for all instances of WEAPON (WPNARR)
+; N.B: replace to common
 proc plr_delWpns uses ebx ecx, pWpnArr: DWORD
 	mov ebx, [pWpnArr]
 	xor ecx, ecx
