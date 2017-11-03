@@ -1,11 +1,4 @@
 
-
-
-;todo merge,
-
-
-
-
 ; player unit methods
 proc plr_init uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
@@ -28,7 +21,7 @@ proc plr_init uses ebx, pPlr:DWORD
 
 	mov ecx, [ebx+PLAYER.size.x]
     imul ecx, [ebx+PLAYER.size.x]
-    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], image, ecx
+    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], img_pl, ecx
 
     mov [ebx+PLAYER.speed], 4 
 

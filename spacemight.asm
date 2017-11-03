@@ -17,7 +17,9 @@ section '.data' data readable writeable
 	paint PAINTSTRUCT
 	player PLAYER
 	errmsg db "Error", 0
-	image file "img\sm_plr_32x32x32_raw.bmp"
+	img_pl file "img\sm_plr_32x32x32_raw.bmp"
+	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
+
 
 section '.code' code readable executable
   	
