@@ -31,7 +31,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD
  	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
 	inc ecx
-	cmp ecx, [ebx+PLAYER.wpn.length]
+	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
 	jnz @B
 	ret
 endp
@@ -72,7 +72,7 @@ proc plr_destructor uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 
 	lea eax, [ebx+PLAYER.wpn]
-	stdcall wpn_destructor, eax
+	stdcall plr_delWpns, eax
 	
 	mov eax, [ebx+PLAYER.timer]
 	test eax, eax
@@ -148,3 +148,15 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	ret
 endp
 
+proc plr_delWpns uses ebx ecx, pWpnArr: DWORD
+	mov ebx, [pWpnArr]
+	xor ecx, ecx
+  @@:  
+ 	GetDimIndexAddr ebx, WEAPON, ecx
+	stdcall wpn_destructor, eax
+	inc ecx
+	cmp ecx, [ebx+WPNARR.length]
+	jnz @B
+
+	ret
+endp

@@ -89,7 +89,7 @@ proc wpn_stop uses ebx, pWpn:DWORD
 	ret
 endp
 
-proc wpn_destructor uses ebx, pWpn:DWORD
+proc wpn_destructor uses ebx ecx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_stop, ebx
   @@:
