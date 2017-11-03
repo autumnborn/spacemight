@@ -74,12 +74,7 @@ proc wpn_fire uses ebx ecx, pWpn:DWORD, startX:DWORD, startY:DWORD
 	ret
 endp
 
-proc wpn_destructor uses ebx, pWpn:DWORD
-	xor eax, eax
-	nop
-	nop
-	nop
-
+proc wpn_stop uses ebx, pWpn:DWORD
 	mov ebx, [pWpn]
 	mov eax, [ebx+WEAPON.timer]
 	test eax, eax
@@ -88,6 +83,13 @@ proc wpn_destructor uses ebx, pWpn:DWORD
 	test eax, eax
 	jnz @F
 	mov [ebx+WEAPON.timer], 0
+  @@:
+	ret
+endp
+
+proc wpn_destructor uses ebx, pWpn:DWORD
+	mov ebx, [pWpn]
+	stdcall wpn_stop, ebx
   @@:
   	lea eax, [ebx+WEAPON.img.dib]
 	lea ecx, [ebx+WEAPON.img.memDC]
@@ -107,7 +109,7 @@ proc wpn_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
   .exitif:
 	 
 	.if [ebx+WEAPON.p.y] > SCR_HEIGHT ;sign < 0 as unsign > SCR_HEIGHT too
-		stdcall wpn_destructor, ebx
+		stdcall wpn_stop, ebx
 	.endif
 	stdcall wpn_draw, ebx 
 	ret

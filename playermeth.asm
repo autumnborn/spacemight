@@ -64,6 +64,10 @@ endp
 
 proc plr_destructor uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
+
+	lea eax, [ebx+PLAYER.wpn]
+	stdcall wpn_destructor, eax
+	
 	mov eax, [ebx+PLAYER.timer]
 	test eax, eax
 	jz @F
