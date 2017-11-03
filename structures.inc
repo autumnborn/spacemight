@@ -39,6 +39,7 @@ struct PLAYER
 	weapon db ?
 	health dw ?
 	timer dd ?
+	firesleep db ?
 	p POINT
 	size POINT
 	act ACTIONFLAGS
