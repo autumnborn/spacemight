@@ -8,13 +8,32 @@ proc wpn_init uses ebx ecx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl
 
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biPlanes], 1
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biBitCount], 32
+
 	.if [type]=W_SIMPLE
-		mov [ebx+WEAPON.size.x], 5
-		mov [ebx+WEAPON.size.y], 10
+		mov eax, 2
+		mov ecx, 8
+		mov [ebx+WEAPON.size.x], eax
+		mov [ebx+WEAPON.size.y], ecx
+		mov [ebx+WEAPON.img.bmInfo.bmiHeader.biWidth], eax
+		mov [ebx+WEAPON.img.bmInfo.bmiHeader.biHeight], ecx
+
 	.elseif [type]=W_DOUBLE
-		mov [ebx+WEAPON.size.x], 10
-		mov [ebx+WEAPON.size.y], 10
+		mov [ebx+WEAPON.size.x], eax
+		mov [ebx+WEAPON.size.y], ecx
 	.endif	
+
+	lea eax, [ebx+WEAPON.img.bmInfo]
+	lea ecx, [ebx+WEAPON.img.pvBits]
+	lea edx, [ebx+WEAPON.img.memDC]
+	stdcall _createDIB, eax, ecx, edx
+	mov [ebx+WEAPON.img.dib], eax
+
+	mov ecx, [ebx+WEAPON.size.x]
+    imul ecx, [ebx+WEAPON.size.x]
+    IMG_MEMCOPY [ebx+WEAPON.img.pvBits], img_w1, ecx
 
 	ret
 endp
@@ -22,16 +41,20 @@ endp
 proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
 	
-	mov ebx, [pWpn]
+	; mov ebx, [pWpn]
+	; mov ecx, [ebx+WEAPON.p.x]
+	; mov edx, [ebx+WEAPON.p.y]
+	; sub ecx, [ebx+WEAPON.size.x]
+	; sub edx, [ebx+WEAPON.size.y]
+	; push ebx ecx edx
+	; invoke SetPixel, [hdc], [ebx+WEAPON.p.x], [ebx+WEAPON.p.y], 0
+	; pop edx ecx ebx 
+	; invoke SetPixel, [hdc], [ebx+WEAPON.p.x], edx, 0FF0000h
 	mov ecx, [ebx+WEAPON.p.x]
-	mov edx, [ebx+WEAPON.p.y]
-	sub ecx, [ebx+WEAPON.size.x]
-	sub edx, [ebx+WEAPON.size.y]
-	push ebx ecx edx
-	invoke SetPixel, [hdc], [ebx+WEAPON.p.x], [ebx+WEAPON.p.y], 0
-	pop edx ecx ebx 
-	invoke SetPixel, [hdc], [ebx+WEAPON.p.x], edx, 0FF0000h
-	
+    mov edx, [ebx+WEAPON.p.y]
+	invoke BitBlt, [hdc], ecx, edx, [ebx+WEAPON.size.x], [ebx+WEAPON.size.y], [ebx+WEAPON.img.memDC], 0, 0, SRCCOPY
+
+
 	invoke EndPaint, [hwnd], paint
 	ret
 endp
@@ -52,6 +75,11 @@ proc wpn_fire uses ebx ecx, pWpn:DWORD, startX:DWORD, startY:DWORD
 endp
 
 proc wpn_destructor uses ebx, pWpn:DWORD
+	xor eax, eax
+	nop
+	nop
+	nop
+
 	mov ebx, [pWpn]
 	mov eax, [ebx+WEAPON.timer]
 	test eax, eax
@@ -61,6 +89,9 @@ proc wpn_destructor uses ebx, pWpn:DWORD
 	jnz @F
 	mov [ebx+WEAPON.timer], 0
   @@:
+  	lea eax, [ebx+WEAPON.img.dib]
+	lea ecx, [ebx+WEAPON.img.memDC]
+	stdcall _deleteDIB, eax, ecx
   	ret
 endp
 

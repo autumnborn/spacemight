@@ -29,6 +29,7 @@ struct WEAPON
 	timer dd ?
 	p POINT
 	size POINT
+	img DIBINFO
 ends
 
 struct PLAYER
@@ -84,7 +85,7 @@ macro GetDimFieldAddr var, type, index, field
 
 macro IMG_MEMCOPY pDest, pSrc, bCount
 {
-	local beginl
+	local beginl, chk
     
     mov edi, pDest
     mov esi, pSrc
