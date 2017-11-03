@@ -32,28 +32,30 @@ proc wpn_init uses ebx ecx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
 	mov [ebx+WEAPON.img.dib], eax
 
 	mov ecx, [ebx+WEAPON.size.x]
-    imul ecx, [ebx+WEAPON.size.x]
+    imul ecx, [ebx+WEAPON.size.y]
     IMG_MEMCOPY [ebx+WEAPON.img.pvBits], img_w1, ecx
 
 	ret
 endp
 
+proc wpn_clear uses ebx ecx edx, pWpn:DWORD
+	invoke BeginPaint, [hwnd], paint
+	mov ebx, [pWpn]
+    
+    mov ecx, [ebx+WEAPON.p.x]
+    mov edx, [ebx+WEAPON.p.y]
+	invoke BitBlt, [hdc], ecx, edx, [ebx+WEAPON.size.x], [ebx+WEAPON.size.y], [screen.memDC], ecx, edx, SRCCOPY
+
+	invoke EndPaint, [hwnd], paint
+	ret
+endp
+
 proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
-	
-	; mov ebx, [pWpn]
-	; mov ecx, [ebx+WEAPON.p.x]
-	; mov edx, [ebx+WEAPON.p.y]
-	; sub ecx, [ebx+WEAPON.size.x]
-	; sub edx, [ebx+WEAPON.size.y]
-	; push ebx ecx edx
-	; invoke SetPixel, [hdc], [ebx+WEAPON.p.x], [ebx+WEAPON.p.y], 0
-	; pop edx ecx ebx 
-	; invoke SetPixel, [hdc], [ebx+WEAPON.p.x], edx, 0FF0000h
+
 	mov ecx, [ebx+WEAPON.p.x]
     mov edx, [ebx+WEAPON.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+WEAPON.size.x], [ebx+WEAPON.size.y], [ebx+WEAPON.img.memDC], 0, 0, SRCCOPY
-
 
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -99,6 +101,7 @@ endp
 
 proc wpn_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
+	stdcall wpn_clear, ebx
 
 	cmp [ebx+WEAPON.direct], 0
 	jl @F
