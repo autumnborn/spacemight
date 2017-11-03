@@ -1,6 +1,6 @@
 
 ; player unit methods
-proc plr_init uses ebx, pPlr:DWORD
+proc plr_init uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov [ebx+PLAYER.size.x], 32
 	mov [ebx+PLAYER.size.y], 32
@@ -25,8 +25,14 @@ proc plr_init uses ebx, pPlr:DWORD
 
     mov [ebx+PLAYER.speed], 4 
 
-	lea eax, [ebx+PLAYER.wpn]
+ 	lea edx, [ebx+PLAYER.wpn]
+    xor ecx, ecx
+  @@:  
+ 	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
+	inc ecx
+	cmp ecx, [ebx+PLAYER.wpn.length]
+	jnz @B
 	ret
 endp
 
@@ -128,8 +134,11 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	.endif
 
 	.if [ebx+PLAYER.act.fire]
-		.if [ebx+PLAYER.wpn.timer]=0 
-			lea eax, [ebx+PLAYER.wpn]
+		lea edx, [ebx+PLAYER.wpn]
+		GetDimFieldAddr edx, WEAPON, 0, timer
+		.if dword [eax]=0 
+			;GetDimIndexAddr edx, WEAPON, 0
+			lea eax, [ebx+PLAYER.wpn.i0]
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y] 
 		.endif
 	.endif

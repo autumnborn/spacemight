@@ -4,6 +4,7 @@ entry start
 include 'win32a.inc'
 include 'macro\if.inc'
 include 'equates.inc'
+include 'macro.inc'
 include 'structures.inc'
 
 section '.data' data readable writeable
@@ -25,7 +26,7 @@ section '.code' code readable executable
   	
   start:
   	include 'form.asm'
-
+ 
   	stdcall _configWnd
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
