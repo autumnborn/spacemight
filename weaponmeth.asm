@@ -61,18 +61,19 @@ proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	ret
 endp
 
-proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD
+proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DWORD
 	mov ebx, [pWpn]
-	mov ecx, [startX]
+	;center X align
+	mov ecx, [hostW]
+	sub ecx, [ebx+WEAPON.size.x]
+	shr ecx, 1
+	add ecx, [startX]
 	mov [ebx+WEAPON.p.x], ecx
+	;///
 	mov ecx, [startY]
 	mov [ebx+WEAPON.p.y], ecx
-	; mov ecx, [ebx+WEAPON.timer]
-	; test ecx, ecx
-	; jnz @F
 	invoke timeSetEvent, WPN_TIMER_DELAY, WPN_TIMER_RESOL, wpn_TimeProc, ebx, TIME_PERIODIC
 	mov [ebx+WEAPON.timer], eax
-  ; @@:
 	ret
 endp
 
