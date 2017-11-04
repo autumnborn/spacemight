@@ -168,17 +168,25 @@ proc plr_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
 	ret
 endp
 
-proc plr_updateWpns uses ebx ecx, pPlr:DWORD
+proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
  	lea edx, [ebx+PLAYER.wpn]
     xor ecx, ecx
+  
   @@:  
+  	GetDimFieldAddr edx, WEAPON, ecx, timer
+  	mov eax, [eax]
+  	test eax, eax
+  	jz .skip
  	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_TimeProc, eax
+
+  .skip:	
 	inc ecx
 	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
 	jnz @B	
 	ret
+
 endp
 
 ; call destructor for all instances of WEAPON (WPNARR)
