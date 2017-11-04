@@ -32,7 +32,7 @@ struct WEAPON
 	img DIBINFO
 ends
 
-ARRAY WPNARR, 10, WEAPON
+ARRAY WPNARR, 5h, WEAPON
 
 struct PLAYER
 	speed db ?

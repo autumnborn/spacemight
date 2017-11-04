@@ -133,6 +133,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	  @@:
 	.endif
 
+
 	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.firesleep]
 		lea edx, [ebx+PLAYER.wpn]
 
@@ -142,7 +143,9 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 		.if dword [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], [ebx+PLAYER.size.x]
+			push ebx
 			invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, plr_TimeFireProc, ebx, TIME_ONESHOT
+			pop ebx
 			test eax, eax
 			setne [ebx+PLAYER.firesleep]
 			jmp @F
@@ -161,6 +164,7 @@ endp
 proc plr_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 	mov byte [ebx+PLAYER.firesleep], 0
+	invoke timeKillEvent, [uID]
 	ret
 endp
 

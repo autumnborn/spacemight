@@ -6,7 +6,7 @@ macro ARRAY var, size, type
     \{
       i\#idx type
     \}
-    length dd size-1
+    length dd size
   ends
 }
 
