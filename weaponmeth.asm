@@ -77,8 +77,9 @@ proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DW
 	add ecx, [hostW]
   @@:	
 	mov [ebx+WEAPON.p.y], ecx
-	invoke timeSetEvent, WPN_TIMER_DELAY, WPN_TIMER_RESOL, wpn_TimeProc, ebx, TIME_PERIODIC
-	mov [ebx+WEAPON.timer], eax
+	;invoke timeSetEvent, WPN_TIMER_DELAY, WPN_TIMER_RESOL, wpn_TimeProc, ebx, TIME_PERIODIC
+	;mov [ebx+WEAPON.timer], eax
+	mov [ebx+WEAPON.timer], -1
 	ret
 endp
 
@@ -87,9 +88,9 @@ proc wpn_stop uses ebx, pWpn:DWORD
 	mov eax, [ebx+WEAPON.timer]
 	test eax, eax
 	jz @F
-	invoke timeKillEvent, eax
-	test eax, eax
-	jnz @F
+	;invoke timeKillEvent, eax
+	;test eax, eax
+	;jnz @F
 	mov [ebx+WEAPON.timer], 0
   @@:
 	ret
@@ -105,8 +106,9 @@ proc wpn_destructor uses ebx ecx, pWpn:DWORD
   	ret
 endp
 
-proc wpn_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
-	mov ebx, [dwUser]
+;proc wpn_TimeProc uses ebx, uID, uMsg, dwUser, dw1, dw2
+proc wpn_TimeProc uses ebx, pWpn:DWORD
+	mov ebx, [pWpn]
 	stdcall wpn_clear, ebx
 
 	cmp [ebx+WEAPON.direct], 0

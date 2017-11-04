@@ -157,7 +157,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	.endif
 
 	stdcall plr_draw, ebx
-
+	stdcall plr_updateWpns, ebx
 	ret
 endp
 
@@ -165,6 +165,19 @@ proc plr_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 	mov byte [ebx+PLAYER.firesleep], 0
 	invoke timeKillEvent, [uID]
+	ret
+endp
+
+proc plr_updateWpns uses ebx ecx, pPlr:DWORD
+	mov ebx, [pPlr]
+ 	lea edx, [ebx+PLAYER.wpn]
+    xor ecx, ecx
+  @@:  
+ 	GetDimIndexAddr edx, WEAPON, ecx
+	stdcall wpn_TimeProc, eax
+	inc ecx
+	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
+	jnz @B	
 	ret
 endp
 
