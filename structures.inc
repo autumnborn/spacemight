@@ -55,4 +55,6 @@ struct ENEMY
 	timer dd ?
 	p POINT
 	size POINT
+	wpn WPNARR
+	img DIBINFO
 ends

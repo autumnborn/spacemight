@@ -20,7 +20,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD
 	mov [ebx+PLAYER.img.dib], eax
 
 	mov ecx, [ebx+PLAYER.size.x]
-    imul ecx, [ebx+PLAYER.size.x]
+    imul ecx, [ebx+PLAYER.size.y]
     IMG_MEMCOPY [ebx+PLAYER.img.pvBits], img_pl, ecx
 
     mov [ebx+PLAYER.speed], 4 

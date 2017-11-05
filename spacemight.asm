@@ -17,10 +17,11 @@ section '.data' data readable writeable
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paint PAINTSTRUCT
 	player PLAYER
+	enemy ENEMY
 	errmsg db "Error", 0
 	img_pl file "img\sm_plr_32x32x32_raw.bmp"
 	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
-
+	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
 
 section '.code' code readable executable
   	
@@ -37,6 +38,11 @@ section '.code' code readable executable
 
   	stdcall plr_init, player
   	stdcall plr_wakeup, player
+
+  	mov [enemy.p.x], 10
+  	mov [enemy.p.y], 20
+  	stdcall enm_init, enemy
+  	stdcall enm_wakeup, enemy
 
   .msg_loop:
     invoke GetMessage, msg, NULL, 0, 0
@@ -56,6 +62,7 @@ section '.code' code readable executable
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
+  	include 'enemymeth.asm'
   	include 'playermeth.asm'
   	include 'weaponmeth.asm'
 
