@@ -41,7 +41,7 @@ section '.code' code readable executable
 
   	mov [enemy.p.x], 10
   	mov [enemy.p.y], 20
-  	stdcall enm_init, enemy
+  	stdcall enm_init, enemy, player
   	stdcall enm_wakeup, enemy
 
   .msg_loop:

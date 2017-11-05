@@ -189,6 +189,22 @@ proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
 
 endp
 
+; Visibility for enemies
+; returns coordinate x
+proc plr_GetX uses ebx, pPlr:DWORD
+	mov ebx, [pPlr]
+	mov eax, [ebx+PLAYER.p.x]
+	ret
+endp
+
+; Visibility for enemies
+; returns coordinate y
+proc plr_GetY uses ebx, pPlr:DWORD
+	mov ebx, [pPlr]
+	mov eax, [ebx+PLAYER.p.y]
+	ret
+endp
+
 ; call destructor for all instances of WEAPON (WPNARR)
 ; N.B: replace to common
 proc plr_delWpns uses ebx ecx, pWpnArr: DWORD

@@ -53,6 +53,7 @@ struct ENEMY
 	weapon db ?
 	health dw ?
 	timer dd ?
+	pPlayer dd ?
 	p POINT
 	size POINT
 	wpn WPNARR

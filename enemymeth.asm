@@ -1,6 +1,10 @@
 ; enemy unit methods
-proc enm_init uses ebx ecx edx, pEnm:DWORD
+proc enm_init uses ebx ecx edx, pEnm:DWORD, pPlr: DWORD
 	mov ebx, [pEnm]
+
+	mov eax, [pPlr]
+	mov [ebx+ENEMY.pPlayer], eax
+
 	mov [ebx+ENEMY.size.x], 24
 	mov [ebx+ENEMY.size.y], 32
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
@@ -82,9 +86,10 @@ endp
 
 proc enm_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-
-	stdcall enm_draw, ebx
+	stdcall enm_clear, ebx
+	stdcall enm_behavior, ebx
 	stdcall enm_updateWpns, ebx
+	stdcall enm_draw, ebx
 	ret
 endp
 
@@ -108,9 +113,69 @@ proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 	ret
 
 endp
+db "BEHAVIOR"
+proc enm_behavior uses ebx, pEnm:DWORD
+	mov ebx, [pEnm]
+	
+	movzx edx, byte [ebx+ENEMY.speed]
+	stdcall plr_GetY, [ebx+ENEMY.pPlayer]
+	lea ecx, [ebx+ENEMY.p.y]
+	add dword [ecx], edx
+	cmp [ecx], eax
+	jae .exit	 
+	stdcall plr_GetX, [ebx+ENEMY.pPlayer]
+	mov ecx, [ebx+ENEMY.p.x]
+	add eax, 4
+	cmp ecx, eax
+	ja .toleft
+	sub eax, 8
+	cmp ecx, eax
+	jnb .fire
+	add ecx, edx
+	jmp @F
+  .toleft:	
+	sub ecx, edx
+	jmp @F
+  .fire:
+  	stdcall enm_fire, ebx	
+  @@:
+  	mov [ebx+ENEMY.p.x], ecx
+  .exit:	
+	ret
+endp
+
+proc enm_fire uses ebx ecx edx, pEnm:DWORD
+	lea edx, [ebx+ENEMY.wpn]
+
+	xor ecx, ecx
+  @@:
+	GetDimFieldAddr edx, WEAPON, ecx, exist
+	.if byte [eax]=0
+		GetDimIndexAddr edx, WEAPON, ecx
+		stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x]
+		push ebx
+		invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
+		pop ebx
+		;test eax, eax
+		;setne [ebx+ENEMY.firesleep]
+		jmp @F
+	.endif
+	inc ecx
+	cmp ecx, [edx+WPNARR.length]
+	jnz @B 
+  @@:
+  	ret
+endp
+
+proc enm_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
+	mov ebx, [dwUser]
+	;mov byte [ebx+PLAYER.firesleep], 0
+	invoke timeKillEvent, [uID]
+	ret
+endp
 
 ;!!
-proc enm_delWpns uses ebx ecx, pWpnArr: DWORD
+proc enm_delWpns uses ebx ecx, pWpnArr:DWORD
 	mov ebx, [pWpnArr]
 	xor ecx, ecx
   @@:  
