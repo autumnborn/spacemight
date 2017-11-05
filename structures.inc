@@ -26,7 +26,7 @@ struct WEAPON
 	type db ?	
 	damage dw ?
 	direct db ?
-	timer dd ?
+	exist db ?
 	p POINT
 	size POINT
 	img DIBINFO

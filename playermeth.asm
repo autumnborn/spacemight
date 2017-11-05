@@ -139,8 +139,8 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
 		xor ecx, ecx
 	  @@:
-		GetDimFieldAddr edx, WEAPON, ecx, timer
-		.if dword [eax]=0
+		GetDimFieldAddr edx, WEAPON, ecx, exist
+		.if byte [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], [ebx+PLAYER.size.x]
 			push ebx
@@ -174,12 +174,12 @@ proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
     xor ecx, ecx
   
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, timer
-  	mov eax, [eax]
-  	test eax, eax
+  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	mov al, byte [eax]
+  	test al, al
   	jz .skip
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_TimeProc, eax
+	stdcall wpn_update, eax
 
   .skip:	
 	inc ecx
