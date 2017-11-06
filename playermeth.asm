@@ -1,5 +1,10 @@
-
 ; player unit methods
+if DBG
+	nop
+	db "playermeth"
+	nop
+end if
+
 proc plr_init uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov [ebx+PLAYER.size.x], 32

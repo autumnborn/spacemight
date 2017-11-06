@@ -1,3 +1,6 @@
+; Assembly condition
+DBG 				=1
+
 ; Screen
 SCR_WIDTH			=640
 SCR_HEIGHT			=480
@@ -17,6 +20,8 @@ WPN_TIMER_DELAY		=20
 WPN_TIMER_RESOL		=10
 ENM_TIMER_DELAY		=20
 ENM_TIMER_RESOL		=10
+ENM_FIRE_DELAY		=300
+ENM_FIRE_RESOL		=100
 
 ; Weapon types
 W_SIMPLE			=1

@@ -1,4 +1,10 @@
 ; enemy unit methods
+if DBG
+	nop
+	db "enemymeth"
+	nop
+end if
+
 proc enm_init uses ebx ecx edx, pEnm:DWORD, pPlr: DWORD
 	mov ebx, [pEnm]
 
@@ -169,7 +175,7 @@ endp
 
 proc enm_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	;mov byte [ebx+PLAYER.firesleep], 0
+	;mov byte [ebx+ENEMY.firesleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp

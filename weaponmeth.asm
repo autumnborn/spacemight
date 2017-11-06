@@ -1,4 +1,10 @@
 ; weapon methods
+if DBG
+	nop
+	db "weaponmeth"
+	nop
+end if
+
 proc wpn_init uses ebx ecx edx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
 	mov ebx, [pWpn]
 	mov ecx, [pParent]
