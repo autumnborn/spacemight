@@ -119,7 +119,7 @@ proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 	ret
 
 endp
-db "BEHAVIOR"
+
 proc enm_behavior uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	
