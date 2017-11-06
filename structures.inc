@@ -60,8 +60,11 @@ struct ENEMY
 	img DIBINFO
 ends
 
+ARRAY ENMARR, 3, ENEMY
+
 struct WORLDCTRL
 	timer dd ?
+	enemies ENMARR
 ends
-;ARRAY ENMARR, 3, ENEMY
+
 

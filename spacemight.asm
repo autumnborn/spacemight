@@ -18,7 +18,8 @@ section '.data' data readable writeable
 	paint PAINTSTRUCT
 	player PLAYER
 	enemy ENEMY
-	wdctrl WORLDCTRL  
+	wdctrl WORLDCTRL
+
 	errmsg db "Error", 0
 	img_pl file "img\sm_plr_32x32x32_raw.bmp"
 	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
@@ -43,7 +44,7 @@ section '.code' code readable executable
 
   	mov [enemy.p.x], 10
   	mov [enemy.p.y], 20
-  	stdcall enm_init, enemy, player
+  	stdcall wdc_init, wdctrl
   	stdcall wdc_wakeup, wdctrl
 
   .msg_loop:
