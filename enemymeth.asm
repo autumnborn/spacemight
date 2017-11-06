@@ -71,6 +71,15 @@ endp
 ; 	mov [ebx+ENEMY.timer], eax
 ; 	ret
 ; endp
+proc enm_stop uses ebx, pEnm:DWORD
+	mov ebx, [pEnm]
+	mov al, [ebx+ENEMY.exist]
+	test al, al
+	jz @F
+	mov byte [ebx+ENEMY.exist], 0
+  @@:
+	ret
+endp
 
 proc enm_destructor uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
@@ -127,6 +136,11 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	movzx edx, byte [ebx+ENEMY.speed]
 	stdcall plr_GetY, [ebx+ENEMY.pPlayer]
 	lea ecx, [ebx+ENEMY.p.y]
+	.if dword [ecx] > SCR_HEIGHT
+		stdcall enm_stop, ebx
+		jmp .exit
+	.endif 
+	
 	add dword [ecx], edx
 	cmp [ecx], eax
 	jae .exit	 

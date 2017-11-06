@@ -52,7 +52,7 @@ struct ENEMY
 	speed db ?
 	weapon db ?
 	health dw ?
-	timer dd ?
+	exist db ?
 	pPlayer dd ?
 	p POINT
 	size POINT
