@@ -157,6 +157,16 @@ section '.code' code readable executable
   	ret
   endp 
 
+  proc _rnd uses edx, max:DWORD
+	@@:
+	  xor edx, edx	
+	  rdrand eax
+	  jnc @B
+	  div [max]
+	  mov eax, edx
+	  ret
+  endp
+
 section '.idata' import data readable
 	include 'imports.inc'
 

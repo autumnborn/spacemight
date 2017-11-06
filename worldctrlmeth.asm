@@ -27,9 +27,35 @@ endp
 
 proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	lea eax, [ebx+WORLDCTRL.enemies.i0]
+ 
+
+ 	lea edx, [ebx+WORLDCTRL.enemies]
+    xor ecx, ecx
+  
+  @@:  
+  	GetDimFieldAddr edx, ENEMY, ecx, exist
+  	mov al, byte [eax]
+  	test al, al
+  	jnz .upd
+ 	GetDimIndexAddr edx, ENEMY, ecx
+ 	inc byte [eax+ENEMY.exist]
+ 	push edx
+ 	xchg edx, eax
+	stdcall _rnd, SCR_WIDTH
+	mov [edx+ENEMY.p.x], eax
+	mov [edx+ENEMY.p.y], 0
+	pop edx
+  .upd:	
+ 	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_update, eax
+	inc ecx
+	cmp ecx, [edx+ENMARR.length]
+	jnz @B	
 	ret
+
+	; lea eax, [ebx+WORLDCTRL.enemies.i0]
+	; stdcall enm_update, eax
+	; ret
 endp
 
 proc wdc_destructor uses ebx, pWdc:DWORD
