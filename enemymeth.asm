@@ -65,12 +65,12 @@ proc enm_draw uses ebx ecx edx, pEnm:DWORD
 	ret
 endp
 
-proc enm_wakeup uses ebx, pEnm:DWORD
-	mov ebx, [pEnm]
-	invoke timeSetEvent, ENM_TIMER_DELAY, ENM_TIMER_RESOL, enm_TimeProc, ebx, TIME_PERIODIC 
-	mov [ebx+ENEMY.timer], eax
-	ret
-endp
+; proc enm_wakeup uses ebx, pEnm:DWORD
+; 	mov ebx, [pEnm]
+; 	invoke timeSetEvent, ENM_TIMER_DELAY, ENM_TIMER_RESOL, enm_TimeProc, ebx, TIME_PERIODIC 
+; 	mov [ebx+ENEMY.timer], eax
+; 	ret
+; endp
 
 proc enm_destructor uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
@@ -90,8 +90,9 @@ proc enm_destructor uses ebx, pEnm:DWORD
   	ret
 endp
 
-proc enm_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
-	mov ebx, [dwUser]
+;proc enm_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
+proc enm_update uses ebx ecx, pEnm:DWORD
+	mov ebx, [pEnm]
 	stdcall enm_clear, ebx
 	stdcall enm_behavior, ebx
 	stdcall enm_updateWpns, ebx
@@ -120,7 +121,7 @@ proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 
 endp
 
-proc enm_behavior uses ebx, pEnm:DWORD
+proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 	
 	movzx edx, byte [ebx+ENEMY.speed]
@@ -160,7 +161,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 		GetDimIndexAddr edx, WEAPON, ecx
 		stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x]
 		push ebx
-		invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
+		invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
 		pop ebx
 		;test eax, eax
 		;setne [ebx+ENEMY.firesleep]

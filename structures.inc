@@ -59,3 +59,9 @@ struct ENEMY
 	wpn WPNARR
 	img DIBINFO
 ends
+
+struct WORLDCTRL
+	timer dd ?
+ends
+;ARRAY ENMARR, 3, ENEMY
+
