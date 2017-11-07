@@ -5,22 +5,27 @@ if DBG
 	nop
 end if
 
-proc enm_init uses ebx ecx edx, pEnm:DWORD, pPlr: DWORD
+proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov ebx, [pEnm]
 
 	mov eax, [pPlr]
 	mov [ebx+ENEMY.pPlayer], eax
 
-	mov [ebx+ENEMY.size.x], 24
-	mov [ebx+ENEMY.size.y], 32
+	mov eax, [pType]
+	mov cl, [eax+ENMTYPE.speed]
+    mov [ebx+ENEMY.speed], cl
+	
+	mov ecx, [eax+ENMTYPE.size.x]
+	mov [ebx+ENEMY.size.x], ecx
+	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biWidth], ecx
+	
+	mov ecx, [eax+ENMTYPE.size.y]
+	mov [ebx+ENEMY.size.y], ecx
+	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biHeight], ecx
+	
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biPlanes], 1
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biBitCount], 32
-
-	mov eax, [ebx+ENEMY.size.x]
-	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biWidth], eax
-	mov eax, [ebx+ENEMY.size.y]
-	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biHeight], eax
 
 	lea eax, [ebx+ENEMY.img.bmInfo]
 	lea ecx, [ebx+ENEMY.img.pvBits]
@@ -28,11 +33,13 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pPlr: DWORD
 	stdcall _createDIB, eax, ecx, edx
 	mov [ebx+ENEMY.img.dib], eax
 
-	mov ecx, [ebx+ENEMY.size.x]
-    imul ecx, [ebx+ENEMY.size.y]
-    IMG_MEMCOPY [ebx+ENEMY.img.pvBits], img_e1, ecx
 
-    mov [ebx+ENEMY.speed], 2 
+    mov eax, [pType]
+    mov ecx, [eax+ENMTYPE.pimg]
+	mov edx, [ebx+ENEMY.size.x]
+    imul edx, [ebx+ENEMY.size.y]
+    IMG_MEMCOPY [ebx+ENEMY.img.pvBits], ecx, edx
+
 
  	lea edx, [ebx+ENEMY.wpn]
     xor ecx, ecx

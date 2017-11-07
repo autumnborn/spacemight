@@ -19,12 +19,13 @@ section '.data' data readable writeable
 	player PLAYER
 	enemy ENEMY
 	wdctrl WORLDCTRL
-
+	
 	errmsg db "Error", 0
 	img_pl file "img\sm_plr_32x32x32_raw.bmp"
 	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
 	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
-	worldTimer dd ?; temp
+	
+	etype_1 ENMTYPE 1, 2, 1, 50, img_e1, <24, 32>
 
 section '.code' code readable executable
   	

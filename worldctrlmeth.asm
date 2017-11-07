@@ -12,7 +12,7 @@ proc wdc_init uses ebx, pWdc:DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, ENEMY, ecx
-	stdcall enm_init, eax, player
+	stdcall enm_init, eax, etype_1, player
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
 	jnz @B

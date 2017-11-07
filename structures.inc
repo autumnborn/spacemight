@@ -69,4 +69,11 @@ struct WORLDCTRL
 	enemies ENMARR
 ends
 
-
+struct ENMTYPE
+	type db ?
+	speed db ?
+	weapon db ?
+	health dw ?
+	pimg dd ?
+	size POINT
+ends
