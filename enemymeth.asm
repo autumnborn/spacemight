@@ -166,31 +166,36 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 endp
 
 proc enm_fire uses ebx ecx edx, pEnm:DWORD
-	lea edx, [ebx+ENEMY.wpn]
+	mov ebx, [pEnm]
 
-	xor ecx, ecx
-  @@:
-	GetDimFieldAddr edx, WEAPON, ecx, exist
-	.if byte [eax]=0
-		GetDimIndexAddr edx, WEAPON, ecx
-		stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x]
-		push ebx
-		invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
-		pop ebx
-		;test eax, eax
-		;setne [ebx+ENEMY.firesleep]
-		jmp @F
-	.endif
-	inc ecx
-	cmp ecx, [edx+WPNARR.length]
-	jnz @B 
+	.if ~[ebx+ENEMY.firesleep]
+
+		lea edx, [ebx+ENEMY.wpn]
+		xor ecx, ecx
+	  @@:
+		GetDimFieldAddr edx, WEAPON, ecx, exist
+		.if byte [eax]=0
+			GetDimIndexAddr edx, WEAPON, ecx
+			stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x]
+			push ebx
+			invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
+			pop ebx
+			test eax, eax
+			setne [ebx+ENEMY.firesleep]
+			jmp @F
+		.endif
+		inc ecx
+		cmp ecx, [edx+WPNARR.length]
+		jnz @B 
+
+	.endif	
   @@:
   	ret
 endp
 
 proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	;mov byte [ebx+ENEMY.firesleep], 0
+	mov byte [ebx+ENEMY.firesleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp

@@ -53,6 +53,7 @@ struct ENEMY
 	weapon db ?
 	health dw ?
 	exist db ?
+	firesleep db ?
 	pPlayer dd ?
 	p POINT
 	size POINT
