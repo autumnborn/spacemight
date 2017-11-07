@@ -188,7 +188,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
   	ret
 endp
 
-proc enm_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
+proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 	;mov byte [ebx+ENEMY.firesleep], 0
 	invoke timeKillEvent, [uID]

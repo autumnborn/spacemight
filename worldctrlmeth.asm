@@ -39,10 +39,11 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
   	test al, al
   	jnz .upd
 
+  	mov ebx, [dwUser]
   	mov al, [ebx+WORLDCTRL.enmdelay]
   	test al, al
   	jnz .cont
-  	mov ebx, [dwUser]
+  	; mov ebx, [dwUser]
   	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 
  	GetDimIndexAddr edx, ENEMY, ecx
