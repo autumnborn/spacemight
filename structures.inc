@@ -64,6 +64,7 @@ ARRAY ENMARR, 3, ENEMY
 
 struct WORLDCTRL
 	timer dd ?
+	enmdelay db ?
 	enemies ENMARR
 ends
 
