@@ -117,10 +117,10 @@ proc wpn_update uses ebx, pWpn:DWORD
 
 	cmp [ebx+WEAPON.direct], 0
 	jl @F
-	inc [ebx+WEAPON.p.y]
+	add [ebx+WEAPON.p.y], WPN_SPEED
 	jmp .exitif
   @@:	
-	dec [ebx+WEAPON.p.y]
+	sub [ebx+WEAPON.p.y], WPN_SPEED
   .exitif:
 	 
 	.if [ebx+WEAPON.p.y] > SCR_HEIGHT ;sign < 0 as unsign > SCR_HEIGHT too
