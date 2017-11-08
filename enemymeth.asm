@@ -107,7 +107,7 @@ proc enm_destructor uses ebx, pEnm:DWORD
 endp
 
 ;proc enm_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
-proc enm_update uses ebx, pEnm:DWORD
+proc enm_update uses eax ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	stdcall enm_clear, ebx
 	stdcall enm_behavior, ebx

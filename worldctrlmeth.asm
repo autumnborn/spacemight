@@ -43,7 +43,6 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
   	mov al, [ebx+WORLDCTRL.enmdelay]
   	test al, al
   	jnz .cont
-  	; mov ebx, [dwUser]
   	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 
  	GetDimIndexAddr edx, ENEMY, ecx
@@ -57,8 +56,8 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
   .upd:	
  	GetDimIndexAddr edx, ENEMY, ecx
-	stdcall wdc_enemyCollision, eax, player
 	stdcall enm_update, eax
+	stdcall wdc_enemyCollision, eax, player
 
   .cont:
 	inc ecx
