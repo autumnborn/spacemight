@@ -60,6 +60,8 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	stdcall wdc_enemyCollision, eax, player
 
   .cont:
+  	GetDimIndexAddr edx, ENEMY, ecx
+  	stdcall enm_updateWpns, eax	;weapon updating independent of enemy die 
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
 	jnz @B

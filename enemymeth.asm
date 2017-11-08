@@ -111,7 +111,7 @@ proc enm_update uses eax ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	stdcall enm_clear, ebx
 	stdcall enm_behavior, ebx
-	stdcall enm_updateWpns, ebx
+	; stdcall enm_updateWpns, ebx
 	stdcall enm_draw, ebx
 	ret
 endp
@@ -207,6 +207,7 @@ proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	ret
 endp
 
+; pWpn pointer to player(!) weapon
 proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	mov ebx, [pEnm]
 	mov ecx, [pWpn]
