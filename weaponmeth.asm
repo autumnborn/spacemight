@@ -13,10 +13,6 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:B
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl
 
-	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
-	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biPlanes], 1
-	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biBitCount], 32
-
 	mov eax, [pType]
 	mov cl, [eax+WPNTYPE.type]
 	mov [ebx+WEAPON.type], cl
@@ -31,6 +27,10 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:B
 	mov ecx, [eax+WPNTYPE.size.y]
 	mov [ebx+WEAPON.size.y], ecx
 	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biHeight], ecx
+
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biPlanes], 1
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biBitCount], 32
 
 	lea eax, [ebx+WEAPON.img.bmInfo]
 	lea ecx, [ebx+WEAPON.img.pvBits]

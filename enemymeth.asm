@@ -12,8 +12,14 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.pPlayer], eax
 
 	mov eax, [pType]
+	mov cl, [eax+ENMTYPE.type]
+    mov [ebx+ENEMY.type], cl
+
 	mov cl, [eax+ENMTYPE.speed]
     mov [ebx+ENEMY.speed], cl
+
+    mov cx, [eax+ENMTYPE.health]
+    mov [ebx+ENEMY.health], cx
 	
 	mov ecx, [eax+ENMTYPE.size.x]
 	mov [ebx+ENEMY.size.x], ecx

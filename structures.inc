@@ -36,7 +36,7 @@ ARRAY WPNARR, 10, WEAPON
 
 struct PLAYER
 	speed db ?
-	weapon db ?
+	weapon db ? ;(?)
 	health dw ?
 	timer dd ?
 	firesleep db ?
@@ -50,7 +50,7 @@ ends
 struct ENEMY
 	type db ?
 	speed db ?
-	weapon db ?
+	weapon db ? ;(?)
 	health dw ?
 	exist db ?
 	firesleep db ?
