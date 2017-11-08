@@ -26,6 +26,7 @@ section '.data' data readable writeable
 	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
 	
 	etype_1 ENMTYPE 1, 2, 1, 50, img_e1, <24, 32>
+	wpntype_1 WPNTYPE W_SIMPLE, 50, img_w1, <2, 8>
 
 section '.code' code readable executable
   	

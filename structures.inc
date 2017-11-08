@@ -77,3 +77,11 @@ struct ENMTYPE
 	pimg dd ?
 	size POINT
 ends
+
+struct WPNTYPE
+	type db ?
+	damage dw ?
+	pimg dd ?
+	size POINT	
+ends
+

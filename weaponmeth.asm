@@ -5,12 +5,11 @@ if DBG
 	nop
 end if
 
-proc wpn_init uses ebx ecx edx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYTE
+proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:BYTE
 	mov ebx, [pWpn]
 	mov ecx, [pParent]
 	mov [ebx+WEAPON.parent], ecx
-	mov cl, [type]
-	mov [ebx+WEAPON.type], cl
+
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl
 
@@ -18,18 +17,20 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYT
 	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biPlanes], 1
 	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biBitCount], 32
 
-	.if [type]=W_SIMPLE
-		mov eax, 2
-		mov ecx, 8
-		mov [ebx+WEAPON.size.x], eax
-		mov [ebx+WEAPON.size.y], ecx
-		mov [ebx+WEAPON.img.bmInfo.bmiHeader.biWidth], eax
-		mov [ebx+WEAPON.img.bmInfo.bmiHeader.biHeight], ecx
+	mov eax, [pType]
+	mov cl, [eax+WPNTYPE.type]
+	mov [ebx+WEAPON.type], cl
+	
+	mov cx, [eax+WPNTYPE.damage]
+	mov [ebx+WEAPON.damage], cx
+	
+	mov ecx, [eax+WPNTYPE.size.x]
+	mov [ebx+WEAPON.size.x], ecx
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biWidth], ecx
 
-	.elseif [type]=W_DOUBLE
-		mov [ebx+WEAPON.size.x], eax
-		mov [ebx+WEAPON.size.y], ecx
-	.endif	
+	mov ecx, [eax+WPNTYPE.size.y]
+	mov [ebx+WEAPON.size.y], ecx
+	mov [ebx+WEAPON.img.bmInfo.bmiHeader.biHeight], ecx
 
 	lea eax, [ebx+WEAPON.img.bmInfo]
 	lea ecx, [ebx+WEAPON.img.pvBits]
@@ -37,9 +38,11 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pParent:DWORD, type:BYTE, direct:BYT
 	stdcall _createDIB, eax, ecx, edx
 	mov [ebx+WEAPON.img.dib], eax
 
-	mov ecx, [ebx+WEAPON.size.x]
-    imul ecx, [ebx+WEAPON.size.y]
-    IMG_MEMCOPY [ebx+WEAPON.img.pvBits], img_w1, ecx
+	mov eax, [pType]
+    mov ecx, [eax+WPNTYPE.pimg]
+	mov edx, [ebx+WEAPON.size.x]
+    imul edx, [ebx+WEAPON.size.y]
+    IMG_MEMCOPY [ebx+WEAPON.img.pvBits], ecx, edx
 
 	ret
 endp

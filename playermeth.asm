@@ -34,7 +34,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, ebx, W_SIMPLE, -1
+	stdcall wpn_init, eax, wpntype_1, ebx, -1
 	inc ecx
 	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
 	jnz @B

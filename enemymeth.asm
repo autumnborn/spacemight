@@ -45,7 +45,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, ebx, W_SIMPLE, 0
+	stdcall wpn_init, eax, wpntype_1, ebx, 0
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
 	jnz @B
