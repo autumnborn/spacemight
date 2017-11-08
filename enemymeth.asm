@@ -78,12 +78,6 @@ proc enm_draw uses ebx ecx edx, pEnm:DWORD
 	ret
 endp
 
-; proc enm_wakeup uses ebx, pEnm:DWORD
-; 	mov ebx, [pEnm]
-; 	invoke timeSetEvent, ENM_TIMER_DELAY, ENM_TIMER_RESOL, enm_TimeProc, ebx, TIME_PERIODIC 
-; 	mov [ebx+ENEMY.timer], eax
-; 	ret
-; endp
 proc enm_stop uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	mov al, [ebx+ENEMY.exist]
@@ -210,6 +204,26 @@ proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 	mov byte [ebx+ENEMY.firesleep], 0
 	invoke timeKillEvent, [uID]
+	ret
+endp
+
+proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
+	mov ebx, [pEnm]
+	mov ecx, [pWpn]
+	stdcall wpn_hit, ecx
+	mov ax, [ecx+WEAPON.damage]
+	sub [ebx+ENEMY.health], ax
+	cmp word [ebx+ENEMY.health], 0
+	jg @F
+	stdcall enm_die, ebx
+  @@: 
+	ret
+endp
+
+proc enm_die uses ebx ecx, pEnm:DWORD
+	mov ebx, [pEnm]
+	stdcall enm_stop, ebx
+	stdcall enm_clear, ebx
 	ret
 endp
 

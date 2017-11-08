@@ -210,6 +210,27 @@ proc plr_GetY uses ebx, pPlr:DWORD
 	ret
 endp
 
+proc plr_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
+	mov ebx, [pEnm]
+	mov ecx, [pWpn]
+	stdcall wpn_hit, ecx
+	lea eax, [ebx+ENEMY.health]
+	sub [eax], [ecx+WEAPON.damage]
+	cmp [eax], 0
+	ja @F
+	stdcall plr_die, ebx
+  @@: 
+	ret
+endp
+
+proc plr_die uses ebx ecx, pEnm:DWORD
+	mov ebx, [pEnm]
+	;todo something
+	stdcall plr_clear, ebx
+	ret
+endp
+
+
 ; call destructor for all instances of WEAPON (WPNARR)
 ; N.B: replace to common
 proc plr_delWpns uses ebx ecx, pWpnArr: DWORD

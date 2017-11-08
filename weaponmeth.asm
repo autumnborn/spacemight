@@ -131,3 +131,10 @@ proc wpn_update uses ebx, pWpn:DWORD
   @@:	
 	ret
 endp
+
+proc wpn_hit uses ebx ecx, pWpn:DWORD
+	mov ebx, [pWpn]
+	stdcall wpn_stop, ebx
+	stdcall wpn_clear, ebx
+	ret
+endp
