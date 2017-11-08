@@ -6,12 +6,17 @@ if DBG
 end if
 
 proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
+	local pWpnType dd ?
+
 	mov ebx, [pEnm]
 
 	mov eax, [pPlr]
 	mov [ebx+ENEMY.pPlayer], eax
 
 	mov eax, [pType]
+	mov ecx, [eax+ENMTYPE.pWpnType]
+	mov [pWpnType], ecx 
+	
 	mov cl, [eax+ENMTYPE.type]
     mov [ebx+ENEMY.type], cl
 
@@ -51,7 +56,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, wpntype_1, ebx, 0
+	stdcall wpn_init, eax, [pWpnType], ebx, 0
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
 	jnz @B

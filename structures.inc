@@ -50,7 +50,7 @@ ends
 struct ENEMY
 	type db ?
 	speed db ?
-	weapon db ? ;(?)
+	weapon db ?
 	health dw ?
 	exist db ?
 	firesleep db ?
@@ -72,7 +72,7 @@ ends
 struct ENMTYPE
 	type db ?
 	speed db ?
-	weapon db ?
+	pWpnType dd ?
 	health dw ?
 	pimg dd ?
 	size POINT

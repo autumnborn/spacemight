@@ -25,14 +25,14 @@ section '.data' data readable writeable
 	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
 	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
 	
-	etype_1 ENMTYPE 1, 2, 1, 50, img_e1, <24, 32>
 	wpntype_1 WPNTYPE W_SIMPLE, 50, img_w1, <2, 8>
+	etype_1 ENMTYPE 1, 2, wpntype_1, 50, img_e1, <24, 32>
 
 section '.code' code readable executable
   	
   start:
   	include 'form.asm'
- 
+
   	stdcall _configWnd
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
