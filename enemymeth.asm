@@ -88,6 +88,9 @@ proc enm_stop uses ebx, pEnm:DWORD
 	test al, al
 	jz @F
 	mov byte [ebx+ENEMY.exist], 0
+	mov eax, [ebx+ENEMY.pType]
+	mov ax, [eax+UNITTYPE.health]
+	mov [ebx+ENEMY.health], ax
   @@:
 	ret
 endp
@@ -110,12 +113,10 @@ proc enm_destructor uses ebx, pEnm:DWORD
   	ret
 endp
 
-;proc enm_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 proc enm_update uses eax ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	stdcall enm_clear, ebx
 	stdcall enm_behavior, ebx
-	; stdcall enm_updateWpns, ebx
 	stdcall enm_draw, ebx
 	ret
 endp
