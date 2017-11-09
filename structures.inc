@@ -35,6 +35,7 @@ ends
 ARRAY WPNARR, 10, WEAPON
 
 struct PLAYER
+	pType dd ?
 	speed db ?
 	weapon db ? ;(?)
 	health dw ?
@@ -48,7 +49,7 @@ struct PLAYER
 ends
 
 struct ENEMY
-	type db ?
+	pType dd ?
 	speed db ?
 	weapon db ?
 	health dw ?

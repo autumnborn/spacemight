@@ -5,12 +5,14 @@ if DBG
 	nop
 end if
 
+; pType - pointer to UNITTYPE
 proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	local pWpnType dd ?
 
 	mov ebx, [pPlr]
 
 	mov eax, [pType]
+	mov [ebx+PLAYER.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
 

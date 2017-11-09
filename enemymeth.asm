@@ -5,6 +5,7 @@ if DBG
 	nop
 end if
 
+; pType - pointer to UNITTYPE
 proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	local pWpnType dd ?
 
@@ -14,12 +15,10 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.pPlayer], eax
 
 	mov eax, [pType]
+    mov [ebx+ENEMY.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
 	
-	mov cl, [eax+UNITTYPE.type]
-    mov [ebx+ENEMY.type], cl
-
 	mov cl, [eax+UNITTYPE.speed]
     mov [ebx+ENEMY.speed], cl
 
