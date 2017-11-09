@@ -5,18 +5,32 @@ if DBG
 	nop
 end if
 
-proc plr_init uses ebx ecx edx, pPlr:DWORD
+proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
+	local pWpnType dd ?
+
 	mov ebx, [pPlr]
-	mov [ebx+PLAYER.size.x], 32
-	mov [ebx+PLAYER.size.y], 32
+
+	mov eax, [pType]
+	mov ecx, [eax+UNITTYPE.pWpnType]
+	mov [pWpnType], ecx 
+
+	mov cl, [eax+UNITTYPE.speed]
+    mov [ebx+PLAYER.speed], cl
+
+	mov cx, [eax+UNITTYPE.health]
+    mov [ebx+PLAYER.health], cx
+	
+	mov ecx, [eax+UNITTYPE.size.x]
+	mov [ebx+PLAYER.size.x], ecx
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biWidth], ecx
+
+	mov ecx, [eax+UNITTYPE.size.y]
+	mov [ebx+PLAYER.size.y], ecx
+	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biHeight], ecx
+
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biPlanes], 1
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biBitCount], 32
-
-	mov eax, [ebx+PLAYER.size.x]
-	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biWidth], eax
-	mov eax, [ebx+PLAYER.size.y]
-	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biHeight], eax
 
 	lea eax, [ebx+PLAYER.img.bmInfo]
 	lea ecx, [ebx+PLAYER.img.pvBits]
@@ -24,17 +38,17 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD
 	stdcall _createDIB, eax, ecx, edx
 	mov [ebx+PLAYER.img.dib], eax
 
-	mov ecx, [ebx+PLAYER.size.x]
-    imul ecx, [ebx+PLAYER.size.y]
-    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], img_pl, ecx
-
-    mov [ebx+PLAYER.speed], 4 
+	mov eax, [pType]
+    mov ecx, [eax+UNITTYPE.pimg]
+	mov edx, [ebx+PLAYER.size.x]
+    imul edx, [ebx+PLAYER.size.y]
+    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], ecx, edx
 
  	lea edx, [ebx+PLAYER.wpn]
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, wpntype_1, ebx, -1
+	stdcall wpn_init, eax, [pWpnType], ebx, -1
 	inc ecx
 	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
 	jnz @B

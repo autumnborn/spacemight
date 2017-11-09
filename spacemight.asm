@@ -26,6 +26,7 @@ section '.data' data readable writeable
 	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
 	
 	wpntype_1 WPNTYPE W_SIMPLE, 50, img_w1, <2, 8>
+	plrtype UNITTYPE 0, 4, wpntype_1, 300, img_pl, <32, 32>
 	etype_1 UNITTYPE 1, 2, wpntype_1, 50, img_e1, <24, 32>
 
 section '.code' code readable executable
@@ -41,11 +42,9 @@ section '.code' code readable executable
   	mov [player.p.y], 224
  
 
-  	stdcall plr_init, player
+  	stdcall plr_init, player, plrtype
   	stdcall plr_wakeup, player
 
-  	mov [enemy.p.x], 10
-  	mov [enemy.p.y], 20
   	stdcall wdc_init, wdctrl
   	stdcall wdc_wakeup, wdctrl
 
