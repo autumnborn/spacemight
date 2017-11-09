@@ -14,23 +14,23 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.pPlayer], eax
 
 	mov eax, [pType]
-	mov ecx, [eax+ENMTYPE.pWpnType]
+	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
 	
-	mov cl, [eax+ENMTYPE.type]
+	mov cl, [eax+UNITTYPE.type]
     mov [ebx+ENEMY.type], cl
 
-	mov cl, [eax+ENMTYPE.speed]
+	mov cl, [eax+UNITTYPE.speed]
     mov [ebx+ENEMY.speed], cl
 
-    mov cx, [eax+ENMTYPE.health]
+    mov cx, [eax+UNITTYPE.health]
     mov [ebx+ENEMY.health], cx
 	
-	mov ecx, [eax+ENMTYPE.size.x]
+	mov ecx, [eax+UNITTYPE.size.x]
 	mov [ebx+ENEMY.size.x], ecx
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biWidth], ecx
 	
-	mov ecx, [eax+ENMTYPE.size.y]
+	mov ecx, [eax+UNITTYPE.size.y]
 	mov [ebx+ENEMY.size.y], ecx
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biHeight], ecx
 	
@@ -46,7 +46,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 
 
     mov eax, [pType]
-    mov ecx, [eax+ENMTYPE.pimg]
+    mov ecx, [eax+UNITTYPE.pimg]
 	mov edx, [ebx+ENEMY.size.x]
     imul edx, [ebx+ENEMY.size.y]
     IMG_MEMCOPY [ebx+ENEMY.img.pvBits], ecx, edx

@@ -69,7 +69,7 @@ struct WORLDCTRL
 	enemies ENMARR
 ends
 
-struct ENMTYPE
+struct UNITTYPE
 	type db ?
 	speed db ?
 	pWpnType dd ?
