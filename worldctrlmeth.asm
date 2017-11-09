@@ -132,7 +132,8 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 		jmp .skip
 	.endif
 	;collision exist
-	stdcall enm_hit, [pEnm], edx
+	GetDimIndexAddr edx, WEAPON, ecx
+	stdcall enm_hit, [pEnm], eax
 
   .skip:	
 	inc ecx
