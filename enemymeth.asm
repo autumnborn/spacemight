@@ -235,20 +235,23 @@ proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 endp
 
 ; pWpn pointer to player(!) weapon
+; return points, if died, and null otherwise 
 proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	mov ebx, [pEnm]
 	mov ecx, [pWpn]
 	stdcall wpn_hit, ecx
 	mov ax, [ecx+WEAPON.damage]
 	sub [ebx+ENEMY.health], ax
+	xor eax, eax
 	cmp word [ebx+ENEMY.health], 0
 	jg @F
 	stdcall enm_die, ebx
+	or eax, 10	;todo: some calc points
   @@: 
 	ret
 endp
 
-proc enm_die uses ebx ecx, pEnm:DWORD
+proc enm_die uses eax ebx ecx, pEnm:DWORD
 	mov ebx, [pEnm]
 	stdcall enm_stop, ebx
 	stdcall enm_clear, ebx

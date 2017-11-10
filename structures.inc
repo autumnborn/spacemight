@@ -40,6 +40,7 @@ struct PLAYER
 	weapon db ? ;(?)
 	wpnDirect db ?
 	health dw ?
+	points dd ?
 	timer dd ?
 	firesleep db ?
 	p POINT

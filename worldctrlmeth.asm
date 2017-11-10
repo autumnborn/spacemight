@@ -79,7 +79,11 @@ proc wdc_destructor uses ebx, pWdc:DWORD
 
 	ret
 endp
-
+nop
+nop
+db "collisions"
+nop
+nop
 ; Enemies collisions handle
 proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	locals 
@@ -134,6 +138,13 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	;collision exist
 	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall enm_hit, [pEnm], eax
+	test eax, eax
+	jz .skip
+	push edx
+	mov edx, [pPlr]
+	lea edx, [edx+PLAYER.points]
+	add [edx], eax
+	pop edx
 
   .skip:	
 	inc ecx
