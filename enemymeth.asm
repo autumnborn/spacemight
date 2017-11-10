@@ -162,7 +162,18 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	
 	add dword [ecx], edx
 	cmp [ecx], eax
-	jae .exit	 
+	je .exit	;ex jae .exit
+
+	;enemies shoots from backyard
+	jb .direct0
+	mov [ebx+ENEMY.wpnDirect], -1	
+	jmp @F
+
+  .direct0:
+	mov [ebx+ENEMY.wpnDirect], 0
+	;////
+
+  @@:
 	stdcall plr_GetX, [ebx+ENEMY.pPlayer]
 	mov ecx, [ebx+ENEMY.p.x]
 	add eax, 4
