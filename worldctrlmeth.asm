@@ -58,6 +58,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
  	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_update, eax
 	stdcall wdc_enemyCollision, eax, player
+	stdcall wdc_playerCollision, player, eax
 
   .cont:
   	GetDimIndexAddr edx, ENEMY, ecx
@@ -104,7 +105,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	add eax, [ebx+ENEMY.size.y]
 	mov [enmY2], eax
 	
-	
+	;player weapon collision
 	mov eax, [pPlr]
  	lea edx, [eax+PLAYER.wpn]
 
@@ -145,6 +146,70 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	lea edx, [edx+PLAYER.points]
 	add [edx], eax
 	pop edx
+
+  .skip:	
+	inc ecx
+	cmp ecx, [edx+WPNARR.length]
+	jnz @B
+	
+
+	ret
+endp
+
+; Player collisions handle
+proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
+	locals 
+		plrX1 dd ?
+		plrX2 dd ?
+		plrY1 dd ?
+		plrY2 dd ?
+	endl
+
+	mov ebx, [pPlr]
+
+	mov eax, [ebx+PLAYER.p.x]
+	mov [plrX1], eax
+	add eax, [ebx+PLAYER.size.x]
+	mov [plrX2], eax
+	mov eax, [ebx+PLAYER.p.y]
+	mov [plrY1], eax
+	add eax, [ebx+PLAYER.size.y]
+	mov [plrY2], eax
+	
+	;enemy weapon collision
+	mov eax, [pEnm]
+ 	lea edx, [eax+ENEMY.wpn]
+
+    xor ecx, ecx
+
+  @@:  
+  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	mov al, byte [eax]
+  	test al, al
+  	jz .skip
+
+	GetDimFieldAddr edx, WEAPON, ecx, size.x
+	mov ebx, [eax]
+ 	GetDimFieldAddr edx, WEAPON, ecx, p.x
+	add ebx, [eax]
+	mov eax, [eax]
+	
+	.if eax>[plrX2] | ebx<[plrX1]
+		jmp .skip
+	.endif
+
+ 	GetDimFieldAddr edx, WEAPON, ecx, size.y
+	mov ebx, [eax]
+ 	GetDimFieldAddr edx, WEAPON, ecx, p.y
+	add ebx, [eax]
+	mov eax, [eax]
+
+	.if eax>[plrY2] | ebx<[plrY1]
+		jmp .skip
+	.endif
+	;collision exist
+	GetDimIndexAddr edx, WEAPON, ecx
+	stdcall plr_hit, [pPlr], eax
 
   .skip:	
 	inc ecx

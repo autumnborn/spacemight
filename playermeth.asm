@@ -59,7 +59,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
  	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_init, eax, [pWpnType], ebx, [wpnDirect]
 	inc ecx
-	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
+	cmp ecx, [edx+WPNARR.length]
 	jnz @B
 	ret
 endp
@@ -237,14 +237,14 @@ proc plr_GetY uses ebx, pPlr:DWORD
 	ret
 endp
 
-proc plr_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
-	mov ebx, [pEnm]
+proc plr_hit uses ebx ecx, pPlr:DWORD, pWpn:DWORD
+	mov ebx, [pPlr]
 	mov ecx, [pWpn]
 	stdcall wpn_hit, ecx
-	lea eax, [ebx+ENEMY.health]
-	sub [eax], [ecx+WEAPON.damage]
-	cmp [eax], 0
-	ja @F
+	mov ax, [ecx+WEAPON.damage]
+	sub [ebx+PLAYER.health], ax
+	cmp word [ebx+PLAYER.health], 0
+	jg @F
 	stdcall plr_die, ebx
   @@: 
 	ret
