@@ -38,6 +38,7 @@ struct PLAYER
 	pType dd ?
 	speed db ?
 	weapon db ? ;(?)
+	wpnDirect db ?
 	health dw ?
 	timer dd ?
 	firesleep db ?
@@ -52,6 +53,7 @@ struct ENEMY
 	pType dd ?
 	speed db ?
 	weapon db ?
+	wpnDirect db ?
 	health dw ?
 	exist db ?
 	firesleep db ?
@@ -74,6 +76,7 @@ struct UNITTYPE
 	type db ?
 	speed db ?
 	pWpnType dd ?
+	wpnDirect db ?
 	health dw ?
 	pimg dd ?
 	size POINT

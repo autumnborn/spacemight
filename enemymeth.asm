@@ -7,7 +7,10 @@ end if
 
 ; pType - pointer to UNITTYPE
 proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
-	local pWpnType dd ?
+	locals
+		pWpnType dd ?
+		wpnDirect dd ?
+	endl
 
 	mov ebx, [pEnm]
 
@@ -18,7 +21,11 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
     mov [ebx+ENEMY.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
-	
+
+	movzx ecx, byte [eax+UNITTYPE.wpnDirect]
+	mov [ebx+ENEMY.wpnDirect], cl
+	mov [wpnDirect], ecx
+
 	mov cl, [eax+UNITTYPE.speed]
     mov [ebx+ENEMY.speed], cl
 
@@ -55,7 +62,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, [pWpnType], ebx, 0
+	stdcall wpn_init, eax, [pWpnType], ebx, [wpnDirect]
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
 	jnz @B
@@ -178,9 +185,13 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 endp
 
 proc enm_fire uses ebx ecx edx, pEnm:DWORD
+	local wpnDirect dd ?
+	
 	mov ebx, [pEnm]
 
 	.if ~[ebx+ENEMY.firesleep]
+		movzx ecx, [ebx+ENEMY.wpnDirect]
+		mov [wpnDirect], ecx
 
 		lea edx, [ebx+ENEMY.wpn]
 		xor ecx, ecx
@@ -188,7 +199,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 		GetDimFieldAddr edx, WEAPON, ecx, exist
 		.if byte [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
-			stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x]
+			stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x], [ebx+ENEMY.size.y], [wpnDirect]
 			push ebx
 			invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx

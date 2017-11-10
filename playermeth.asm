@@ -7,7 +7,10 @@ end if
 
 ; pType - pointer to UNITTYPE
 proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
-	local pWpnType dd ?
+	locals
+		pWpnType dd ?
+		wpnDirect dd ?
+	endl
 
 	mov ebx, [pPlr]
 
@@ -15,6 +18,10 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	mov [ebx+PLAYER.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
+
+	movzx ecx, byte [eax+UNITTYPE.wpnDirect]
+	mov [ebx+PLAYER.wpnDirect], cl
+	mov [wpnDirect], ecx
 
 	mov cl, [eax+UNITTYPE.speed]
     mov [ebx+PLAYER.speed], cl
@@ -50,7 +57,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
     xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, WEAPON, ecx
-	stdcall wpn_init, eax, [pWpnType], ebx, -1
+	stdcall wpn_init, eax, [pWpnType], ebx, [wpnDirect]
 	inc ecx
 	cmp ecx, [edx+WPNARR.length] ; eq [ebx+PLAYER.wpn.length] 
 	jnz @B
@@ -108,6 +115,8 @@ proc plr_destructor uses ebx, pPlr:DWORD
 endp
 
 proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
+	local wpnDirect dd ?
+
 	mov ebx, [dwUser]
 
 
@@ -156,14 +165,16 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
 
 	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.firesleep]
-		lea edx, [ebx+PLAYER.wpn]
+		movzx ecx, [ebx+ENEMY.wpnDirect]
+		mov [wpnDirect], ecx
 
+		lea edx, [ebx+PLAYER.wpn]			
 		xor ecx, ecx
 	  @@:
 		GetDimFieldAddr edx, WEAPON, ecx, exist
 		.if byte [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
-			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], [ebx+PLAYER.size.x]
+			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], [ebx+PLAYER.size.x], [ebx+PLAYER.size.x], [wpnDirect]
 			push ebx
 			invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, plr_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx

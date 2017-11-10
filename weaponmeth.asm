@@ -70,8 +70,10 @@ proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	ret
 endp
 
-proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DWORD, hostH:DWORD
+proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DWORD, hostH:DWORD, direct:BYTE
 	mov ebx, [pWpn]
+	mov cl, [direct]
+	mov [ebx+WEAPON.direct], cl
 	;center X align
 	mov ecx, [hostW]
 	sub ecx, [ebx+WEAPON.size.x]
