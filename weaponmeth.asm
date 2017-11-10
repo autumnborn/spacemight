@@ -83,7 +83,7 @@ proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DW
 	
 	mov ecx, [startY]
 	;startY align cond direct
-	cmp [ebx+WEAPON.direct], 0
+	cmp [ebx+WEAPON.direct], WPN_DIRECT_D
 	jnz @F 
 	add ecx, [hostW]
   @@:	
@@ -117,7 +117,7 @@ proc wpn_update uses ebx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_clear, ebx
 
-	cmp [ebx+WEAPON.direct], 0
+	cmp [ebx+WEAPON.direct], WPN_DIRECT_D
 	jl @F
 	add [ebx+WEAPON.p.y], WPN_SPEED
 	jmp .exitif

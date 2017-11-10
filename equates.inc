@@ -25,8 +25,10 @@ ENM_FIRE_RESOL		=100
 
 WDC_ENM_DELAY		=100
 
-; Weapon speed
+; Weapon moving
 WPN_SPEED			=4
+WPN_DIRECT_U		=-1
+WPN_DIRECT_D		=0
 ; Weapon types
 W_SIMPLE			=1
 W_DOUBLE			=2

@@ -166,11 +166,11 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 
 	;enemies shoots from backyard
 	jb .direct0
-	mov [ebx+ENEMY.wpnDirect], -1	
+	mov [ebx+ENEMY.wpnDirect], WPN_DIRECT_U	
 	jmp @F
 
   .direct0:
-	mov [ebx+ENEMY.wpnDirect], 0
+	mov [ebx+ENEMY.wpnDirect], WPN_DIRECT_D
 	;////
 
   @@:
