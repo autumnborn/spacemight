@@ -9,10 +9,23 @@ proc wdc_init uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 	lea edx, [ebx+WORLDCTRL.enemies]
-    xor ecx, ecx
+	stdcall wdc_enmInit, edx, etype_1, player
+ ;    xor ecx, ecx
+ ;  @@:  
+ ; 	GetDimIndexAddr edx, ENEMY, ecx
+	; stdcall enm_init, eax, etype_1, player
+	; inc ecx
+	; cmp ecx, [edx+ENMARR.length]
+	; jnz @B
+	ret
+endp
+
+proc wdc_enmInit uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
+	mov edx, [pEnmArr]
+   	xor ecx, ecx
   @@:  
  	GetDimIndexAddr edx, ENEMY, ecx
-	stdcall enm_init, eax, etype_1, player
+	stdcall enm_init, eax, [pEnmType], [pPlr]
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
 	jnz @B
