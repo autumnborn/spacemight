@@ -51,6 +51,7 @@ struct PLAYER
 ends
 
 struct ENEMY
+	type db ?
 	pType dd ?
 	speed db ?
 	weapon db ?

@@ -165,7 +165,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
 
 	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.firesleep]
-		movzx ecx, [ebx+ENEMY.wpnDirect]
+		movzx ecx, [ebx+PLAYER.wpnDirect]
 		mov [wpnDirect], ecx
 
 		lea edx, [ebx+PLAYER.wpn]			

@@ -26,6 +26,9 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.wpnDirect], cl
 	mov [wpnDirect], ecx
 
+	mov cl, [eax+UNITTYPE.type]
+    mov [ebx+ENEMY.type], cl
+
 	mov cl, [eax+UNITTYPE.speed]
     mov [ebx+ENEMY.speed], cl
 
