@@ -167,8 +167,10 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	cmp [ecx], eax
 	je .exit	;ex jae .exit
 
-	;enemies shoots from backyard
+	;enemies shoots from backyard, if enemy type <> 1 
 	jb .direct0
+	cmp [ebx+ENEMY.type], 1
+	jz .exit
 	mov [ebx+ENEMY.wpnDirect], WPN_DIRECT_U	
 	jmp @F
 

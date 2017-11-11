@@ -27,7 +27,7 @@ section '.data' data readable writeable
 	
 	wpntype_1 WPNTYPE W_SIMPLE, 50, img_w1, <2, 8>
 	plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 300, img_pl, <32, 32>
-	etype_1 UNITTYPE 1, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
+	etype_1 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
 
 section '.code' code readable executable
   	
