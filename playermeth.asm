@@ -108,9 +108,9 @@ proc plr_destructor uses ebx, pPlr:DWORD
 	invoke timeKillEvent, eax
 	mov [ebx+PLAYER.timer], 0
   @@:
-	lea eax, [ebx+PLAYER.img.dib]
-	lea ecx, [ebx+PLAYER.img.memDC]
-	stdcall _deleteDIB, eax, ecx
+	; lea eax, [ebx+PLAYER.img.dib]
+	; lea ecx, [ebx+PLAYER.img.memDC]
+	stdcall _deleteDIB, [ebx+PLAYER.img.dib], [ebx+PLAYER.img.memDC]
   	ret
 endp
 
