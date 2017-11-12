@@ -40,7 +40,7 @@ struct PLAYER
 	weapon db ? ;(?)
 	wpnDirect db ?
 	health dw ?
-	points dd ?
+	score dd ?
 	timer dd ?
 	firesleep db ?
 	p POINT
@@ -70,6 +70,7 @@ ARRAY ENMARR, 3, ENEMY
 
 struct WORLDCTRL
 	timer dd ?
+	level db ?
 	enmdelay db ?
 	enemies ENMARR
 ends

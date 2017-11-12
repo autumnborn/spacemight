@@ -156,7 +156,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	jz .skip
 	push edx
 	mov edx, [pPlr]
-	lea edx, [edx+PLAYER.points]
+	lea edx, [edx+PLAYER.score]
 	add [edx], eax
 	pop edx
 
