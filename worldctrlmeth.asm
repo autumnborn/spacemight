@@ -10,13 +10,6 @@ proc wdc_init uses ebx, pWdc:DWORD
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 	lea edx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, edx, etype_1, player
- ;    xor ecx, ecx
- ;  @@:  
- ; 	GetDimIndexAddr edx, ENEMY, ecx
-	; stdcall enm_init, eax, etype_1, player
-	; inc ecx
-	; cmp ecx, [edx+ENMARR.length]
-	; jnz @B
 	ret
 endp
 
@@ -72,6 +65,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	stdcall enm_update, eax
 	stdcall wdc_enemyCollision, eax, player
 	stdcall wdc_playerCollision, player, eax
+	stdcall wdc_defLevel, ebx, player
 
   .cont:
   	GetDimIndexAddr edx, ENEMY, ecx
@@ -93,6 +87,35 @@ proc wdc_destructor uses ebx, pWdc:DWORD
 
 	ret
 endp
+
+proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
+	mov ebx, [pWdc]
+	mov eax, [pPlr]
+	mov edx, [eax+PLAYER.score]
+
+	.if edx>LEVEL9
+		mov byte [ebx+WORLDCTRL.level], 9
+	.elseif edx>LEVEL8
+		mov byte [ebx+WORLDCTRL.level], 8
+	.elseif edx>LEVEL7
+		mov byte [ebx+WORLDCTRL.level], 7
+	.elseif edx>LEVEL6
+		mov byte [ebx+WORLDCTRL.level], 6
+	.elseif edx>LEVEL5
+		mov byte [ebx+WORLDCTRL.level], 5
+	.elseif edx>LEVEL4
+		mov byte [ebx+WORLDCTRL.level], 4
+	.elseif edx>LEVEL3
+		mov byte [ebx+WORLDCTRL.level], 3
+	.elseif edx>LEVEL2
+		mov byte [ebx+WORLDCTRL.level], 2
+	.elseif edx>LEVEL1
+		mov byte [ebx+WORLDCTRL.level], 1
+	.endif
+
+	ret
+endp
+
 nop
 nop
 db "collisions"
