@@ -155,7 +155,7 @@ section '.code' code readable executable
   endp
 
   ; dib - dib handle returned _createDIB
-  proc _deleteDIB, dib:DWORD, memDC:DWORD
+  proc _deleteDIB uses ebx, dib:DWORD, memDC:DWORD
   	invoke DeleteObject, [dib]
   	invoke ReleaseDC, [hwnd], [memDC]
   	ret

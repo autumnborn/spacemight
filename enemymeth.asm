@@ -105,7 +105,7 @@ proc enm_stop uses ebx, pEnm:DWORD
 	ret
 endp
 
-proc enm_destructor uses ebx ecx, pEnm:DWORD
+proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 
 	lea eax, [ebx+ENEMY.wpn]

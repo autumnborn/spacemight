@@ -90,29 +90,33 @@ proc wdc_destructor uses ebx, pWdc:DWORD
 	ret
 endp
 
-proc wdc_defLevel uses eax ebx, pWdc:DWORD, pPlr:DWORD
+proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov ebx, [pWdc]
 	mov eax, [pPlr]
 	mov eax, [eax+PLAYER.score]
+	mov dl, [ebx+WORLDCTRL.level]
 
-	.if eax>LEVEL9
+	.if eax>LEVEL9 & dl=8
 		mov byte [ebx+WORLDCTRL.level], 9
-	.elseif eax>LEVEL8
+	.elseif eax>LEVEL8 & dl=7
 		mov byte [ebx+WORLDCTRL.level], 8
-	.elseif eax>LEVEL7
+	.elseif eax>LEVEL7 & dl=6
 		mov byte [ebx+WORLDCTRL.level], 7
-	.elseif eax>LEVEL6
+	.elseif eax>LEVEL6 & dl=5
 		mov byte [ebx+WORLDCTRL.level], 6
-	.elseif eax>LEVEL5
+	.elseif eax>LEVEL5 & dl=4
 		mov byte [ebx+WORLDCTRL.level], 5
-	.elseif eax>LEVEL4
+	.elseif eax>LEVEL4 & dl=3
 		mov byte [ebx+WORLDCTRL.level], 4
-	.elseif eax>LEVEL3
+	.elseif eax>LEVEL3 & dl=2
 		mov byte [ebx+WORLDCTRL.level], 3
-	.elseif eax>LEVEL2
+	.elseif eax>LEVEL2 & dl=1
 		mov byte [ebx+WORLDCTRL.level], 2
-	.elseif eax>LEVEL1
+	.elseif eax>LEVEL1 & dl=0
 		mov byte [ebx+WORLDCTRL.level], 1
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_2, [pPlr]
 	.endif
 
 	ret
