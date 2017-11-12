@@ -85,31 +85,33 @@ proc wdc_destructor uses ebx, pWdc:DWORD
 	invoke timeKillEvent, eax
 	mov [ebx+WORLDCTRL.timer], 0
 
+	lea eax, [ebx+WORLDCTRL.enemies] 
+	stdcall wdc_delEnms, eax
 	ret
 endp
 
-proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
+proc wdc_defLevel uses eax ebx, pWdc:DWORD, pPlr:DWORD
 	mov ebx, [pWdc]
 	mov eax, [pPlr]
-	mov edx, [eax+PLAYER.score]
+	mov eax, [eax+PLAYER.score]
 
-	.if edx>LEVEL9
+	.if eax>LEVEL9
 		mov byte [ebx+WORLDCTRL.level], 9
-	.elseif edx>LEVEL8
+	.elseif eax>LEVEL8
 		mov byte [ebx+WORLDCTRL.level], 8
-	.elseif edx>LEVEL7
+	.elseif eax>LEVEL7
 		mov byte [ebx+WORLDCTRL.level], 7
-	.elseif edx>LEVEL6
+	.elseif eax>LEVEL6
 		mov byte [ebx+WORLDCTRL.level], 6
-	.elseif edx>LEVEL5
+	.elseif eax>LEVEL5
 		mov byte [ebx+WORLDCTRL.level], 5
-	.elseif edx>LEVEL4
+	.elseif eax>LEVEL4
 		mov byte [ebx+WORLDCTRL.level], 4
-	.elseif edx>LEVEL3
+	.elseif eax>LEVEL3
 		mov byte [ebx+WORLDCTRL.level], 3
-	.elseif edx>LEVEL2
+	.elseif eax>LEVEL2
 		mov byte [ebx+WORLDCTRL.level], 2
-	.elseif edx>LEVEL1
+	.elseif eax>LEVEL1
 		mov byte [ebx+WORLDCTRL.level], 1
 	.endif
 
@@ -253,5 +255,18 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	jnz @B
 	
 
+	ret
+endp
+
+; !!!
+proc wdc_delEnms uses ebx ecx edx, pEnmArr:DWORD
+	mov edx, [pEnmArr]
+   	xor ecx, ecx
+  @@:  
+ 	GetDimIndexAddr edx, ENEMY, ecx
+	stdcall enm_destructor, eax
+	inc ecx
+	cmp ecx, [edx+ENMARR.length]
+	jnz @B
 	ret
 endp

@@ -24,12 +24,12 @@ section '.data' data readable writeable
 	img_pl file "img\sm_plr_32x32x32_raw.bmp"
 	img_w1 file "img\sm_wpn1_2x8x32_raw.bmp"
 	img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
-	img_e3 file "img\sm_enm1_24x32x32_raw.bmp"
-	img_e4 file "img\sm_enm1_24x32x32_raw.bmp"
-	
+
 	wpntype_1 WPNTYPE W_SIMPLE, 50, img_w1, <2, 8>
 	plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 300, img_pl, <32, 32>
 	etype_1 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
+	etype_2 UNITTYPE 3, 3, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
+	etype_3 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
 
 section '.code' code readable executable
   	
@@ -64,6 +64,7 @@ section '.code' code readable executable
 
   exit:
   	stdcall plr_destructor, player
+  	stdcall wdc_destructor, wdctrl
    	stdcall _deleteDIB, [screen.dib], [screen.memDC]
   	invoke ExitProcess, 0
 

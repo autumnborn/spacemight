@@ -105,18 +105,12 @@ proc enm_stop uses ebx, pEnm:DWORD
 	ret
 endp
 
-proc enm_destructor uses ebx, pEnm:DWORD
+proc enm_destructor uses ebx ecx, pEnm:DWORD
 	mov ebx, [pEnm]
 
 	lea eax, [ebx+ENEMY.wpn]
 	stdcall enm_delWpns, eax
-	
-	mov eax, [ebx+ENEMY.timer]
-	test eax, eax
-	jz @F
-	invoke timeKillEvent, eax
-	mov [ebx+ENEMY.timer], 0
-  @@:
+
 	lea eax, [ebx+ENEMY.img.dib]
 	lea ecx, [ebx+ENEMY.img.memDC]
 	stdcall _deleteDIB, eax, ecx
