@@ -98,20 +98,44 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 
 	.if eax>LEVEL9 & dl=8
 		mov byte [ebx+WORLDCTRL.level], 9
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_10, [pPlr]
 	.elseif eax>LEVEL8 & dl=7
 		mov byte [ebx+WORLDCTRL.level], 8
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_9, [pPlr]
 	.elseif eax>LEVEL7 & dl=6
 		mov byte [ebx+WORLDCTRL.level], 7
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_8, [pPlr]
 	.elseif eax>LEVEL6 & dl=5
 		mov byte [ebx+WORLDCTRL.level], 6
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_7, [pPlr]
 	.elseif eax>LEVEL5 & dl=4
 		mov byte [ebx+WORLDCTRL.level], 5
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_6, [pPlr]
 	.elseif eax>LEVEL4 & dl=3
 		mov byte [ebx+WORLDCTRL.level], 4
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_5, [pPlr]		
 	.elseif eax>LEVEL3 & dl=2
 		mov byte [ebx+WORLDCTRL.level], 3
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_4, [pPlr]
 	.elseif eax>LEVEL2 & dl=1
 		mov byte [ebx+WORLDCTRL.level], 2
+		lea edx, [ebx+WORLDCTRL.enemies]
+		stdcall wdc_delEnms, edx
+		stdcall wdc_enmInit, edx, etype_3, [pPlr]
 	.elseif eax>LEVEL1 & dl=0
 		mov byte [ebx+WORLDCTRL.level], 1
 		lea edx, [ebx+WORLDCTRL.enemies]
