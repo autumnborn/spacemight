@@ -105,9 +105,6 @@ endp
 proc wpn_destructor uses ebx ecx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_stop, ebx
-  @@:
-  	;lea eax, [ebx+WEAPON.img.dib]
-	;lea ecx, [ebx+WEAPON.img.memDC]
 	stdcall _deleteDIB, [ebx+WEAPON.img.dib], [ebx+WEAPON.img.memDC]
   	ret
 endp

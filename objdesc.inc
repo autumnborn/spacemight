@@ -24,12 +24,12 @@ plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 300, img_pl, <32, 32>
 
 ; Enemies
 etype_1 UNITTYPE 1, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_2 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_3 UNITTYPE 3, 3, wpntype_2, WPN_DIRECT_D, 50, img_e2, <32, 32>
-etype_4 UNITTYPE 4, 4, wpntype_3, WPN_DIRECT_D, 50, img_e2, <32, 32>
-etype_5 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_6 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_7 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_8 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_9 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_10 UNITTYPE 4, 4, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
+etype_2 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 150, img_e1, <24, 32>
+etype_3 UNITTYPE 3, 2, wpntype_2, WPN_DIRECT_D, 100, img_e2, <32, 32>
+etype_4 UNITTYPE 4, 2, wpntype_2, WPN_DIRECT_D, 150, img_e2, <32, 32>
+etype_5 UNITTYPE 5, 2, wpntype_3, WPN_DIRECT_D, 150, img_e1, <24, 32>
+etype_6 UNITTYPE 6, 3, wpntype_1, WPN_DIRECT_D, 100, img_e1, <24, 32>
+etype_7 UNITTYPE 7, 3, wpntype_2, WPN_DIRECT_D, 100, img_e1, <24, 32>
+etype_8 UNITTYPE 8, 3, wpntype_3, WPN_DIRECT_D, 100, img_e1, <24, 32>
+etype_9 UNITTYPE 9, 3, wpntype_3, WPN_DIRECT_D, 100, img_e1, <24, 32>
+etype_10 UNITTYPE 10, 3, wpntype_3, WPN_DIRECT_D, 150, img_e1, <24, 32>

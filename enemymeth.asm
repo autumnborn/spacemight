@@ -111,8 +111,6 @@ proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	lea eax, [ebx+ENEMY.wpn]
 	stdcall enm_delWpns, eax
 
-	; lea eax, [ebx+ENEMY.img.dib]
-	; lea ecx, [ebx+ENEMY.img.memDC]
 	stdcall _deleteDIB, [ebx+ENEMY.img.dib], [ebx+ENEMY.img.memDC]
   	ret
 endp
