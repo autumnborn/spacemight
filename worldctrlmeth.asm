@@ -98,51 +98,78 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 
 	.if eax>LEVEL9 & dl=8
 		mov byte [ebx+WORLDCTRL.level], 9
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_10, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_10
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_10, [pPlr]
 	.elseif eax>LEVEL8 & dl=7
 		mov byte [ebx+WORLDCTRL.level], 8
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_9, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_9
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_9, [pPlr]
 	.elseif eax>LEVEL7 & dl=6
 		mov byte [ebx+WORLDCTRL.level], 7
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_8, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_8
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_8, [pPlr]
 	.elseif eax>LEVEL6 & dl=5
 		mov byte [ebx+WORLDCTRL.level], 6
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_7, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_7
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_7, [pPlr]
 	.elseif eax>LEVEL5 & dl=4
 		mov byte [ebx+WORLDCTRL.level], 5
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_6, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_6
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_6, [pPlr]
 	.elseif eax>LEVEL4 & dl=3
 		mov byte [ebx+WORLDCTRL.level], 4
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_5, [pPlr]		
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_5
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_5, [pPlr]		
 	.elseif eax>LEVEL3 & dl=2
 		mov byte [ebx+WORLDCTRL.level], 3
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_4, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_4
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_4, [pPlr]
 	.elseif eax>LEVEL2 & dl=1
 		mov byte [ebx+WORLDCTRL.level], 2
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_3, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_3
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_3, [pPlr]
 	.elseif eax>LEVEL1 & dl=0
 		mov byte [ebx+WORLDCTRL.level], 1
-		lea edx, [ebx+WORLDCTRL.enemies]
-		stdcall wdc_delEnms, edx
-		stdcall wdc_enmInit, edx, etype_2, [pPlr]
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_2
+		; lea edx, [ebx+WORLDCTRL.enemies]
+		; stdcall wdc_delEnms, edx
+		; stdcall wdc_enmInit, edx, etype_2, [pPlr]
 	.endif
 
+	ret
+endp
+
+proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD, pEnmType:DWORD
+	mov ebx, [pWdc]
+	lea ecx, [ebx+WORLDCTRL.enemies]
+	stdcall wdc_delEnms, ecx
+	
+	; restore plr health
+	mov eax, [pPlr]
+	mov edx, [pPlrType]
+	mov dx, [edx+UNITTYPE.health]
+	mov [eax+PLAYER.health], dx
+
+	; todo some infoview about new level
+	
+	; lea ecx, [ebx+WORLDCTRL.enemies]
+	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
 	ret
 endp
 
