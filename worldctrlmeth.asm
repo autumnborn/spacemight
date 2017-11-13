@@ -217,9 +217,27 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
 	jnz @B
-	
 
-	ret
+	; player unit collision
+	mov eax, [pPlr]
+	mov ebx, [eax+PLAYER.p.x]
+	mov ecx, [eax+PLAYER.size.x]
+	add ecx, ebx
+	.if ebx>[enmX2] | ecx<[enmX1]
+		jmp .exit
+	.endif
+	mov ebx, [eax+PLAYER.p.y]
+	mov ecx, [eax+PLAYER.size.y]
+	add ecx, ebx
+	.if ebx>[enmY2] | ecx<[enmY1]
+		jmp .exit
+	.endif
+	; collision exist
+	stdcall enm_die, [pEnm]
+	stdcall plr_die, [pPlr]
+	
+  .exit:
+ 	ret
 endp
 
 ; Player collisions handle
