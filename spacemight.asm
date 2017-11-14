@@ -22,7 +22,7 @@ section '.data' data readable writeable
 	
 	errmsg db "Error", 0
 	szBuff db 255 dup(0)
-	rcHealth RECT 100, 100, 0, 0
+	rcHealth RECT 600, 460, 0, 0
 	include 'objdesc.inc'
 
 section '.code' code readable executable
@@ -63,6 +63,7 @@ section '.code' code readable executable
   	invoke ExitProcess, 0
 
   	include 'formproc.asm'
+  	include 'infout.asm'
   	include 'enemymeth.asm'
   	include 'playermeth.asm'
   	include 'weaponmeth.asm'

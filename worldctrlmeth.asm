@@ -73,7 +73,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
 	jnz @B
-	stdcall wdc_healthDraw, player, rcHealth
+
 	ret
 endp
 
@@ -150,7 +150,7 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov [eax+PLAYER.health], dx
 
 	; todo some infoview about new level
-	
+	stdcall inf_healthDraw, [pPlr], rcHealth, 0FFFFFFh
 	; lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
 	ret
@@ -304,6 +304,7 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	;collision exist
 	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall plr_hit, [pPlr], eax
+	stdcall inf_healthDraw, [pPlr], rcHealth, 0FFFFFFh
 
   .skip:	
 	inc ecx
@@ -311,26 +312,6 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	jnz @B
 	
 
-	ret
-endp
-
-proc wdc_healthDraw uses ebx, pPlr:DWORD, pRect:DWORD
-	invoke BeginPaint, [hwnd], paint
-	mov ebx, [pRect]
-	mov ecx, [ebx+RECT.right]
-	sub ecx, [ebx+RECT.left]
-	mov edx, [ebx+RECT.bottom]
-	sub edx, [ebx+RECT.top]
-	invoke BitBlt, [hdc], [ebx+RECT.left], [ebx+RECT.top], ecx, edx, [screen.memDC], [ebx+RECT.left], [ebx+RECT.top], SRCCOPY
-	
-	mov ebx, [pPlr]
-	movzx ebx, word [ebx+PLAYER.health]
-	stdcall _val2dsu, ebx, szBuff
-	invoke SetTextColor, [hdc], 0FFFFFFh
-	invoke SetBkMode, [hdc], TRANSPARENT
-	invoke DrawText, [hdc], szBuff, -1, [pRect], DT_CALCRECT
-	invoke DrawText, [hdc], szBuff, -1, [pRect], DT_NOCLIP
-	invoke EndPaint, [hwnd], paint
 	ret
 endp
 
