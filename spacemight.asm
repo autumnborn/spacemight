@@ -21,6 +21,8 @@ section '.data' data readable writeable
 	wdctrl WORLDCTRL
 	
 	errmsg db "Error", 0
+	szBuff db 255 dup(0)
+	rcHealth RECT 100, 100, 0, 0
 	include 'objdesc.inc'
 
 section '.code' code readable executable
@@ -153,14 +155,109 @@ section '.code' code readable executable
   	ret
   endp 
 
-  proc _rnd uses edx, max:DWORD
+  ; Random number from 0 to top-1
+  proc _rnd uses edx, top:DWORD
 	@@:
 	  xor edx, edx	
 	  rdrand eax
 	  jnc @B
-	  div [max]
+	  div [top]
 	  mov eax, edx
 	  ret
+  endp
+
+  ;	Cover for convert v2d unsigned
+  ;	iVal - dword value
+  ;	pBuf - dword ptr to  str buffer
+  proc _val2dsu uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
+  	mov eax, [iVal]
+  	mov edi, [pBuf]
+  	call _v2d
+  	call _strRev
+  	ret
+  endp
+
+  ;	Cover for convert v2d signed
+  ;	iVal - dword value
+  ;	pBuf - dword ptr to str buffer
+  proc _val2dss uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
+  	mov eax, [iVal]
+  	mov edi, [pBuf]
+  	xor edx, edx	;edx -> sign: 0 - p, 1 - n
+  	mov ecx, eax
+  	rol ecx, 1
+  	test cl, 1
+  	jz @F
+  	inc edx
+  	xor ecx, ecx
+  	xchg eax, ecx
+  	sub eax, ecx
+
+  @@:
+  	push edx
+  	call _v2d
+  	pop edx
+  	test edx, edx
+  	jz @F
+  	mov [edi+ecx], byte "-"
+
+  @@:
+  	call _strRev
+  	ret 
+  endp 
+
+  ; Converts value to dec string
+  ; eax - value, edi - ptr to result buffer
+  ; Note: num-chars places from right to left
+  proc _v2d
+  	xor ecx, ecx
+
+  @@:
+  	test eax, eax
+  	jz @F	
+  	xor edx, edx
+  	mov ebx, 0Ah
+  	div ebx
+  	add dl, 30h
+  	mov [edi+ecx], dl
+  	inc ecx
+  	jmp @B
+
+  @@:
+  	test ecx, ecx
+  	jnz @F
+  	mov [edi], byte 30h
+    inc ecx
+  @@:
+  	mov [edi+ecx], word 0	
+  	ret
+  endp
+
+  ; Reverts null terminated string
+  ; edi - ptr to sz string buffer
+  proc _strRev
+  	push edi
+  	mov esi, edi
+
+  @@:
+  	mov al, [esi]
+  	test al, al
+  	jz @F
+  	inc esi
+  	jmp @B
+  
+  @@:
+  	dec esi
+  	cmp esi, edi
+  	jbe @F
+  	mov al, [esi]
+  	xchg al, [edi]
+  	mov [esi], al
+  	inc edi
+  	jmp @B
+  @@:
+  	pop edi
+  	ret
   endp
 
 section '.idata' import data readable
