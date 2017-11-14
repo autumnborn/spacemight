@@ -20,7 +20,7 @@ wpntype_2 WPNTYPE W_DOUBLE, 50, img_w2, <14, 6>
 wpntype_3 WPNTYPE W_TRIPPLE, 50, img_w3, <24, 8>
 
 ; Player
-plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 300, img_pl, <32, 32>
+plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 1000, img_pl, <32, 32>
 
 ; Enemies
 etype_1 UNITTYPE 1, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>

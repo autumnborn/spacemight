@@ -112,10 +112,10 @@ proc plr_destructor uses ebx, pPlr:DWORD
   	ret
 endp
 
-proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
+proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	local wpnDirect dd ?
 
-	mov ebx, [dwUser]
+	mov ebx, [pPlr]
 
 
 	.if dword [ebx+PLAYER.act.left]
@@ -188,6 +188,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 
 	stdcall plr_draw, ebx
 	stdcall plr_updateWpns, ebx
+	stdcall inf_healthDraw, infout, ebx
 	ret
 endp
 

@@ -1,20 +1,62 @@
-
-proc inf_healthDraw uses ebx ecx edx, pPlr:DWORD, pRect:DWORD, color:DWORD
-	invoke BeginPaint, [hwnd], paint
-	mov ebx, [pRect]
-	mov ecx, [ebx+RECT.right]
-	sub ecx, [ebx+RECT.left]
-	mov edx, [ebx+RECT.bottom]
-	sub edx, [ebx+RECT.top]
-	invoke BitBlt, [hdc], [ebx+RECT.left], [ebx+RECT.top], ecx, edx, [screen.memDC], [ebx+RECT.left], [ebx+RECT.top], SRCCOPY
+proc inf_init uses ebx, pInf:DWORD
+	mov ebx, [pInf]
 	
-	mov ebx, [pPlr]
-	movzx ebx, word [ebx+PLAYER.health]
-	stdcall _val2dsu, ebx, szBuff
-	invoke SetTextColor, [hdc], [color]
-	invoke SetBkMode, [hdc], TRANSPARENT
-	invoke DrawText, [hdc], szBuff, -1, [pRect], DT_CALCRECT
-	invoke DrawText, [hdc], szBuff, -1, [pRect], DT_NOCLIP
+	mov [ebx+INFOUT.img.bmInfo.bmiHeader.biWidth], SCR_WIDTH
+	mov [ebx+INFOUT.img.bmInfo.bmiHeader.biHeight], 30
+	mov [ebx+INFOUT.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
+	mov [ebx+INFOUT.img.bmInfo.bmiHeader.biPlanes], 1
+	mov [ebx+INFOUT.img.bmInfo.bmiHeader.biBitCount], 32
+	lea eax, [ebx+INFOUT.img.bmInfo]
+	lea ecx, [ebx+INFOUT.img.pvBits]
+	lea edx, [ebx+INFOUT.img.memDC]
+	stdcall _createDIB, eax, ecx, edx
+	mov [ebx+INFOUT.img.dib], eax
+
+	ret
+endp
+
+proc inf_destructor uses ebx, pInf:DWORD
+	mov ebx, [pInf]
+	stdcall _deleteDIB, [ebx+INFOUT.img.dib], [ebx+INFOUT.img.memDC]
+	ret
+endp
+
+proc inf_healthDraw uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
+	invoke BeginPaint, [hwnd], paint
+	mov ecx, [pPlr]
+	mov edx, [ecx+PLAYER.pType]
+	movzx eax, word [edx+UNITTYPE.health]
+	xor edx, edx
+	mov bl, 100
+	div bl
+	movzx ebx, word [ecx+PLAYER.health]
+	xchg eax, ebx
+	div bx
+	mov dl, al ; dl - %
+	
+	.if dl>60
+		mov eax, 0FF00h
+	.elseif dl>30
+		mov eax, 0FFFF00h
+	.else
+		mov eax, 0FF0000h
+	.endif
+
+	mov ebx, [pInf]
+	mov edi, [ebx+INFOUT.img.pvBits]
+	xor cl, cl
+
+  @@:	
+	stosd
+	inc cl
+	cmp cl, dl
+	jb @B
+	xor eax, eax
+	cmp cl, 100
+	jb @B
+
+	invoke BitBlt, [hdc], 500, 450, 100, 1, [screen.memDC], 500, 450, SRCCOPY
+	invoke BitBlt, [hdc], 500, 450, 100, 1, [ebx+INFOUT.img.memDC], 0, 29, SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	ret
 endp

@@ -19,7 +19,8 @@ section '.data' data readable writeable
 	player PLAYER
 	enemy ENEMY
 	wdctrl WORLDCTRL
-	
+	infout INFOUT
+
 	errmsg db "Error", 0
 	szBuff db 255 dup(0)
 	rcHealth RECT 600, 460, 0, 0
@@ -40,6 +41,8 @@ section '.code' code readable executable
 
   	stdcall plr_init, player, plrtype
   	stdcall plr_wakeup, player
+
+  	stdcall inf_init, infout
 
   	stdcall wdc_init, wdctrl
   	stdcall wdc_wakeup, wdctrl

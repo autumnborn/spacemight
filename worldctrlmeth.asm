@@ -150,7 +150,7 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov [eax+PLAYER.health], dx
 
 	; todo some infoview about new level
-	stdcall inf_healthDraw, [pPlr], rcHealth, 0FFFFFFh
+
 	; lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
 	ret
@@ -304,7 +304,6 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	;collision exist
 	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall plr_hit, [pPlr], eax
-	stdcall inf_healthDraw, [pPlr], rcHealth, 0FFFFFFh
 
   .skip:	
 	inc ecx

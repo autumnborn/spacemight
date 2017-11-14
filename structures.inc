@@ -92,3 +92,6 @@ struct WPNTYPE
 	size POINT	
 ends
 
+struct INFOUT
+	img DIBINFO
+ends
