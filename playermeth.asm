@@ -188,7 +188,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 
 	stdcall plr_draw, ebx
 	stdcall plr_updateWpns, ebx
-	stdcall inf_healthDraw, infout, ebx
+	stdcall inf_drawHealth, infout, ebx
 	ret
 endp
 

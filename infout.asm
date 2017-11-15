@@ -21,7 +21,7 @@ proc inf_destructor uses ebx, pInf:DWORD
 	ret
 endp
 
-proc inf_healthDraw uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
+proc inf_drawHealth uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ecx, [pPlr]
 	mov edx, [ecx+PLAYER.pType]
@@ -55,8 +55,8 @@ proc inf_healthDraw uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 	cmp cl, 100
 	jb @B
 
-	invoke BitBlt, [hdc], 500, 450, 100, 1, [screen.memDC], 500, 450, SRCCOPY
-	invoke BitBlt, [hdc], 500, 450, 100, 1, [ebx+INFOUT.img.memDC], 0, 29, SRCCOPY
+	invoke BitBlt, [hdc], INF_HEALTH_X, INF_HEALTH_Y, 100, 1, [screen.memDC], INF_HEALTH_X, INF_HEALTH_Y, SRCCOPY
+	invoke BitBlt, [hdc], INF_HEALTH_X, INF_HEALTH_Y, 100, 1, [ebx+INFOUT.img.memDC], 0, 29, SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	ret
 endp

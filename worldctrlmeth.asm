@@ -27,7 +27,7 @@ endp
 
 proc wdc_wakeup uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
-	invoke timeSetEvent, ENM_TIMER_DELAY, ENM_TIMER_RESOL, wdc_TimeProc, ebx, TIME_PERIODIC 
+	invoke timeSetEvent, WDC_TIMER_DELAY, WDC_TIMER_RESOL, wdc_TimeProc, ebx, TIME_PERIODIC 
 	mov [ebx+WORLDCTRL.timer], eax
 	ret
 endp
