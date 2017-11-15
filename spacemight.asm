@@ -264,6 +264,27 @@ section '.code' code readable executable
   	ret
   endp
 
+  ; Concatinates null-terminated strings
+  proc _concat uses eax esi edi, psz1:DWORD, psz2:DWORD
+  	mov esi, [psz1]
+  
+  @@:	
+  	lodsb
+  	test al, al
+  	jnz @B
+  	dec esi
+  	xchg edi, esi
+  	mov esi, [psz2]
+
+  @@:
+  	lodsb
+  	stosb
+  	test al, al
+  	jnz @B
+  	stosb
+  	ret
+  endp
+
 section '.idata' import data readable
 	include 'imports.inc'
 
