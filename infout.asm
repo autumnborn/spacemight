@@ -1,3 +1,11 @@
+; Information output
+if DBG
+	nop
+	db "infout"
+	nop
+end if
+
+
 proc inf_init uses ebx, pInf:DWORD
 	mov ebx, [pInf]
 	
@@ -58,5 +66,20 @@ proc inf_drawHealth uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 	invoke BitBlt, [hdc], INF_HEALTH_X, INF_HEALTH_Y, 100, 1, [screen.memDC], INF_HEALTH_X, INF_HEALTH_Y, SRCCOPY
 	invoke BitBlt, [hdc], INF_HEALTH_X, INF_HEALTH_Y, 100, 1, [ebx+INFOUT.img.memDC], 0, 29, SRCCOPY
 	invoke EndPaint, [hwnd], paint
+	ret
+endp
+
+proc inf_drawText uses eax ebx ecx edx, pInf:DWORD, pszBuff:DWORD, x:DWORD, y:DWORD, color:DWORD
+	mov ebx, [pInf]
+	mov eax, [x]
+	mov [ebx+INFOUT.rect.left], eax
+	mov eax, [y]
+	mov [ebx+INFOUT.rect.top], eax
+
+	invoke SetBkMode, [hdc], TRANSPARENT
+	invoke SetTextColor, [hdc], [color]
+	lea eax, [ebx+INFOUT.rect]
+	invoke DrawText, [hdc], [pszBuff], -1, eax, DT_NOCLIP
+	
 	ret
 endp

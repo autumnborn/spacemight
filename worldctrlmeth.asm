@@ -150,7 +150,9 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov [eax+PLAYER.health], dx
 
 	; todo some infoview about new level
-
+	movzx eax, byte [ebx+WORLDCTRL.level]
+	stdcall _val2dsu, eax, szBuff
+	stdcall inf_drawText, infout, szBuff, 315, 230, 0FFFFFFh
 	; lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
 	ret

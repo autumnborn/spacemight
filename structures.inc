@@ -93,5 +93,6 @@ struct WPNTYPE
 ends
 
 struct INFOUT
+	rect RECT
 	img DIBINFO
 ends
