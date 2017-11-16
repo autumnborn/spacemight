@@ -156,7 +156,8 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	movzx eax, byte [ebx+WORLDCTRL.level]
 	lea edx, [szNum] 
 	stdcall _val2dsu, eax, edx
-	mov ecx, 7
+	stdcall _countSz, szLevel
+	mov ecx, eax
 	MEMCOPY szBuff, szLevel, ecx
 	stdcall _concat, szBuff, edx
 	stdcall inf_drawText, infout, szBuff, 315, 230, 0FFFFFFh

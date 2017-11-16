@@ -286,6 +286,19 @@ section '.code' code readable executable
   	ret
   endp
 
+  ; Counts ansi string length, includes last null-byte
+  proc _countSz uses esi, psz:DWORD
+  	mov esi, [psz]
+ 
+  @@:
+  	lodsb
+  	test al, al
+  	jnz @B	
+  	sub esi, [psz]
+  	mov eax, esi
+  	ret
+  endp
+
 section '.idata' import data readable
 	include 'imports.inc'
 
