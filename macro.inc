@@ -38,6 +38,19 @@ macro GetDimFieldAddr var, type, index, field
 } 
 
 ; Memory copy
+macro MEMCOPY pDest, pSrc, bCount
+{
+    mov edi, pDest
+    mov esi, pSrc
+
+  @@:
+    lodsb
+    stosb
+    dec bCount
+    test bCount, bCount
+    jnz @B
+}
+
 macro IMG_MEMCOPY pDest, pSrc, bCount
 {
 	local beginl, chk

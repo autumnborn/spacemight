@@ -10,7 +10,8 @@ img_pl file "img\sm_plr_32x32x32_raw.bmp"
 
 ; Enemies
 img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
-img_e2 file "img\sm_enm2_32x32x32_raw.bmp"
+img_e2 file "img\sm_enm2_24x32x32_raw.bmp"
+img_e3 file "img\sm_enm3_32x32x32_raw.bmp"
 
 ; Objects description
 
@@ -24,10 +25,10 @@ plrtype UNITTYPE 0, 4, wpntype_1, WPN_DIRECT_U, 1000, img_pl, <32, 32>
 
 ; Enemies
 etype_1 UNITTYPE 1, 2, wpntype_1, WPN_DIRECT_D, 50, img_e1, <24, 32>
-etype_2 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 150, img_e1, <24, 32>
-etype_3 UNITTYPE 3, 2, wpntype_2, WPN_DIRECT_D, 100, img_e2, <32, 32>
-etype_4 UNITTYPE 4, 2, wpntype_2, WPN_DIRECT_D, 150, img_e2, <32, 32>
-etype_5 UNITTYPE 5, 2, wpntype_3, WPN_DIRECT_D, 150, img_e1, <24, 32>
+etype_2 UNITTYPE 2, 2, wpntype_1, WPN_DIRECT_D, 150, img_e2, <24, 32>
+etype_3 UNITTYPE 3, 2, wpntype_2, WPN_DIRECT_D, 100, img_e2, <24, 32>
+etype_4 UNITTYPE 4, 2, wpntype_2, WPN_DIRECT_D, 150, img_e3, <32, 32>
+etype_5 UNITTYPE 5, 2, wpntype_3, WPN_DIRECT_D, 150, img_e3, <32, 32>
 etype_6 UNITTYPE 6, 3, wpntype_1, WPN_DIRECT_D, 100, img_e1, <24, 32>
 etype_7 UNITTYPE 7, 3, wpntype_2, WPN_DIRECT_D, 100, img_e1, <24, 32>
 etype_8 UNITTYPE 8, 3, wpntype_3, WPN_DIRECT_D, 100, img_e1, <24, 32>

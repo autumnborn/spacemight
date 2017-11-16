@@ -22,6 +22,7 @@ section '.data' data readable writeable
 	infout INFOUT
 
 	errmsg db "Error", 0
+	szLevel db "LEVEL ", 0
 	szBuff db 255 dup(0)
 	rcHealth RECT 600, 460, 0, 0
 	include 'objdesc.inc'
