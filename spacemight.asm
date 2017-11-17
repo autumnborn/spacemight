@@ -77,9 +77,9 @@ section '.code' code readable executable
 	; Keyboard handler
 	proc _control uses ebx ecx edx 
 
-		push ebx ecx edx
+		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_LEFT
-		pop edx ecx ebx 
+		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -88,9 +88,9 @@ section '.code' code readable executable
 			not [player.act.left]
 		.endif
 
-		push ebx ecx edx
+		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_UP
-		pop edx ecx ebx 
+		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -99,9 +99,9 @@ section '.code' code readable executable
 			not [player.act.up]
 		.endif
 
-		push ebx ecx edx
+		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_RIGHT
-		pop edx ecx ebx 
+		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -110,9 +110,9 @@ section '.code' code readable executable
 			not [player.act.right]
 		.endif
 
-		push ebx ecx edx
+		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_DOWN
-		pop edx ecx ebx 
+		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -121,9 +121,9 @@ section '.code' code readable executable
 			not [player.act.down]
 		.endif
 			  
-		push ebx ecx edx
+		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_SPACE
-		pop edx ecx ebx 
+		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
