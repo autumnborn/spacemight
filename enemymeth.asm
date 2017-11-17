@@ -109,7 +109,7 @@ proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 
 	lea eax, [ebx+ENEMY.wpn]
-	stdcall enm_delWpns, eax
+	stdcall _delWpns, eax
 
 	stdcall _deleteDIB, [ebx+ENEMY.img.dib], [ebx+ENEMY.img.memDC]
   	ret
@@ -252,19 +252,5 @@ proc enm_die uses eax ebx ecx, pEnm:DWORD
 	mov ebx, [pEnm]
 	stdcall enm_stop, ebx
 	stdcall enm_clear, ebx
-	ret
-endp
-
-;!!
-proc enm_delWpns uses ebx ecx, pWpnArr:DWORD
-	mov ebx, [pWpnArr]
-	xor ecx, ecx
-  @@:  
- 	GetDimIndexAddr ebx, WEAPON, ecx
-	stdcall wpn_destructor, eax
-	inc ecx
-	cmp ecx, [ebx+WPNARR.length]
-	jnz @B
-
 	ret
 endp

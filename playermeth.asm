@@ -100,7 +100,7 @@ proc plr_destructor uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 
 	lea eax, [ebx+PLAYER.wpn]
-	stdcall plr_delWpns, eax
+	stdcall _delWpns, eax
 	
 	mov eax, [ebx+PLAYER.timer]
 	test eax, eax
@@ -253,21 +253,5 @@ proc plr_die uses ebx ecx, pEnm:DWORD
 	mov ebx, [pEnm]
 	;todo something
 	stdcall plr_clear, ebx
-	ret
-endp
-
-
-; call destructor for all instances of WEAPON (WPNARR)
-; N.B: replace to common
-proc plr_delWpns uses ebx ecx, pWpnArr: DWORD
-	mov ebx, [pWpnArr]
-	xor ecx, ecx
-  @@:  
- 	GetDimIndexAddr ebx, WEAPON, ecx
-	stdcall wpn_destructor, eax
-	inc ecx
-	cmp ecx, [ebx+WPNARR.length]
-	jnz @B
-
 	ret
 endp

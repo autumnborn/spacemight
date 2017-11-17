@@ -74,254 +74,268 @@ section '.code' code readable executable
   	include 'weaponmeth.asm'
   	include 'worldctrlmeth.asm'
 
-  ; Keyboard handler
-  proc _control uses ebx ecx edx 
+	; Keyboard handler
+	proc _control uses ebx ecx edx 
 
-	  push ebx ecx edx
-	  invoke GetAsyncKeyState, VK_LEFT
-	  pop edx ecx ebx 
-	  and eax, 8000h
-	  .if eax<>0
-	  	mov al, -1
-	  .endif
-	  .if al <> [player.act.left]
-	  	not [player.act.left]
-	  .endif
-	  
-	  push ebx ecx edx
-	  invoke GetAsyncKeyState, VK_UP
-	  pop edx ecx ebx 
-	  and eax, 8000h
-	  .if eax<>0
-	  	mov al, -1
-	  .endif
-	  .if al <> [player.act.up]
-	  	not [player.act.up]
-	  .endif
-	  
-	  push ebx ecx edx
-	  invoke GetAsyncKeyState, VK_RIGHT
-	  pop edx ecx ebx 
-	  and eax, 8000h
-	  .if eax<>0
-	  	mov al, -1
-	  .endif
-	  .if al <> [player.act.right]
-	  	not [player.act.right]
-	  .endif
-	  
-	  push ebx ecx edx
-	  invoke GetAsyncKeyState, VK_DOWN
-	  pop edx ecx ebx 
-	  and eax, 8000h
-	  .if eax<>0
-	  	mov al, -1
-	  .endif
-	  .if al <> [player.act.down]
-	  	not [player.act.down]
-	  .endif
-	  	  
-	  push ebx ecx edx
-	  invoke GetAsyncKeyState, VK_SPACE
-	  pop edx ecx ebx 
-	  and eax, 8000h
-	  .if eax<>0
-	  	mov al, -1
-	  .endif
-	  .if al <> [player.act.fire]
-	  	not [player.act.fire]
-	  .endif
-	  
-	@@:
-	  ret
-  endp
+		push ebx ecx edx
+		invoke GetAsyncKeyState, VK_LEFT
+		pop edx ecx ebx 
+		and eax, 8000h
+		.if eax<>0
+			mov al, -1
+		.endif
+		.if al <> [player.act.left]
+			not [player.act.left]
+		.endif
+
+		push ebx ecx edx
+		invoke GetAsyncKeyState, VK_UP
+		pop edx ecx ebx 
+		and eax, 8000h
+		.if eax<>0
+			mov al, -1
+		.endif
+		.if al <> [player.act.up]
+			not [player.act.up]
+		.endif
+
+		push ebx ecx edx
+		invoke GetAsyncKeyState, VK_RIGHT
+		pop edx ecx ebx 
+		and eax, 8000h
+		.if eax<>0
+			mov al, -1
+		.endif
+		.if al <> [player.act.right]
+			not [player.act.right]
+		.endif
+
+		push ebx ecx edx
+		invoke GetAsyncKeyState, VK_DOWN
+		pop edx ecx ebx 
+		and eax, 8000h
+		.if eax<>0
+			mov al, -1
+		.endif
+		.if al <> [player.act.down]
+			not [player.act.down]
+		.endif
+			  
+		push ebx ecx edx
+		invoke GetAsyncKeyState, VK_SPACE
+		pop edx ecx ebx 
+		and eax, 8000h
+		.if eax<>0
+			mov al, -1
+		.endif
+		.if al <> [player.act.fire]
+			not [player.act.fire]
+		.endif
+
+	  @@:
+		ret
+	endp
 
  
-  ; bmInfo - ptr to BITMAPINFO
-  ; pvBits - ptr to var for ptr to bitmap bits
-  ; memDC  - ptr to var for handle to a memory device context
-  ; return dib-handle, pvBits - ptr to bitmap bits, memDC - handle to a memory device context
-  proc _createDIB uses ebx, bmInfo:DWORD, pvBits:DWORD, memDC:DWORD
-    invoke CreateCompatibleDC, [hdc]
-    mov ebx, [memDC]
-    mov [ebx], eax
-    push ebx
-    invoke CreateDIBSection, [hdc], [bmInfo], DIB_RGB_COLORS, [pvBits], NULL, NULL    
-    pop ebx
-    push eax
-    invoke SelectObject, [ebx], eax
-    pop eax
-    ret
-  endp
+	; bmInfo - ptr to BITMAPINFO
+	; pvBits - ptr to var for ptr to bitmap bits
+	; memDC  - ptr to var for handle to a memory device context
+	; return dib-handle, pvBits - ptr to bitmap bits, memDC - handle to a memory device context
+	proc _createDIB uses ebx, bmInfo:DWORD, pvBits:DWORD, memDC:DWORD
+		invoke CreateCompatibleDC, [hdc]
+		mov ebx, [memDC]
+		mov [ebx], eax
+		push ebx
+		invoke CreateDIBSection, [hdc], [bmInfo], DIB_RGB_COLORS, [pvBits], NULL, NULL    
+		pop ebx
+		push eax
+		invoke SelectObject, [ebx], eax
+		pop eax
+		ret
+	endp
 
-  ; dib - dib handle returned _createDIB
-  proc _deleteDIB uses ebx, dib:DWORD, memDC:DWORD
-  	invoke DeleteObject, [dib]
-  	invoke DeleteDC, [memDC]
-  	ret
-  endp 
+	; dib - dib handle returned _createDIB
+	proc _deleteDIB uses ebx, dib:DWORD, memDC:DWORD
+		invoke DeleteObject, [dib]
+		invoke DeleteDC, [memDC]
+		ret
+	endp 
 
-  ; Random number from 0 to top-1
-  proc _rnd uses ecx edx, top:DWORD
-    mov     eax,[rndSeed]
-    ; if rndSeed = 0
-    or      eax,eax
-    jnz     @F
-    ; init rnd gen
-    rdtsc
-    xor     eax,edx
-    mov     [rndSeed],eax
-  @@:
-    xor     edx,edx
-    mov     ecx,127773
-    div     ecx
-    mov     ecx,eax
-    mov     eax,16807
-    mul     edx
-    mov     edx,ecx
-    mov     ecx,eax
-    mov     eax,2836
-    mul     edx
-    sub     ecx,eax
-    xor     edx,edx
-    mov     eax,ecx
-    mov     [rndSeed],ecx
-    mov     ecx,100000
-    div     ecx
-	mov eax, edx
-	xor edx, edx
-    div [top]
-    mov eax, edx
-    ret
-  endp
+	; Calls destructor for all instances of WEAPON (WPNARR)
+	proc _delWpns uses ebx ecx, pWpnArr: DWORD
+		mov ebx, [pWpnArr]
+		xor ecx, ecx
+	  @@:  
+	 	GetDimIndexAddr ebx, WEAPON, ecx
+		stdcall wpn_destructor, eax
+		inc ecx
+		cmp ecx, [ebx+WPNARR.length]
+		jnz @B
 
-  ;	Cover for convert v2d unsigned
-  ;	iVal - dword value
-  ;	pBuf - dword ptr to  str buffer
-  proc _val2dsu uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
-  	mov eax, [iVal]
-  	mov edi, [pBuf]
-  	call _v2d
-  	call _strRev
-  	ret
-  endp
+		ret
+	endp
 
-  ;	Cover for convert v2d signed
-  ;	iVal - dword value
-  ;	pBuf - dword ptr to str buffer
-  proc _val2dss uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
-  	mov eax, [iVal]
-  	mov edi, [pBuf]
-  	xor edx, edx	;edx -> sign: 0 - p, 1 - n
-  	mov ecx, eax
-  	rol ecx, 1
-  	test cl, 1
-  	jz @F
-  	inc edx
-  	xor ecx, ecx
-  	xchg eax, ecx
-  	sub eax, ecx
+	; Random number from 0 to top-1
+	proc _rnd uses ecx edx, top:DWORD
+		mov     eax,[rndSeed]
+		; if rndSeed = 0
+		or      eax,eax
+		jnz     @F
+		; init rnd gen
+		rdtsc
+		xor     eax,edx
+		mov     [rndSeed],eax
+	  @@:
+		xor     edx,edx
+		mov     ecx,127773
+		div     ecx
+		mov     ecx,eax
+		mov     eax,16807
+		mul     edx
+		mov     edx,ecx
+		mov     ecx,eax
+		mov     eax,2836
+		mul     edx
+		sub     ecx,eax
+		xor     edx,edx
+		mov     eax,ecx
+		mov     [rndSeed],ecx
+		mov     ecx,100000
+		div     ecx
+		mov eax, edx
+		xor edx, edx
+		div [top]
+		mov eax, edx
+		ret
+	endp
 
-  @@:
-  	push edx
-  	call _v2d
-  	pop edx
-  	test edx, edx
-  	jz @F
-  	mov [edi+ecx], byte "-"
+	;	Cover for convert v2d unsigned
+	;	iVal - dword value
+	;	pBuf - dword ptr to  str buffer
+	proc _val2dsu uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
+		mov eax, [iVal]
+		mov edi, [pBuf]
+		call _v2d
+		call _strRev
+		ret
+	endp
 
-  @@:
-  	call _strRev
-  	ret 
-  endp 
+	;	Cover for convert v2d signed
+	;	iVal - dword value
+	;	pBuf - dword ptr to str buffer
+	proc _val2dss uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
+		mov eax, [iVal]
+		mov edi, [pBuf]
+		xor edx, edx	;edx -> sign: 0 - p, 1 - n
+		mov ecx, eax
+		rol ecx, 1
+		test cl, 1
+		jz @F
+		inc edx
+		xor ecx, ecx
+		xchg eax, ecx
+		sub eax, ecx
 
-  ; Converts value to dec string
-  ; eax - value, edi - ptr to result buffer
-  ; Note: num-chars places from right to left
-  proc _v2d
-  	xor ecx, ecx
+	  @@:
+		push edx
+		call _v2d
+		pop edx
+		test edx, edx
+		jz @F
+		mov [edi+ecx], byte "-"
 
-  @@:
-  	test eax, eax
-  	jz @F	
-  	xor edx, edx
-  	mov ebx, 0Ah
-  	div ebx
-  	add dl, 30h
-  	mov [edi+ecx], dl
-  	inc ecx
-  	jmp @B
+	  @@:
+		call _strRev
+		ret 
+	endp 
 
-  @@:
-  	test ecx, ecx
-  	jnz @F
-  	mov [edi], byte 30h
-    inc ecx
-  @@:
-  	mov [edi+ecx], word 0	
-  	ret
-  endp
+	; Converts value to dec string
+	; eax - value, edi - ptr to result buffer
+	; Note: num-chars places from right to left
+	proc _v2d
+		xor ecx, ecx
 
-  ; Reverts null terminated string
-  ; edi - ptr to sz string buffer
-  proc _strRev
-  	push edi
-  	mov esi, edi
+	  @@:
+		test eax, eax
+		jz @F	
+		xor edx, edx
+		mov ebx, 0Ah
+		div ebx
+		add dl, 30h
+		mov [edi+ecx], dl
+		inc ecx
+		jmp @B
 
-  @@:
-  	mov al, [esi]
-  	test al, al
-  	jz @F
-  	inc esi
-  	jmp @B
-  
-  @@:
-  	dec esi
-  	cmp esi, edi
-  	jbe @F
-  	mov al, [esi]
-  	xchg al, [edi]
-  	mov [esi], al
-  	inc edi
-  	jmp @B
-  @@:
-  	pop edi
-  	ret
-  endp
+	  @@:
+		test ecx, ecx
+		jnz @F
+		mov [edi], byte 30h
+		inc ecx
+	  @@:
+		mov [edi+ecx], word 0	
+		ret
+	endp
 
-  ; Concatinates null-terminated strings
-  proc _concat uses eax esi edi, psz1:DWORD, psz2:DWORD
-  	mov esi, [psz1]
-  
-  @@:	
-  	lodsb
-  	test al, al
-  	jnz @B
-  	dec esi
-  	xchg edi, esi
-  	mov esi, [psz2]
+	; Reverts null terminated string
+	; edi - ptr to sz string buffer
+	proc _strRev
+		push edi
+		mov esi, edi
 
-  @@:
-  	lodsb
-  	stosb
-  	test al, al
-  	jnz @B
-  	stosb
-  	ret
-  endp
+	  @@:
+		mov al, [esi]
+		test al, al
+		jz @F
+		inc esi
+		jmp @B
 
-  ; Counts ansi string length, includes last null-byte
-  proc _countSz uses esi, psz:DWORD
-  	mov esi, [psz]
- 
-  @@:
-  	lodsb
-  	test al, al
-  	jnz @B	
-  	sub esi, [psz]
-  	mov eax, esi
-  	ret
-  endp
+	  @@:
+		dec esi
+		cmp esi, edi
+		jbe @F
+		mov al, [esi]
+		xchg al, [edi]
+		mov [esi], al
+		inc edi
+		jmp @B
+	  @@:
+		pop edi
+		ret
+	endp
+
+	; Concatinates null-terminated strings
+	proc _concat uses eax esi edi, psz1:DWORD, psz2:DWORD
+		mov esi, [psz1]
+
+	  @@:	
+		lodsb
+		test al, al
+		jnz @B
+		dec esi
+		xchg edi, esi
+		mov esi, [psz2]
+
+	  @@:
+		lodsb
+		stosb
+		test al, al
+		jnz @B
+		stosb
+		ret
+	endp
+
+	; Counts ansi string length, includes last null-byte
+	proc _countSz uses esi, psz:DWORD
+		mov esi, [psz]
+
+	  @@:
+		lodsb
+		test al, al
+		jnz @B	
+		sub esi, [psz]
+		mov eax, esi
+		ret
+	endp
 
 section '.idata' import data readable
 	include 'imports.inc'
