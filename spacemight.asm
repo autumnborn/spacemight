@@ -14,6 +14,7 @@ section '.data' data readable writeable
 	hwnd dd ?
 	msg MSG
 	hdc dd ?
+	rndSeed dd ?
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paint PAINTSTRUCT
 	player PLAYER
@@ -161,14 +162,37 @@ section '.code' code readable executable
   endp 
 
   ; Random number from 0 to top-1
-  proc _rnd uses edx, top:DWORD
-	@@:
-	  xor edx, edx	
-	  rdrand eax
-	  jnc @B
-	  div [top]
-	  mov eax, edx
-	  ret
+  proc _rnd uses ecx edx, top:DWORD
+    mov     eax,[rndSeed]
+    ; if rndSeed = 0
+    or      eax,eax
+    jnz     @F
+    ; init rnd gen
+    rdtsc
+    xor     eax,edx
+    mov     [rndSeed],eax
+  @@:
+    xor     edx,edx
+    mov     ecx,127773
+    div     ecx
+    mov     ecx,eax
+    mov     eax,16807
+    mul     edx
+    mov     edx,ecx
+    mov     ecx,eax
+    mov     eax,2836
+    mul     edx
+    sub     ecx,eax
+    xor     edx,edx
+    mov     eax,ecx
+    mov     [rndSeed],ecx
+    mov     ecx,100000
+    div     ecx
+	mov eax, edx
+	xor edx, edx
+    div [top]
+    mov eax, edx
+    ret
   endp
 
   ;	Cover for convert v2d unsigned
