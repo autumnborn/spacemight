@@ -91,8 +91,12 @@ endp
 
 proc plr_wakeup uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
+	mov eax, [ebx+PLAYER.timer]
+	test eax, eax
+	jnz @F
 	invoke timeSetEvent, PLR_TIMER_DELAY, PLR_TIMER_RESOL, plr_TimeProc, ebx, TIME_PERIODIC 
 	mov [ebx+PLAYER.timer], eax
+  @@:
 	ret
 endp
 
