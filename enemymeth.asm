@@ -107,7 +107,8 @@ endp
 
 proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
-
+	mov [ebx+ENEMY.exist], 0
+	
 	lea eax, [ebx+ENEMY.wpn]
 	stdcall _delWpns, eax
 
