@@ -32,6 +32,17 @@ proc wdc_wakeup uses ebx, pWdc:DWORD
 	ret
 endp
 
+proc wdc_stop uses ebx, pWdc:DWORD
+	mov ebx, [pWdc]
+	mov eax, [ebx+WORLDCTRL.timer]
+	test eax, eax
+	jz @F
+	invoke timeKillEvent, eax
+	mov [ebx+WORLDCTRL.timer], 0
+  @@:
+	ret
+endp
+
 proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
 	dec byte [ebx+WORLDCTRL.enmdelay]
@@ -79,13 +90,7 @@ endp
 
 proc wdc_destructor uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
-
-	mov eax, [ebx+WORLDCTRL.timer]
-	test eax, eax
-	jz @F
-	invoke timeKillEvent, eax
-	mov [ebx+WORLDCTRL.timer], 0
-
+	stdcall wdc_stop, ebx
 	lea eax, [ebx+WORLDCTRL.enemies] 
 	stdcall wdc_delEnms, eax
 	ret
@@ -142,6 +147,8 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	local szNum[4]:BYTE
 
 	mov ebx, [pWdc]
+	stdcall wdc_stop, ebx
+
 	lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_delEnms, ecx
 	
@@ -161,7 +168,7 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	MEMCOPY szBuff, szLevel, ecx
 	stdcall _concat, szBuff, edx
 	stdcall inf_drawText, infout, szBuff, 315, 230, 0FFFFFFh
-
+	
 	lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
 	ret

@@ -16,6 +16,7 @@ section '.data' data readable writeable
 	hdc dd ?
 	rndSeed dd ?
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
+	paused db ?
 	paint PAINTSTRUCT
 	player PLAYER
 	enemy ENEMY
@@ -77,9 +78,7 @@ section '.code' code readable executable
 	; Keyboard handler
 	proc _control uses ebx ecx edx 
 
-		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_LEFT
-		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -88,9 +87,7 @@ section '.code' code readable executable
 			not [player.act.left]
 		.endif
 
-		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_UP
-		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -99,9 +96,7 @@ section '.code' code readable executable
 			not [player.act.up]
 		.endif
 
-		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_RIGHT
-		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -110,9 +105,7 @@ section '.code' code readable executable
 			not [player.act.right]
 		.endif
 
-		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_DOWN
-		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -121,9 +114,7 @@ section '.code' code readable executable
 			not [player.act.down]
 		.endif
 			  
-		; push ebx ecx edx
 		invoke GetAsyncKeyState, VK_SPACE
-		; pop edx ecx ebx 
 		and eax, 8000h
 		.if eax<>0
 			mov al, -1
@@ -132,7 +123,23 @@ section '.code' code readable executable
 			not [player.act.fire]
 		.endif
 
+		invoke GetAsyncKeyState, VK_RETURN
+		and eax, 8000h
+		test eax, eax
+		jz @F			
+		.if ~[paused]
+			stdcall plr_stop, player
+			stdcall wdc_stop, wdctrl
+			not [paused]
+			invoke Sleep, 500
+		.else
+			stdcall plr_wakeup, player
+			stdcall wdc_wakeup, wdctrl
+			not [paused]
+			invoke Sleep, 500
+		.endif
 	  @@:
+	  
 		ret
 	endp
 

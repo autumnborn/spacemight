@@ -96,18 +96,25 @@ proc plr_wakeup uses ebx, pPlr:DWORD
 	ret
 endp
 
-proc plr_destructor uses ebx, pPlr:DWORD
+proc plr_stop uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
-
-	lea eax, [ebx+PLAYER.wpn]
-	stdcall _delWpns, eax
-	
 	mov eax, [ebx+PLAYER.timer]
 	test eax, eax
 	jz @F
 	invoke timeKillEvent, eax
 	mov [ebx+PLAYER.timer], 0
   @@:
+	ret
+endp
+
+proc plr_destructor uses ebx, pPlr:DWORD
+	mov ebx, [pPlr]
+	
+	stdcall plr_stop, ebx
+
+	lea eax, [ebx+PLAYER.wpn]
+	stdcall _delWpns, eax
+	
 	stdcall _deleteDIB, [ebx+PLAYER.img.dib], [ebx+PLAYER.img.memDC]
   	ret
 endp
@@ -116,7 +123,6 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	local wpnDirect dd ?
 
 	mov ebx, [pPlr]
-
 
 	.if dword [ebx+PLAYER.act.left]
 		stdcall plr_clear, ebx
