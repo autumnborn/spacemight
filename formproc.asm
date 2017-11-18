@@ -27,7 +27,7 @@
       ret
   endp
 
-  proc _bgPaint
+  proc _bgPaint uses ecx edx
     invoke BitBlt, [hdc], 0, 0, SCR_WIDTH, SCR_HEIGHT, [screen.memDC], 0, 0, SRCCOPY
     ret
   endp

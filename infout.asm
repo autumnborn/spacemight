@@ -70,16 +70,17 @@ proc inf_drawHealth uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 endp
 
 proc inf_drawText uses eax ebx ecx edx, pInf:DWORD, pszBuff:DWORD, x:DWORD, y:DWORD, color:DWORD
+	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pInf]
 	mov eax, [x]
 	mov [ebx+INFOUT.rect.left], eax
 	mov eax, [y]
 	mov [ebx+INFOUT.rect.top], eax
-
+	
 	invoke SetBkMode, [hdc], TRANSPARENT
 	invoke SetTextColor, [hdc], [color]
 	lea eax, [ebx+INFOUT.rect]
 	invoke DrawText, [hdc], [pszBuff], -1, eax, DT_NOCLIP
-	
+	invoke EndPaint, [hwnd], paint
 	ret
 endp

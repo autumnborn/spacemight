@@ -127,22 +127,27 @@ section '.code' code readable executable
 		and eax, 8000h
 		test eax, eax
 		jz @F			
+		stdcall _pause
+	  @@:
+	  
+		ret
+	endp
+
+	proc _pause uses ecx edx
 		.if ~[paused]
 			stdcall plr_stop, player
 			stdcall wdc_stop, wdctrl
 			not [paused]
 			invoke Sleep, 500
 		.else
+			invoke Sleep, 250
 			stdcall plr_wakeup, player
 			stdcall wdc_wakeup, wdctrl
+			stdcall _bgPaint
 			not [paused]
-			invoke Sleep, 500
 		.endif
-	  @@:
-	  
 		ret
 	endp
-
  
 	; bmInfo - ptr to BITMAPINFO
 	; pvBits - ptr to var for ptr to bitmap bits
