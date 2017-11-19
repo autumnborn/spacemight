@@ -153,7 +153,15 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov ebx, [pWdc]
 
 	stdcall _bgPaint
-	stdcall _pause, 0, 0, 0, 0
+
+	movzx eax, byte [ebx+WORLDCTRL.level]
+	lea edx, [szNum] 
+	stdcall _val2dsu, eax, edx
+	stdcall _countSz, szLevel
+	mov ecx, eax
+	MEMCOPY szBuff, szLevel, ecx
+	stdcall _concat, szBuff, edx
+	stdcall _pause, szBuff, 300, 220, 0FFFFFFh
 
 	lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_delEnms, ecx
@@ -163,17 +171,6 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov edx, [pPlrType]
 	mov dx, [edx+UNITTYPE.health]
 	mov [eax+PLAYER.health], dx
-
-	; todo some infoview about new level
-
-	movzx eax, byte [ebx+WORLDCTRL.level]
-	lea edx, [szNum] 
-	stdcall _val2dsu, eax, edx
-	stdcall _countSz, szLevel
-	mov ecx, eax
-	MEMCOPY szBuff, szLevel, ecx
-	stdcall _concat, szBuff, edx
-	stdcall inf_drawText, infout, szBuff, 315, 230, 0FFFFFFh
 	
 	lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
