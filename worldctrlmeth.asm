@@ -7,6 +7,7 @@ end if
 
 proc wdc_init uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
+	mov byte [ebx+WORLDCTRL.level], 1
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 	lea edx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, edx, etype_1, player
@@ -106,40 +107,40 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [eax+PLAYER.score]
 	mov dl, [ebx+WORLDCTRL.level]
 
-	.if eax>LEVEL9 & dl=8
-		mov byte [ebx+WORLDCTRL.level], 9
+	.if eax>LEVEL10 & dl=9
+		mov byte [ebx+WORLDCTRL.level], 10
 		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_10
+
+	.elseif eax>LEVEL9 & dl=8
+		mov byte [ebx+WORLDCTRL.level], 9
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_9
 
 	.elseif eax>LEVEL8 & dl=7
 		mov byte [ebx+WORLDCTRL.level], 8
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_9
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_8
 
 	.elseif eax>LEVEL7 & dl=6
 		mov byte [ebx+WORLDCTRL.level], 7
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_8
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_7
 
 	.elseif eax>LEVEL6 & dl=5
 		mov byte [ebx+WORLDCTRL.level], 6
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_7
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_6
 
 	.elseif eax>LEVEL5 & dl=4
 		mov byte [ebx+WORLDCTRL.level], 5
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_6
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_5
 
 	.elseif eax>LEVEL4 & dl=3
 		mov byte [ebx+WORLDCTRL.level], 4
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_5
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_4
 
 	.elseif eax>LEVEL3 & dl=2
 		mov byte [ebx+WORLDCTRL.level], 3
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_4
+		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_3
 
 	.elseif eax>LEVEL2 & dl=1
 		mov byte [ebx+WORLDCTRL.level], 2
-		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_3
-
-	.elseif eax>LEVEL1 & dl=0
-		mov byte [ebx+WORLDCTRL.level], 1
 		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_2
 
 	.endif

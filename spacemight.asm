@@ -27,7 +27,6 @@ section '.data' data readable writeable
 	szLevel db "LEVEL ", 0
 	szPause db "PAUSE", 0
 	szBuff db 255 dup(0)
-	rcHealth RECT 600, 460, 0, 0
 	include 'objdesc.inc'
 
 section '.code' code readable executable
