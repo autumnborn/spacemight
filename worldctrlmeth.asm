@@ -152,8 +152,8 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 
 	mov ebx, [pWdc]
 
-	stdcall _pause
 	stdcall _bgPaint
+	stdcall _pause, 0, 0, 0, 0
 
 	lea ecx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_delEnms, ecx

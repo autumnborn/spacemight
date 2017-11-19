@@ -25,6 +25,7 @@ section '.data' data readable writeable
 
 	errmsg db "Error", 0
 	szLevel db "LEVEL ", 0
+	szPause db "PAUSE", 0
 	szBuff db 255 dup(0)
 	rcHealth RECT 600, 460, 0, 0
 	include 'objdesc.inc'
@@ -127,16 +128,23 @@ section '.code' code readable executable
 		and eax, 8000h
 		test eax, eax
 		jz @F			
-		stdcall _pause
+		stdcall _pause, szPause, 300, 220, 0FF00h
 	  @@:
 	  
 		ret
 	endp
 
-	proc _pause uses ecx edx
+	; pszText - ptr to string, which draws when pause sets.
+	; If pszText is 0, then don't draw any text.
+	; x, y - output coords.
+	; color - text color
+	proc _pause uses ecx edx, pszText:DWORD, x:DWORD, y:DWORD, color:DWORD
 		.if ~[paused]
 			stdcall plr_stop, player
 			stdcall wdc_stop, wdctrl
+			.if [pszText]<>0
+				stdcall inf_drawText, infout, [pszText], [x], [y], [color]
+			.endif
 			not [paused]
 			invoke Sleep, 500
 		.else
