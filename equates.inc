@@ -34,6 +34,8 @@ W_DOUBLE			=2
 W_TRIPPLE			=3
 W_DH				=4
 
+; Levels
+WDC_STARTLEVEL		=1
 ; Level/Score
 LEVEL2				=20
 LEVEL3				=40
@@ -44,7 +46,7 @@ LEVEL7				=120
 LEVEL8				=140
 LEVEL9				=160
 LEVEL10				=180
-LEVELEND			=40;200
+LEVELEND			=20;200
 
 ; Info
 INF_HEALTH_X		=500

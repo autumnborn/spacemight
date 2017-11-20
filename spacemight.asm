@@ -134,6 +134,20 @@ section '.code' code readable executable
 		ret
 	endp
 
+	proc _restart uses ecx
+		stdcall plr_destructor, player
+		stdcall wdc_destructor, wdctrl
+		stdcall plr_init, player, plrtype
+		stdcall wdc_init, wdctrl
+		stdcall plr_wakeup, player
+		stdcall wdc_wakeup, wdctrl
+		stdcall _bgPaint
+		stdcall _pause, szEnd, 300, 220, 0FFFFFFh
+		mov byte [wdctrl.level], WDC_STARTLEVEL
+		mov dword [player.score], 0
+		ret
+	endp
+
 	; pszText - ptr to string, which draws when pause sets.
 	; If pszText is 0, then don't draw any text.
 	; x, y - output coords.

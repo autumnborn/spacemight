@@ -7,7 +7,7 @@ end if
 
 proc wdc_init uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
-	mov byte [ebx+WORLDCTRL.level], 1
+	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 	lea edx, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_enmInit, edx, etype_1, player
@@ -107,8 +107,8 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [eax+PLAYER.score]
 	mov dl, [ebx+WORLDCTRL.level]
 
-	.if eax>LEVELEND & dl=2;9
-		stdcall wdc_theEnd
+	.if eax>LEVELEND & dl=1;9
+		stdcall wdc_theEnd, [pWdc], [pPlr]
 
 	.elseif eax>LEVEL10 & dl=9
 		mov byte [ebx+WORLDCTRL.level], 10
@@ -181,12 +181,17 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	ret
 endp
 
-proc wdc_theEnd
-	stdcall _bgPaint
-	stdcall _pause, szEnd, 300, 220, 0FFFFFFh
-	;restart
+proc wdc_theEnd uses ebx ecx, pWdc:DWORD, pPlr:DWORD
+	stdcall _restart
 	ret
 endp
+
+; proc wdc_restart uses ebx, pWdc:DWORD
+; 	mov ebx, [pWdc]
+; 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
+
+; 	ret
+; endp
 
 if DBG
 	nop
