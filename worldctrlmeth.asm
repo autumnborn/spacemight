@@ -10,11 +10,11 @@ proc wdc_init uses ebx, pWdc:DWORD
 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
 	lea edx, [ebx+WORLDCTRL.enemies]
-	stdcall wdc_enmInit, edx, etype_1, player
+	stdcall wdc_initEnms, edx, etype_1, player
 	ret
 endp
 
-proc wdc_enmInit uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
+proc wdc_initEnms uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
 	mov edx, [pEnmArr]
    	xor ecx, ecx
   @@:  
@@ -177,7 +177,7 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	mov [eax+PLAYER.health], dx
 	
 	lea ecx, [ebx+WORLDCTRL.enemies]
-	stdcall wdc_enmInit, ecx, [pEnmType], [pPlr]
+	stdcall wdc_initEnms, ecx, [pEnmType], [pPlr]
 	ret
 endp
 

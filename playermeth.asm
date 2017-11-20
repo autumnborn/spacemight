@@ -233,7 +233,7 @@ endp
 
 ; Visibility for enemies
 ; returns coordinate x
-proc plr_GetX uses ebx, pPlr:DWORD
+proc plr_getX uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.p.x]
 	ret
@@ -241,7 +241,7 @@ endp
 
 ; Visibility for enemies
 ; returns coordinate y
-proc plr_GetY uses ebx, pPlr:DWORD
+proc plr_getY uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.p.y]
 	ret

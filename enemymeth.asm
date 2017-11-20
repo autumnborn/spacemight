@@ -149,7 +149,7 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 	
 	movzx edx, byte [ebx+ENEMY.speed]
-	stdcall plr_GetY, [ebx+ENEMY.pPlayer]
+	stdcall plr_getY, [ebx+ENEMY.pPlayer]
 	lea ecx, [ebx+ENEMY.p.y]
 	.if dword [ecx] > SCR_HEIGHT
 		stdcall enm_stop, ebx
@@ -172,7 +172,7 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	;////
 
   @@:
-	stdcall plr_GetX, [ebx+ENEMY.pPlayer]
+	stdcall plr_getX, [ebx+ENEMY.pPlayer]
 	mov ecx, [ebx+ENEMY.p.x]
 	add eax, 4
 	cmp ecx, eax
