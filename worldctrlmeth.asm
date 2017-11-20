@@ -107,7 +107,10 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [eax+PLAYER.score]
 	mov dl, [ebx+WORLDCTRL.level]
 
-	.if eax>LEVEL10 & dl=9
+	.if eax>LEVELEND & dl=2;9
+		stdcall wdc_theEnd
+
+	.elseif eax>LEVEL10 & dl=9
 		mov byte [ebx+WORLDCTRL.level], 10
 		stdcall wdc_transLevel, [pWdc], [pPlr], plrtype, etype_10
 
@@ -178,11 +181,20 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	ret
 endp
 
-nop
-nop
-db "collisions"
-nop
-nop
+proc wdc_theEnd
+	stdcall _bgPaint
+	stdcall _pause, szEnd, 300, 220, 0FFFFFFh
+	;restart
+	ret
+endp
+
+if DBG
+	nop
+	nop
+	db "collisions"
+	nop
+	nop
+end if
 ; Enemies collisions handle
 proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	locals 

@@ -26,6 +26,7 @@ section '.data' data readable writeable
 	errmsg db "Error", 0
 	szLevel db "LEVEL ", 0
 	szPause db "PAUSE", 0
+	szEnd db "Congratulations, you did it!", 0Dh, 0Ah, "The End", 0
 	szBuff db 255 dup(0)
 	include 'objdesc.inc'
 
@@ -43,11 +44,10 @@ section '.code' code readable executable
  
 
   	stdcall plr_init, player, plrtype
-  	stdcall plr_wakeup, player
-
   	stdcall inf_init, infout
-
   	stdcall wdc_init, wdctrl
+  	
+  	stdcall plr_wakeup, player
   	stdcall wdc_wakeup, wdctrl
 
   .msg_loop:
@@ -65,6 +65,7 @@ section '.code' code readable executable
   exit:
   	stdcall plr_destructor, player
   	stdcall wdc_destructor, wdctrl
+  	stdcall inf_destructor, infout
    	stdcall _deleteDIB, [screen.dib], [screen.memDC]
   	invoke ExitProcess, 0
 
