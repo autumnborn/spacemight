@@ -108,7 +108,7 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov dl, [ebx+WORLDCTRL.level]
 
 	.if eax>LEVELEND & dl=1;9
-		stdcall wdc_theEnd, [pWdc], [pPlr]
+		stdcall wdc_theEnd
 
 	.elseif eax>LEVEL10 & dl=9
 		mov byte [ebx+WORLDCTRL.level], 10
@@ -181,17 +181,12 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	ret
 endp
 
-proc wdc_theEnd uses ebx ecx, pWdc:DWORD, pPlr:DWORD
+proc wdc_theEnd uses ebx ecx
 	stdcall _restart
+	stdcall _bgPaint
+	stdcall _pause, szEnd, 300, 220, 0FFFFFFh
 	ret
 endp
-
-; proc wdc_restart uses ebx, pWdc:DWORD
-; 	mov ebx, [pWdc]
-; 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
-
-; 	ret
-; endp
 
 if DBG
 	nop

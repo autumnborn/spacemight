@@ -141,10 +141,6 @@ section '.code' code readable executable
 		stdcall wdc_init, wdctrl
 		stdcall plr_wakeup, player
 		stdcall wdc_wakeup, wdctrl
-		stdcall _bgPaint
-		stdcall _pause, szEnd, 300, 220, 0FFFFFFh
-		mov byte [wdctrl.level], WDC_STARTLEVEL
-		mov dword [player.score], 0
 		ret
 	endp
 

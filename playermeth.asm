@@ -37,6 +37,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	mov [ebx+PLAYER.size.y], ecx
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biHeight], ecx
 
+	mov [ebx+PLAYER.score], 0
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biPlanes], 1
 	mov [ebx+PLAYER.img.bmInfo.bmiHeader.biBitCount], 32
