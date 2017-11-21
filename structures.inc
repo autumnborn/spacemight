@@ -59,6 +59,8 @@ struct ENEMY
 	health dw ?
 	exist db ?
 	firesleep db ?
+	isAnim db ?
+	animFrmIdx dd ?
 	pPlayer dd ?
 	p POINT
 	size POINT
