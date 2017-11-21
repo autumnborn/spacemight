@@ -22,6 +22,7 @@ section '.data' data readable writeable
 	enemy ENEMY
 	wdctrl WORLDCTRL
 	infout INFOUT
+	anim ANIM
 
 	errmsg db "Error", 0
 	szLevel db "LEVEL ", 0
@@ -47,6 +48,9 @@ section '.code' code readable executable
   	stdcall inf_init, infout
   	stdcall wdc_init, wdctrl, player
   	
+  	stdcall anim_init, anim, animtype_1
+
+
   	stdcall plr_wakeup, player
   	stdcall wdc_wakeup, wdctrl
 
@@ -75,6 +79,7 @@ section '.code' code readable executable
   	include 'playermeth.asm'
   	include 'weaponmeth.asm'
   	include 'worldctrlmeth.asm'
+  	include 'animmeth.asm'
 
 	; Keyboard handler
 	proc _control uses ebx ecx edx 
@@ -127,7 +132,7 @@ section '.code' code readable executable
 		invoke GetAsyncKeyState, VK_RETURN
 		and eax, 8000h
 		test eax, eax
-		jz @F			
+		jz @F
 		stdcall _pause, szPause, 300, 220, 0FF00h
 	  @@:
 	  

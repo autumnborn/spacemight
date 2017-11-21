@@ -13,6 +13,10 @@ img_e1 file "img\sm_enm1_24x32x32_raw.bmp"
 img_e2 file "img\sm_enm2_24x32x32_raw.bmp"
 img_e3 file "img\sm_enm3_32x32x32_raw.bmp"
 
+; Animation sequences
+img_exp1 file "img\sm_exp1seq3f_72x24x32_raw.bmp"
+
+
 ; Objects description
 
 ; Weapons
@@ -34,3 +38,6 @@ etype_7 UNITTYPE 7, 3, wpntype_2, WPN_DIRECT_D, 100, img_e1, <24, 32>
 etype_8 UNITTYPE 8, 3, wpntype_3, WPN_DIRECT_D, 100, img_e1, <24, 32>
 etype_9 UNITTYPE 9, 3, wpntype_3, WPN_DIRECT_D, 100, img_e1, <24, 32>
 etype_10 UNITTYPE 10, 3, wpntype_3, WPN_DIRECT_D, 150, img_e1, <24, 32>
+
+; Animation
+animtype_1 ANIMTYPE 3, img_exp1, <72, 24>

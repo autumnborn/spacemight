@@ -97,3 +97,16 @@ struct INFOUT
 	rect RECT
 	img DIBINFO
 ends
+
+struct ANIM
+	frames dd ?
+	frameW dd ?
+	size POINT
+	img DIBINFO
+ends
+
+struct ANIMTYPE
+	frames dd ?
+	pimg dd ?
+	size POINT
+ends
