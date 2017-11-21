@@ -45,7 +45,7 @@ section '.code' code readable executable
 
   	stdcall plr_init, player, plrtype
   	stdcall inf_init, infout
-  	stdcall wdc_init, wdctrl
+  	stdcall wdc_init, wdctrl, player
   	
   	stdcall plr_wakeup, player
   	stdcall wdc_wakeup, wdctrl
@@ -138,7 +138,7 @@ section '.code' code readable executable
 		stdcall plr_destructor, player
 		stdcall wdc_destructor, wdctrl
 		stdcall plr_init, player, plrtype
-		stdcall wdc_init, wdctrl
+		stdcall wdc_init, wdctrl, player
 		stdcall plr_wakeup, player
 		stdcall wdc_wakeup, wdctrl
 		ret

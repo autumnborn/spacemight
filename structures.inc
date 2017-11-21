@@ -71,6 +71,7 @@ ARRAY ENMARR, 3, ENEMY
 struct WORLDCTRL
 	timer dd ?
 	level db ?
+	pPlayer dd ?
 	enmdelay db ?
 	enemies ENMARR
 ends

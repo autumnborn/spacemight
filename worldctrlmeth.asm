@@ -5,12 +5,14 @@ if DBG
 	nop
 end if
 
-proc wdc_init uses ebx, pWdc:DWORD
+proc wdc_init uses ebx, pWdc:DWORD, pPlr:DWORD
 	mov ebx, [pWdc]
+	mov eax, [pPlr]
+	mov [ebx+WORLDCTRL.pPlayer], eax
 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
 	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
-	lea edx, [ebx+WORLDCTRL.enemies]
-	stdcall wdc_initEnms, edx, etype_1, player
+	lea eax, [ebx+WORLDCTRL.enemies]
+	stdcall wdc_initEnms, eax, etype_1, [pPlr]
 	ret
 endp
 
@@ -79,9 +81,12 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
   .upd:	
  	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_update, eax
-	stdcall wdc_enemyCollision, eax, player
-	stdcall wdc_playerCollision, player, eax
-	stdcall wdc_defLevel, ebx, player
+	push ecx
+	mov ecx, [ebx+WORLDCTRL.pPlayer]
+	stdcall wdc_enemyCollision, eax, ecx
+	stdcall wdc_playerCollision, ecx, eax
+	stdcall wdc_defLevel, ebx, ecx
+	pop ecx
 
   .cont:
   	GetDimIndexAddr edx, ENEMY, ecx
@@ -184,7 +189,7 @@ endp
 proc wdc_theEnd uses ebx ecx
 	stdcall _restart
 	stdcall _bgPaint
-	stdcall _pause, szEnd, 300, 220, 0FFFFFFh
+	stdcall _pause, szEnd, 250, 220, 0FFFFFFh
 	ret
 endp
 
