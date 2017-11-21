@@ -59,16 +59,33 @@ proc anim_clear uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD
 	ret
 endp
 
+; Draws one frame from animation sequence
+; pAnim - ptr to instance of ANIM
+; x, y - coords
+; frame - index of frame to draw
+; return index of next frame
 proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, frame:DWORD
-	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pAnim]
+	
+	mov ecx, [frame]
+	mov eax, [ebx+ANIM.frames]
+	inc ecx
+	.if ecx>eax
+		xor eax, eax
+		jmp @F
+	.elseif ecx=eax
+		xor ecx, ecx
+	.endif
 
+	push ecx
+	invoke BeginPaint, [hwnd], paint
 	mov eax, [ebx+ANIM.frameW]
 	mov ecx, [frame]
 	mul ecx
 	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.frameW], [ebx+ANIM.size.y], [ebx+ANIM.img.memDC], eax, 0, SRCCOPY
-	
 	invoke EndPaint, [hwnd], paint
-	
+	pop eax
+
+  @@:
 	ret
 endp
