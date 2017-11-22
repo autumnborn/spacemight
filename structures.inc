@@ -103,8 +103,8 @@ ends
 
 struct ANIM
 	frmCount dd ?
-	frameW dd ?
-	size POINT
+	frameW dd ?	; frame width
+	size POINT	; sequence size (y = frame height)
 	img DIBINFO
 ends
 

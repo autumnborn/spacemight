@@ -268,7 +268,7 @@ proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	ret
 endp
 
-proc enm_die uses eax ebx ecx, pEnm:DWORD
+proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 
 	dec [ebx+ENEMY.animDelay]
@@ -278,7 +278,19 @@ proc enm_die uses eax ebx ecx, pEnm:DWORD
 
 	mov [ebx+ENEMY.animDelay], ENM_ANIM_DELAY_T
 	stdcall enm_clear, ebx
-	stdcall anim_draw, anim, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.animFrmIdx]
+	
+	; align x
+	mov ecx, [ebx+ENEMY.size.x]
+	sub ecx, [anim.frameW]
+	shr ecx, 1
+	add ecx, [ebx+ENEMY.p.x]
+	; align y (ANIM.size.y = frame height)
+	mov edx, [ebx+ENEMY.size.y]
+	sub edx, [anim.size.y]
+	shr edx, 1
+	add edx, [ebx+ENEMY.p.y]
+
+	stdcall anim_draw, anim, ecx, edx, [ebx+ENEMY.animFrmIdx]
 	mov [ebx+ENEMY.animFrmIdx], eax
 	test eax, eax
 	jnz @F
