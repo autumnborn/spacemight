@@ -15,6 +15,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov ebx, [pEnm]
 
 	mov [ebx+ENEMY.isAnim], 0
+	mov [ebx+ENEMY.animDelay], ENM_ANIM_DELAY_T
 
 	mov eax, [pPlr]
 	mov [ebx+ENEMY.pPlayer], eax
@@ -120,13 +121,13 @@ endp
 
 proc enm_update uses eax ebx, pEnm:DWORD
 	mov ebx, [pEnm]
-	stdcall enm_clear, ebx
 	
 	.if [ebx+ENEMY.isAnim]
 		stdcall enm_die, ebx
 		jmp @F
 	.endif
 
+	stdcall enm_clear, ebx
 	stdcall enm_behavior, ebx
 	stdcall enm_draw, ebx
   @@:
@@ -259,9 +260,10 @@ proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	xor eax, eax
 	cmp word [ebx+ENEMY.health], 0
 	jg .exit
+	
 	mov [ebx+ENEMY.isAnim], -1
-	;stdcall enm_die, ebx
-	or eax, 10	;todo: some calc points
+	or eax, 10
+
   .exit: 
 	ret
 endp
@@ -269,6 +271,13 @@ endp
 proc enm_die uses eax ebx ecx, pEnm:DWORD
 	mov ebx, [pEnm]
 
+	dec [ebx+ENEMY.animDelay]
+	mov al, [ebx+ENEMY.animDelay]
+	test al, al
+	jnz @F  
+
+	mov [ebx+ENEMY.animDelay], ENM_ANIM_DELAY_T
+	stdcall enm_clear, ebx
 	stdcall anim_draw, anim, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.animFrmIdx]
 	mov [ebx+ENEMY.animFrmIdx], eax
 	test eax, eax
@@ -281,16 +290,3 @@ proc enm_die uses eax ebx ecx, pEnm:DWORD
   @@:
   	ret
 endp
-
-; proc enm_TimeAnimProc uses eax ebx ecx edx, pEnm:DWORD
-; 	mov ebx, [pEnm]
-; 	stdcall anim_draw, anim, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.animFrmIdx]
-; 	mov [ebx+ENEMY.animFrmIdx], eax
-; 	test eax, eax
-; 	jnz @F
-; 	mov [ebx+ENEMY.isAnim], 0
-; 	stdcall enm_stop, ebx
-; 	stdcall enm_clear, ebx
-;   @@:
-; 	ret
-; endp

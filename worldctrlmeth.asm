@@ -10,7 +10,7 @@ proc wdc_init uses ebx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [pPlr]
 	mov [ebx+WORLDCTRL.pPlayer], eax
 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
-	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
+	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY_T
 	lea eax, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_initEnms, eax, etype_1, [pPlr]
 	ret
@@ -67,7 +67,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
   	mov al, [ebx+WORLDCTRL.enmdelay]
   	test al, al
   	jnz .cont
-  	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY
+  	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY_T
 
  	GetDimIndexAddr edx, ENEMY, ecx
  	inc byte [eax+ENEMY.exist]

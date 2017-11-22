@@ -60,6 +60,7 @@ struct ENEMY
 	exist db ?
 	firesleep db ?
 	isAnim db ?
+	animDelay db ?
 	animFrmIdx dd ?
 	pPlayer dd ?
 	p POINT
