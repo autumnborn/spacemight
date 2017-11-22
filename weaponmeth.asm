@@ -88,16 +88,16 @@ proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DW
 	add ecx, [hostW]
   @@:	
 	mov [ebx+WEAPON.p.y], ecx
-	mov byte [ebx+WEAPON.exist], -1
+	mov byte [ebx+WEAPON.isExist], -1
 	ret
 endp
 
 proc wpn_stop uses ebx, pWpn:DWORD
 	mov ebx, [pWpn]
-	mov al, [ebx+WEAPON.exist]
+	mov al, [ebx+WEAPON.isExist]
 	test al, al
 	jz @F
-	mov byte [ebx+WEAPON.exist], 0
+	mov byte [ebx+WEAPON.isExist], 0
   @@:
 	ret
 endp

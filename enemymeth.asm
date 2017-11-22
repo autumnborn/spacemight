@@ -97,10 +97,10 @@ endp
 
 proc enm_stop uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
-	mov al, [ebx+ENEMY.exist]
+	mov al, [ebx+ENEMY.isExist]
 	test al, al
 	jz @F
-	mov byte [ebx+ENEMY.exist], 0
+	mov byte [ebx+ENEMY.isExist], 0
 	mov eax, [ebx+ENEMY.pType]
 	mov ax, [eax+UNITTYPE.health]
 	mov [ebx+ENEMY.health], ax
@@ -110,7 +110,7 @@ endp
 
 proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
-	mov [ebx+ENEMY.exist], 0
+	mov [ebx+ENEMY.isExist], 0
 	
 	lea eax, [ebx+ENEMY.wpn]
 	stdcall _delWpns, eax
@@ -140,7 +140,7 @@ proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
     xor ecx, ecx
   
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	GetDimFieldAddr edx, WEAPON, ecx, isExist
   	mov al, byte [eax]
   	test al, al
   	jz .skip
@@ -208,14 +208,14 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 	
 	mov ebx, [pEnm]
 
-	.if ~[ebx+ENEMY.firesleep]
+	.if ~[ebx+ENEMY.fireSleep]
 		movzx ecx, [ebx+ENEMY.wpnDirect]
 		mov [wpnDirect], ecx
 
 		lea edx, [ebx+ENEMY.wpn]
 		xor ecx, ecx
 	  @@:
-		GetDimFieldAddr edx, WEAPON, ecx, exist
+		GetDimFieldAddr edx, WEAPON, ecx, isExist
 		.if byte [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
 			stdcall wpn_fire, eax, [ebx+ENEMY.p.x], [ebx+ENEMY.p.y], [ebx+ENEMY.size.x], [ebx+ENEMY.size.y], [wpnDirect]
@@ -223,7 +223,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 			invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx
 			test eax, eax
-			setne [ebx+ENEMY.firesleep]
+			setne [ebx+ENEMY.fireSleep]
 			jmp @F
 		.endif
 		inc ecx
@@ -237,7 +237,7 @@ endp
 
 proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	mov byte [ebx+ENEMY.firesleep], 0
+	mov byte [ebx+ENEMY.fireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp

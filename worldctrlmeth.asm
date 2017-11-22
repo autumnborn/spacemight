@@ -10,7 +10,7 @@ proc wdc_init uses ebx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [pPlr]
 	mov [ebx+WORLDCTRL.pPlayer], eax
 	mov byte [ebx+WORLDCTRL.level], WDC_STARTLEVEL
-	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY_T
+	mov byte [ebx+WORLDCTRL.enmDelay], WDC_ENM_DELAY_T
 	lea eax, [ebx+WORLDCTRL.enemies]
 	stdcall wdc_initEnms, eax, etype_1, [pPlr]
 	ret
@@ -52,25 +52,25 @@ endp
 
 proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	dec byte [ebx+WORLDCTRL.enmdelay]
+	dec byte [ebx+WORLDCTRL.enmDelay]
  
  	lea edx, [ebx+WORLDCTRL.enemies]
     xor ecx, ecx
   
   @@:  
-  	GetDimFieldAddr edx, ENEMY, ecx, exist
+  	GetDimFieldAddr edx, ENEMY, ecx, isExist
   	mov al, byte [eax]
   	test al, al
   	jnz .upd
 
   	mov ebx, [dwUser]
-  	mov al, [ebx+WORLDCTRL.enmdelay]
+  	mov al, [ebx+WORLDCTRL.enmDelay]
   	test al, al
   	jnz .cont
-  	mov byte [ebx+WORLDCTRL.enmdelay], WDC_ENM_DELAY_T
+  	mov byte [ebx+WORLDCTRL.enmDelay], WDC_ENM_DELAY_T
 
  	GetDimIndexAddr edx, ENEMY, ecx
- 	inc byte [eax+ENEMY.exist]
+ 	inc byte [eax+ENEMY.isExist]
  	push edx
  	xchg edx, eax
 	stdcall _rnd, SCR_WIDTH
@@ -227,7 +227,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
     xor ecx, ecx
 
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	GetDimFieldAddr edx, WEAPON, ecx, isExist
   	mov al, byte [eax]
   	test al, al
   	jz .skip
@@ -316,7 +316,7 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
     xor ecx, ecx
 
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	GetDimFieldAddr edx, WEAPON, ecx, isExist
   	mov al, byte [eax]
   	test al, al
   	jz .skip

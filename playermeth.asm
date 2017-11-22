@@ -173,14 +173,14 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	.endif
 
 
-	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.firesleep]
+	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.fireSleep]
 		movzx ecx, [ebx+PLAYER.wpnDirect]
 		mov [wpnDirect], ecx
 
 		lea edx, [ebx+PLAYER.wpn]			
 		xor ecx, ecx
 	  @@:
-		GetDimFieldAddr edx, WEAPON, ecx, exist
+		GetDimFieldAddr edx, WEAPON, ecx, isExist
 		.if byte [eax]=0
 			GetDimIndexAddr edx, WEAPON, ecx
 			stdcall wpn_fire, eax, [ebx+PLAYER.p.x], [ebx+PLAYER.p.y], [ebx+PLAYER.size.x], [ebx+PLAYER.size.x], [wpnDirect]
@@ -188,7 +188,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 			invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, plr_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx
 			test eax, eax
-			setne [ebx+PLAYER.firesleep]
+			setne [ebx+PLAYER.fireSleep]
 			jmp @F
 		.endif
 		inc ecx
@@ -205,7 +205,7 @@ endp
 
 proc plr_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
 	mov ebx, [dwUser]
-	mov byte [ebx+PLAYER.firesleep], 0
+	mov byte [ebx+PLAYER.fireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp
@@ -216,7 +216,7 @@ proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
     xor ecx, ecx
   
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, exist
+  	GetDimFieldAddr edx, WEAPON, ecx, isExist
   	mov al, byte [eax]
   	test al, al
   	jz .skip

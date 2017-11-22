@@ -26,7 +26,7 @@ struct WEAPON
 	type db ?	
 	damage dw ?
 	direct db ?
-	exist db ?
+	isExist db ?
 	p POINT
 	size POINT
 	img DIBINFO
@@ -42,7 +42,7 @@ struct PLAYER
 	health dw ?
 	score dd ?
 	timer dd ?
-	firesleep db ?
+	fireSleep db ?
 	p POINT
 	size POINT
 	act ACTIONFLAGS
@@ -57,8 +57,8 @@ struct ENEMY
 	weapon db ?
 	wpnDirect db ?
 	health dw ?
-	exist db ?
-	firesleep db ?
+	isExist db ?
+	fireSleep db ?
 	isAnim db ?
 	animDelay db ?
 	animFrmIdx dd ?
@@ -75,7 +75,7 @@ struct WORLDCTRL
 	timer dd ?
 	level db ?
 	pPlayer dd ?
-	enmdelay db ?
+	enmDelay db ?
 	enemies ENMARR
 ends
 
@@ -102,14 +102,14 @@ struct INFOUT
 ends
 
 struct ANIM
-	frames dd ?
+	frmCount dd ?
 	frameW dd ?
 	size POINT
 	img DIBINFO
 ends
 
 struct ANIMTYPE
-	frames dd ?
+	frmCount dd ?
 	pimg dd ?
 	size POINT
 ends

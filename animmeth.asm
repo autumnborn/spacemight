@@ -9,8 +9,8 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	mov ebx, [pAnim]
 	mov eax, [pType]
 
-	mov ecx, [eax+ANIMTYPE.frames]
-	mov [ebx+ANIM.frames], ecx
+	mov ecx, [eax+ANIMTYPE.frmCount]
+	mov [ebx+ANIM.frmCount], ecx
 
 	mov ecx, [eax+ANIMTYPE.size.x]
 	mov [ebx+ANIM.size.x], ecx
@@ -22,7 +22,7 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	
 	xor edx, edx
 	mov eax, [ebx+ANIM.size.x]
-	mov ecx, [ebx+ANIM.frames]
+	mov ecx, [ebx+ANIM.frmCount]
 	div ecx
 	mov [ebx+ANIM.frameW], eax
 
@@ -62,13 +62,13 @@ endp
 ; Draws one frame from animation sequence
 ; pAnim - ptr to instance of ANIM
 ; x, y - coords
-; frame - index of frame to draw
+; idx - index of frame to draw
 ; return index of next frame
-proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, frame:DWORD
+proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, idx:DWORD
 	mov ebx, [pAnim]
 	
-	mov ecx, [frame]
-	mov eax, [ebx+ANIM.frames]
+	mov ecx, [idx]
+	mov eax, [ebx+ANIM.frmCount]
 	inc ecx
 	.if ecx>eax
 		xor eax, eax
@@ -80,7 +80,7 @@ proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, frame:DWORD
 	push ecx
 	invoke BeginPaint, [hwnd], paint
 	mov eax, [ebx+ANIM.frameW]
-	mov ecx, [frame]
+	mov ecx, [idx]
 	mul ecx
 	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.frameW], [ebx+ANIM.size.y], [ebx+ANIM.img.memDC], eax, 0, SRCCOPY
 	invoke EndPaint, [hwnd], paint
