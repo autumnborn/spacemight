@@ -102,14 +102,14 @@ struct INFOUT
 ends
 
 struct ANIM
+	pType dd ?
 	frmCount dd ?
-	frameW dd ?	; frame width
-	size POINT	; sequence size (y = frame height)
+	size POINT	; frame size
 	img DIBINFO
 ends
 
 struct ANIMTYPE
 	frmCount dd ?
 	pimg dd ?
-	size POINT
+	size POINT	; sequence img size
 ends

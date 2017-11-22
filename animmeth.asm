@@ -9,22 +9,23 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	mov ebx, [pAnim]
 	mov eax, [pType]
 
+	mov [ebx+ANIM.pType], eax
+
 	mov ecx, [eax+ANIMTYPE.frmCount]
 	mov [ebx+ANIM.frmCount], ecx
 
-	mov ecx, [eax+ANIMTYPE.size.x]
-	mov [ebx+ANIM.size.x], ecx
-	mov [ebx+ANIM.img.bmInfo.bmiHeader.biWidth], ecx
-
 	mov ecx, [eax+ANIMTYPE.size.y]
 	mov [ebx+ANIM.size.y], ecx
-	mov [ebx+ANIM.img.bmInfo.bmiHeader.biHeight], ecx
-	
+	mov [ebx+ANIM.img.bmInfo.bmiHeader.biHeight], ecx	
+
+	mov ecx, [eax+ANIMTYPE.size.x]
+	mov [ebx+ANIM.img.bmInfo.bmiHeader.biWidth], ecx
+
 	xor edx, edx
-	mov eax, [ebx+ANIM.size.x]
+	mov eax, ecx
 	mov ecx, [ebx+ANIM.frmCount]
 	div ecx
-	mov [ebx+ANIM.frameW], eax
+	mov [ebx+ANIM.size.x], eax
 
 	mov [ebx+ANIM.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
 	mov [ebx+ANIM.img.bmInfo.bmiHeader.biPlanes], 1
@@ -38,8 +39,8 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 
 	mov eax, [pType]
 	mov ecx, [eax+ANIMTYPE.pimg]
-	mov edx, [ebx+ANIM.size.x]
-	imul edx, [ebx+ANIM.size.y]
+	mov edx, [eax+ANIMTYPE.size.x]
+	imul edx, [eax+ANIMTYPE.size.y]
 	IMG_MEMCOPY [ebx+ANIM.img.pvBits], ecx, edx
 
 	ret
@@ -54,7 +55,7 @@ endp
 proc anim_clear uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pAnim]
-	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.frameW], [ebx+ANIM.size.y], [screen.memDC], [x], [y], SRCCOPY
+	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.size.x], [ebx+ANIM.size.y], [screen.memDC], [x], [y], SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	ret
 endp
@@ -79,10 +80,10 @@ proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, idx:DWORD
 
 	push ecx
 	invoke BeginPaint, [hwnd], paint
-	mov eax, [ebx+ANIM.frameW]
+	mov eax, [ebx+ANIM.size.x]
 	mov ecx, [idx]
 	mul ecx
-	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.frameW], [ebx+ANIM.size.y], [ebx+ANIM.img.memDC], eax, 0, SRCCOPY
+	invoke BitBlt, [hdc], [x], [y], [ebx+ANIM.size.x], [ebx+ANIM.size.y], [ebx+ANIM.img.memDC], eax, 0, SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	pop eax
 

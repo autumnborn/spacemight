@@ -281,7 +281,7 @@ proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	
 	; align x
 	mov ecx, [ebx+ENEMY.size.x]
-	sub ecx, [anim.frameW]
+	sub ecx, [anim.size.x]
 	shr ecx, 1
 	add ecx, [ebx+ENEMY.p.x]
 	; align y (ANIM.size.y = frame height)
