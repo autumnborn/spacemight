@@ -14,6 +14,9 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 
 	mov ebx, [pPlr]
 
+	mov [ebx+PLAYER.isAnim], 0
+	mov [ebx+PLAYER.animDelay], PLR_ANIM_DELAY_T
+
 	mov eax, [pType]
 	mov [ebx+PLAYER.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
@@ -129,6 +132,11 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 
 	mov ebx, [pPlr]
 
+	.if [ebx+PLAYER.isAnim]
+		stdcall plr_die, ebx
+		jmp .exit
+	.endif
+
 	.if dword [ebx+PLAYER.act.left]
 		stdcall plr_clear, ebx
 	.endif
@@ -199,6 +207,8 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 
 	stdcall plr_draw, ebx
 	stdcall plr_updateWpns, ebx
+
+  .exit:
 	stdcall inf_drawHealth, infout, ebx
 	ret
 endp
@@ -249,20 +259,57 @@ endp
 
 proc plr_hit uses ebx ecx, pPlr:DWORD, pWpn:DWORD
 	mov ebx, [pPlr]
+
+	cmp byte [ebx+PLAYER.isAnim], 0
+	je @F
+	xor eax, eax
+	jmp .exit
+
+  @@:
 	mov ecx, [pWpn]
 	stdcall wpn_hit, ecx
 	mov ax, [ecx+WEAPON.damage]
 	sub [ebx+PLAYER.health], ax
 	cmp word [ebx+PLAYER.health], 0
-	jg @F
-	stdcall plr_die, ebx
-  @@: 
+	jg .exit
+	mov [ebx+PLAYER.isAnim], -1
+  
+  .exit: 
 	ret
 endp
 
-proc plr_die uses ebx ecx, pEnm:DWORD
-	mov ebx, [pEnm]
-	;todo something
+proc plr_die uses ebx ecx, pPlr:DWORD
+	mov ebx, [pPlr]
+
+	dec [ebx+PLAYER.animDelay]
+	mov al, [ebx+PLAYER.animDelay]
+	test al, al
+	jnz @F  
+
+	mov [ebx+PLAYER.animDelay], PLR_ANIM_DELAY_T
 	stdcall plr_clear, ebx
+	
+	mov eax, [ebx+PLAYER.pType]
+	mov eax, [eax+UNITTYPE.pAnim]
+	; align x
+	mov ecx, [ebx+PLAYER.size.x]
+	sub ecx, [eax+ANIM.size.x]
+	shr ecx, 1
+	add ecx, [ebx+PLAYER.p.x]
+	; align y
+	mov edx, [ebx+PLAYER.size.y]
+	sub edx, [eax+ANIM.size.y]
+	shr edx, 1
+	add edx, [ebx+PLAYER.p.y]
+
+	stdcall anim_draw, eax, ecx, edx, [ebx+PLAYER.animFrmIdx]
+	mov [ebx+PLAYER.animFrmIdx], eax
+	test eax, eax
+	jnz @F
+
+	mov [ebx+PLAYER.isAnim], 0
+	stdcall plr_clear, ebx
+
+  @@:	
 	ret
 endp

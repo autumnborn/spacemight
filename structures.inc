@@ -43,6 +43,9 @@ struct PLAYER
 	score dd ?
 	timer dd ?
 	fireSleep db ?
+	isAnim db ?
+	animDelay db ?
+	animFrmIdx dd ?
 	p POINT
 	size POINT
 	act ACTIONFLAGS
