@@ -146,7 +146,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 
 	.if [ebx+PLAYER.act.left]
 		cmp dword [ecx], 0
-		jna @F
+		jng @F
 		movzx eax, [ebx+PLAYER.speed] 
 		sub dword [ecx], eax  
 	  @@:
@@ -156,7 +156,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 		mov eax, [ebx+PLAYER.size.x]
 		add eax, [ecx] 
 		cmp eax, SCR_WIDTH
-		jnb @F
+		jnl @F
 		movzx eax, [ebx+PLAYER.speed]
 		add dword [ecx], eax
 	  @@:
@@ -164,7 +164,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	
 	.if [ebx+PLAYER.act.up]
 		cmp dword [edx], 0
-		jna @F
+		jng @F
 		movzx eax, [ebx+PLAYER.speed]
 		sub dword [edx], eax
 	  @@:	
@@ -174,7 +174,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 		mov eax, [ebx+PLAYER.size.y]
 		add eax, [edx] 
 		cmp eax, SCR_HEIGHT
-		jnb @F
+		jnl @F
 		movzx eax, [ebx+PLAYER.speed]
 		add dword [edx], eax
 	  @@:
