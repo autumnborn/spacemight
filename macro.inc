@@ -73,3 +73,12 @@ macro IMG_MEMCOPY pDest, pSrc, bCount
     jnz beginl
   	  
 }
+
+; Image aligned coord
+macro GetAlign size1, size2, coord
+{
+  mov eax, #size1
+  sub eax, #size2
+  shr eax, 1
+  add eax, #coord
+} 

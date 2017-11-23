@@ -75,11 +75,8 @@ proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DW
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl
 	;center X align
-	mov ecx, [hostW]
-	sub ecx, [ebx+WEAPON.size.x]
-	shr ecx, 1
-	add ecx, [startX]
-	mov [ebx+WEAPON.p.x], ecx
+	GetAlign [hostW], [ebx+WEAPON.size.x], [startX] 	
+	mov [ebx+WEAPON.p.x], eax
 	
 	mov ecx, [startY]
 	;startY align cond direct

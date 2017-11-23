@@ -287,20 +287,15 @@ proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	mov [ebx+ENEMY.animDelay], ENM_ANIM_DELAY_T
 	stdcall enm_clear, ebx
 	
-	mov eax, [ebx+ENEMY.pType]
-	mov eax, [eax+UNITTYPE.pAnim]
+	mov edx, [ebx+ENEMY.pType]
+	mov edx, [edx+UNITTYPE.pAnim]
 	; align x
-	mov ecx, [ebx+ENEMY.size.x]
-	sub ecx, [eax+ANIM.size.x]
-	shr ecx, 1
-	add ecx, [ebx+ENEMY.p.x]
+	GetAlign [ebx+ENEMY.size.x], [edx+ANIM.size.x], [ebx+ENEMY.p.x]
+	mov ecx, eax
 	; align y
-	mov edx, [ebx+ENEMY.size.y]
-	sub edx, [eax+ANIM.size.y]
-	shr edx, 1
-	add edx, [ebx+ENEMY.p.y]
-
-	stdcall anim_draw, eax, ecx, edx, [ebx+ENEMY.animFrmIdx]
+	GetAlign [ebx+ENEMY.size.y], [edx+ANIM.size.y], [ebx+ENEMY.p.y]
+	
+	stdcall anim_draw, edx, ecx, eax, [ebx+ENEMY.animFrmIdx]
 	mov [ebx+ENEMY.animFrmIdx], eax
 	test eax, eax
 	jnz @F

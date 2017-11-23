@@ -70,6 +70,7 @@ section '.code' code readable executable
   	stdcall plr_destructor, player
   	stdcall wdc_destructor, wdctrl
   	stdcall inf_destructor, infout
+  	stdcall anim_destructor, anim
    	stdcall _deleteDIB, [screen.dib], [screen.memDC]
   	invoke ExitProcess, 0
 

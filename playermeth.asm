@@ -278,7 +278,7 @@ proc plr_hit uses ebx ecx, pPlr:DWORD, pWpn:DWORD
 	ret
 endp
 
-proc plr_die uses ebx ecx, pPlr:DWORD
+proc plr_die uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
 
 	; direct call
@@ -297,20 +297,15 @@ proc plr_die uses ebx ecx, pPlr:DWORD
 	mov [ebx+PLAYER.animDelay], PLR_ANIM_DELAY_T
 	stdcall plr_clear, ebx
 	
-	mov eax, [ebx+PLAYER.pType]
-	mov eax, [eax+UNITTYPE.pAnim]
+	mov edx, [ebx+PLAYER.pType]
+	mov edx, [edx+UNITTYPE.pAnim]
 	; align x
-	mov ecx, [ebx+PLAYER.size.x]
-	sub ecx, [eax+ANIM.size.x]
-	shr ecx, 1
-	add ecx, [ebx+PLAYER.p.x]
+	GetAlign [ebx+PLAYER.size.x], [edx+ANIM.size.x], [ebx+PLAYER.p.x]
+	mov ecx, eax
 	; align y
-	mov edx, [ebx+PLAYER.size.y]
-	sub edx, [eax+ANIM.size.y]
-	shr edx, 1
-	add edx, [ebx+PLAYER.p.y]
+	GetAlign [ebx+PLAYER.size.y], [edx+ANIM.size.y], [ebx+PLAYER.p.y]
 
-	stdcall anim_draw, eax, ecx, edx, [ebx+PLAYER.animFrmIdx]
+	stdcall anim_draw, edx, ecx, eax, [ebx+PLAYER.animFrmIdx]
 	mov [ebx+PLAYER.animFrmIdx], eax
 	test eax, eax
 	jnz @F
