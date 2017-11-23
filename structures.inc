@@ -82,9 +82,10 @@ ends
 struct UNITTYPE
 	type db ?
 	speed db ?
+	health dw ?
 	pWpnType dd ?
 	wpnDirect db ?
-	health dw ?
+	pAnim dd ?
 	pimg dd ?
 	size POINT
 ends
