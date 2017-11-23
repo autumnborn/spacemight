@@ -28,7 +28,7 @@ wpntype_3 WPNTYPE W_TRIPPLE, 50, img_w3, <24, 8>
 plrtype UNITTYPE 0, 4, 1000, wpntype_1, WPN_DIRECT_U, anim, img_pl, <32, 32>
 
 ; Enemies
-etype_1 UNITTYPE 1, 2, 50, wpntype_1, WPN_DIRECT_D, anim, img_e1, <24, 32>
+etype_1 UNITTYPE 1, 2, 100, wpntype_1, WPN_DIRECT_D, anim, img_e1, <24, 32>
 etype_2 UNITTYPE 2, 2, 150, wpntype_1, WPN_DIRECT_D, anim, img_e2, <24, 32>
 etype_3 UNITTYPE 3, 2, 100, wpntype_2, WPN_DIRECT_D, anim, img_e2, <24, 32>
 etype_4 UNITTYPE 4, 2, 150, wpntype_2, WPN_DIRECT_D, anim, img_e3, <32, 32>

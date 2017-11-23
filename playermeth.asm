@@ -281,6 +281,14 @@ endp
 proc plr_die uses ebx ecx, pPlr:DWORD
 	mov ebx, [pPlr]
 
+	; direct call
+	mov ax, [ebx+PLAYER.health]
+	test ax, ax
+	jz @F
+	mov [ebx+PLAYER.health], 0
+	mov [ebx+PLAYER.isAnim], -1
+
+  @@:
 	dec [ebx+PLAYER.animDelay]
 	mov al, [ebx+PLAYER.animDelay]
 	test al, al

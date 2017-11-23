@@ -271,6 +271,14 @@ endp
 proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 
+	; direct call
+	mov ax, [ebx+ENEMY.health]
+	test ax, ax
+	jz @F
+	mov [ebx+ENEMY.health], 0
+	mov [ebx+ENEMY.isAnim], -1
+	
+  @@:
 	dec [ebx+ENEMY.animDelay]
 	mov al, [ebx+ENEMY.animDelay]
 	test al, al
