@@ -311,7 +311,9 @@ proc plr_die uses ebx ecx edx, pPlr:DWORD
 	jnz @F
 
 	mov [ebx+PLAYER.isAnim], 0
-	stdcall plr_clear, ebx
+	stdcall _restart
+	stdcall _bgPaint
+	stdcall _pause, szOver, 280, 220, 0FFh
 
   @@:	
 	ret
