@@ -24,7 +24,6 @@ macro DIM var, size, type
 macro GetDimIndexAddr var, type, index
 {
   mov eax, sizeof.#type
-  ; mov ecx, index
   imul eax, index
   lea eax, [var+eax]
 }
@@ -32,7 +31,6 @@ macro GetDimIndexAddr var, type, index
 macro GetDimFieldAddr var, type, index, field
 {
   mov eax, sizeof.#type
-  ; mov ecx, index
   imul eax, index
   lea eax, [var+type#.#field+eax]
 } 
@@ -51,6 +49,7 @@ macro MEMCOPY pDest, pSrc, bCount
     jnz @B
 }
 
+; Memcopy for images
 macro IMG_MEMCOPY pDest, pSrc, bCount
 {
 	local beginl, chk

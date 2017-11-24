@@ -5,6 +5,7 @@ if DBG
 	nop
 end if
 
+; Constructor
 ; pType - pointer to UNITTYPE
 proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	locals
@@ -75,6 +76,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	ret
 endp
 
+; Clear screen at current enemy position
 proc enm_clear uses ebx ecx edx, pEnm:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pEnm]
@@ -85,6 +87,7 @@ proc enm_clear uses ebx ecx edx, pEnm:DWORD
 	ret
 endp
 
+; Draws enemy at current position
 proc enm_draw uses ebx ecx edx, pEnm:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pEnm]
@@ -95,6 +98,8 @@ proc enm_draw uses ebx ecx edx, pEnm:DWORD
 	ret
 endp
 
+; Stops enemy updating:
+; reset isExist flag
 proc enm_stop uses ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	mov al, [ebx+ENEMY.isExist]
@@ -108,6 +113,7 @@ proc enm_stop uses ebx, pEnm:DWORD
 	ret
 endp
 
+; ~
 proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 	mov [ebx+ENEMY.isExist], 0
@@ -119,6 +125,7 @@ proc enm_destructor uses ebx ecx edx, pEnm:DWORD
   	ret
 endp
 
+; Updates enemy
 proc enm_update uses eax ebx, pEnm:DWORD
 	mov ebx, [pEnm]
 	
@@ -134,6 +141,7 @@ proc enm_update uses eax ebx, pEnm:DWORD
 	ret
 endp
 
+; Updates existed instances of WEAPON
 proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
  	lea edx, [ebx+ENEMY.wpn]
@@ -155,6 +163,8 @@ proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 
 endp
 
+; Implements enemy behavior:
+; move, fire
 proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 	
@@ -168,7 +178,7 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	
 	add dword [ecx], edx
 	cmp [ecx], eax
-	je .exit	;ex jae .exit
+	je .exit
 
 	;enemies shoots from backyard, if enemy type <> 1 
 	jb .direct0
@@ -203,6 +213,7 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	ret
 endp
 
+; Shot
 proc enm_fire uses ebx ecx edx, pEnm:DWORD
 	local wpnDirect dd ?
 	
@@ -235,14 +246,16 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
   	ret
 endp
 
-proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
-	mov ebx, [dwUser]
+; Fire delay expiration callback
+proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, pEnm, dw1, dw2
+	mov ebx, [pEnm]
 	mov byte [ebx+ENEMY.fireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp
 
-; pWpn pointer to player(!) weapon
+; Collision with player weapon handler
+; pWpn pointer to player(!) WEAPON instance
 ; return points, if died, and null otherwise 
 proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	mov ebx, [pEnm]
@@ -268,6 +281,7 @@ proc enm_hit uses ebx ecx, pEnm:DWORD, pWpn:DWORD
 	ret
 endp
 
+; boom
 proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
 

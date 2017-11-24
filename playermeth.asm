@@ -5,6 +5,7 @@ if DBG
 	nop
 end if
 
+; Constructor
 ; pType - pointer to UNITTYPE
 proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	locals
@@ -68,6 +69,7 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	ret
 endp
 
+; Clear screen at current player position
 proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
@@ -80,6 +82,7 @@ proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	ret
 endp
 
+; Draws player at current position
 proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
@@ -93,6 +96,7 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	ret
 endp
 
+; Runs player main timer
 proc plr_wakeup uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.timer]
@@ -104,6 +108,7 @@ proc plr_wakeup uses ebx, pPlr:DWORD
 	ret
 endp
 
+; Stops player main timer
 proc plr_stop uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.timer]
@@ -115,6 +120,7 @@ proc plr_stop uses ebx, pPlr:DWORD
 	ret
 endp
 
+; ~
 proc plr_destructor uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	
@@ -127,6 +133,8 @@ proc plr_destructor uses ebx, pPlr:DWORD
   	ret
 endp
 
+; Updates player by timer
+; (typical mmsystem TimeProc function)
 proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	local wpnDirect dd ?
 
@@ -213,13 +221,15 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	ret
 endp
 
-proc plr_TimeFireProc, uID, uMsg, dwUser, dw1, dw2
-	mov ebx, [dwUser]
+; Fire delay expiration callback
+proc plr_TimeFireProc, uID, uMsg, pPlr, dw1, dw2
+	mov ebx, [pPlr]
 	mov byte [ebx+PLAYER.fireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp
 
+; Updates instances of WEAPON with isExist flag
 proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
  	lea edx, [ebx+PLAYER.wpn]
@@ -241,22 +251,24 @@ proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
 
 endp
 
-; Visibility for enemies
-; returns coordinate x
+; Returns coordinate x
+; (enm_behavior)
 proc plr_getX uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.p.x]
 	ret
 endp
 
-; Visibility for enemies
-; returns coordinate y
+; Returns coordinate y
+; (enm_behavior)
 proc plr_getY uses ebx, pPlr:DWORD
 	mov ebx, [pPlr]
 	mov eax, [ebx+PLAYER.p.y]
 	ret
 endp
 
+; Collision with enemy weapon handler
+; pWpn - ptr to enemy(!) WEAPON instance
 proc plr_hit uses ebx ecx, pPlr:DWORD, pWpn:DWORD
 	mov ebx, [pPlr]
 
@@ -278,6 +290,7 @@ proc plr_hit uses ebx ecx, pPlr:DWORD, pWpn:DWORD
 	ret
 endp
 
+; boom
 proc plr_die uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
 

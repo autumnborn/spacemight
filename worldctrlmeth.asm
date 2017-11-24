@@ -5,6 +5,7 @@ if DBG
 	nop
 end if
 
+; Constructor
 proc wdc_init uses ebx, pWdc:DWORD, pPlr:DWORD
 	mov ebx, [pWdc]
 	mov eax, [pPlr]
@@ -16,6 +17,10 @@ proc wdc_init uses ebx, pWdc:DWORD, pPlr:DWORD
 	ret
 endp
 
+; Initializes array of ENEMY instances
+; pEnmArr - ptr to array of enemies
+; pEnmType - ptr to enemies UNITTYPE
+; pPlr - ptr to PLAYER instance
 proc wdc_initEnms uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
 	mov edx, [pEnmArr]
    	xor ecx, ecx
@@ -28,6 +33,7 @@ proc wdc_initEnms uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
 	ret
 endp
 
+; Runs worldctrl main timer
 proc wdc_wakeup uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
 	mov eax, [ebx+WORLDCTRL.timer]
@@ -39,6 +45,7 @@ proc wdc_wakeup uses ebx, pWdc:DWORD
 	ret
 endp
 
+; Stops worldctrl main timer
 proc wdc_stop uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
 	mov eax, [ebx+WORLDCTRL.timer]
@@ -50,8 +57,10 @@ proc wdc_stop uses ebx, pWdc:DWORD
 	ret
 endp
 
-proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
-	mov ebx, [dwUser]
+; Worldctrl main timer
+; (typical mmsystem TimeProc function)
+proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, pWdc, dw1, dw2
+	mov ebx, [pWdc]
 	dec byte [ebx+WORLDCTRL.enmDelay]
  
  	lea edx, [ebx+WORLDCTRL.enemies]
@@ -63,7 +72,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
   	test al, al
   	jnz .upd
 
-  	mov ebx, [dwUser]
+  	mov ebx, [pWdc]
   	mov al, [ebx+WORLDCTRL.enmDelay]
   	test al, al
   	jnz .cont
@@ -98,6 +107,7 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, dwUser, dw1, dw2
 	ret
 endp
 
+; ~
 proc wdc_destructor uses ebx, pWdc:DWORD
 	mov ebx, [pWdc]
 	stdcall wdc_stop, ebx
@@ -106,6 +116,7 @@ proc wdc_destructor uses ebx, pWdc:DWORD
 	ret
 endp
 
+; Defines a next level by player score and current level  
 proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov ebx, [pWdc]
 	mov eax, [pPlr]
@@ -156,6 +167,9 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	ret
 endp
 
+; Transition to next level
+; pPlrType - ptr to player UNITTYPE
+; pEnmType - ptr to next level enemy UNITTYPE
 proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD, pEnmType:DWORD
 	local szNum[4]:BYTE
 
@@ -186,6 +200,7 @@ proc wdc_transLevel uses eax ebx ecx edx, pWdc:DWORD, pPlr:DWORD, pPlrType:DWORD
 	ret
 endp
 
+; Ends game
 proc wdc_theEnd uses ebx ecx
 	stdcall _restart
 	stdcall _bgPaint
@@ -200,7 +215,8 @@ if DBG
 	nop
 	nop
 end if
-; Enemies collisions handle
+
+; Enemies collisions handler
 proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	locals 
 		enmX1 dd ?
@@ -289,7 +305,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
  	ret
 endp
 
-; Player collisions handle
+; Player collisions handler
 proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	locals 
 		plrX1 dd ?

@@ -40,7 +40,7 @@ section '.code' code readable executable
   	stdcall _configWnd
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
-
+    ; Player start position
   	mov [player.p.x], 304
   	mov [player.p.y], 224
  
@@ -141,6 +141,7 @@ section '.code' code readable executable
 		ret
 	endp
 
+	; Restarts game
 	proc _restart uses ecx
 		stdcall plr_destructor, player
 		stdcall wdc_destructor, wdctrl
@@ -151,6 +152,7 @@ section '.code' code readable executable
 		ret
 	endp
 
+	; Set/Unset pause
 	; pszText - ptr to string, which draws when pause sets.
 	; If pszText is 0, then don't draw any text.
 	; x, y - output coords.
@@ -174,6 +176,7 @@ section '.code' code readable executable
 		ret
 	endp
  
+ 	; Creates compatible device context and DIB section
 	; bmInfo - ptr to BITMAPINFO
 	; pvBits - ptr to var for ptr to bitmap bits
 	; memDC  - ptr to var for handle to a memory device context
@@ -191,7 +194,8 @@ section '.code' code readable executable
 		ret
 	endp
 
-	; dib - dib handle returned _createDIB
+	; Deletes compatible DC
+	; dib - DIB handle returned _createDIB
 	proc _deleteDIB uses ebx, dib:DWORD, memDC:DWORD
 		invoke DeleteObject, [dib]
 		invoke DeleteDC, [memDC]
@@ -361,7 +365,7 @@ section '.code' code readable executable
 		ret
 	endp
 
-	; Counts ansi string length, includes last null-byte
+	; Counts ansi string length includes last null-byte
 	proc _countSz uses esi, psz:DWORD
 		mov esi, [psz]
 

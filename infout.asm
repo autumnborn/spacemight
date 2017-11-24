@@ -5,7 +5,7 @@ if DBG
 	nop
 end if
 
-
+; Constructor
 proc inf_init uses ebx, pInf:DWORD
 	mov ebx, [pInf]
 	
@@ -23,12 +23,14 @@ proc inf_init uses ebx, pInf:DWORD
 	ret
 endp
 
+; ~
 proc inf_destructor uses ebx, pInf:DWORD
 	mov ebx, [pInf]
 	stdcall _deleteDIB, [ebx+INFOUT.img.dib], [ebx+INFOUT.img.memDC]
 	ret
 endp
 
+; Draws health-line by calculated percent
 proc inf_drawHealth uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ecx, [pPlr]
@@ -69,6 +71,10 @@ proc inf_drawHealth uses eax ebx ecx edx, pInf:DWORD, pPlr:DWORD
 	ret
 endp
 
+; Draws text
+; pszBuff - pointer to null-terminated string to draw
+; x, y - coordinates
+; color - text color
 proc inf_drawText uses eax ebx ecx edx, pInf:DWORD, pszBuff:DWORD, x:DWORD, y:DWORD, color:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pInf]

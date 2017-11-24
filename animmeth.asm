@@ -5,6 +5,8 @@ if DBG
 	nop
 end if
 
+; Constructor
+; pType - ptr to ANIMTYPE
 proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	mov ebx, [pAnim]
 	mov eax, [pType]
@@ -46,12 +48,14 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	ret
 endp
 
+; ~
 proc anim_destructor uses ebx, pAnim:DWORD
 	mov ebx, [pAnim]
 	stdcall _deleteDIB, [ebx+ANIM.img.dib], [ebx+ANIM.img.memDC]
 	ret
 endp
 
+; Clear screen at current animation position
 proc anim_clear uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pAnim]

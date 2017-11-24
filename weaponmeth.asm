@@ -5,6 +5,10 @@ if DBG
 	nop
 end if
 
+; Constructor
+; pType - ptr to type of weapon WPNTYPE
+; pParent - ptr to instance of parent unit(like: PLAYER, ENEMY)
+; direct - fire direction
 proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:BYTE
 	mov ebx, [pWpn]
 	mov ecx, [pParent]
@@ -47,6 +51,7 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:B
 	ret
 endp
 
+; Clear screen at current weapon position
 proc wpn_clear uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pWpn]
@@ -59,6 +64,7 @@ proc wpn_clear uses ebx ecx edx, pWpn:DWORD
 	ret
 endp
 
+; Draws weapon at current position
 proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
 
@@ -70,6 +76,10 @@ proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	ret
 endp
 
+; Shot
+; startX, startY - parent X and Y position
+; hostW, hostH - parent width and height (size.x, size.y), uses for align
+; direct - fire direction
 proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DWORD, hostH:DWORD, direct:BYTE
 	mov ebx, [pWpn]
 	mov cl, [direct]
@@ -89,6 +99,8 @@ proc wpn_fire uses ebx ecx edx, pWpn:DWORD, startX:DWORD, startY:DWORD, hostW:DW
 	ret
 endp
 
+; Stops wepon updating:
+; reset isExist flag
 proc wpn_stop uses ebx, pWpn:DWORD
 	mov ebx, [pWpn]
 	mov al, [ebx+WEAPON.isExist]
@@ -99,6 +111,7 @@ proc wpn_stop uses ebx, pWpn:DWORD
 	ret
 endp
 
+; ~
 proc wpn_destructor uses ebx ecx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_stop, ebx
@@ -106,7 +119,7 @@ proc wpn_destructor uses ebx ecx, pWpn:DWORD
   	ret
 endp
 
-;ex-wpn_TimeProc
+; Updates weapon
 proc wpn_update uses ebx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_clear, ebx
@@ -128,6 +141,7 @@ proc wpn_update uses ebx, pWpn:DWORD
 	ret
 endp
 
+; Collision with unit
 proc wpn_hit uses ebx ecx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_stop, ebx
