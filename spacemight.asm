@@ -24,6 +24,7 @@ section '.data' data readable writeable
 	wdctrl WORLDCTRL
 	infout INFOUT
 	anim ANIM
+	splash SPLASH
 
 	errmsg db "Error", 0
 	szStart db "START", 0
@@ -49,10 +50,11 @@ section '.code' code readable executable
   	stdcall plr_init, player, plrtype
   	stdcall inf_init, infout
   	stdcall wdc_init, wdctrl, player
-  	stdcall anim_init, anim, animtype_1
+  	stdcall anim_init, anim, atExp1
 
   	;stdcall plr_wakeup, player
   	;stdcall wdc_wakeup, wdctrl
+  	stdcall spl_show, splash, SPL_MAIN
 
   	stdcall _bgPaint
   	stdcall _pause, szStart, 300, 220, 0FFFFFFh
@@ -84,6 +86,7 @@ section '.code' code readable executable
   	include 'weaponmeth.asm'
   	include 'worldctrlmeth.asm'
   	include 'animmeth.asm'
+  	include 'splashmeth.asm'
 
 	; Keyboard handler
 	proc _control uses ebx ecx edx 

@@ -18,7 +18,7 @@ img_e6 file "img\sm_enm6_32x32x32_raw.bmp"
 
 ; Animation sequences
 img_exp1 file "img\sm_exp1seq3f_72x24x32_raw.bmp"
-
+img_logo file "img\sm_logo1seq10f_320x32x32_raw.bmp"
 
 ; Objects description
 
@@ -43,4 +43,5 @@ etype_9 UNITTYPE 9, 3, 100, wpntype_3, WPN_DIRECT_D, anim, img_e5, <24, 24>
 etype_10 UNITTYPE 10, 3, 150, wpntype_3, WPN_DIRECT_D, anim, img_e6, <32, 32>
 
 ; Animation
-animtype_1 ANIMTYPE 3, img_exp1, <72, 24>
+atExp1 ANIMTYPE 3, img_exp1, <72, 24>
+atLogo ANIMTYPE 10, img_logo, <320, 32>

@@ -27,6 +27,8 @@ WDC_TIMER_DELAY		=20
 WDC_TIMER_RESOL		=10
 WDC_ENM_DELAY_T		=100	;ticks
 
+SPL_TIMER_DELAY		=20
+SPL_TIMER_RESOL		=10
 
 ; Weapon moving
 WPN_SPEED			=4
@@ -55,3 +57,6 @@ LEVELEND			=200
 ; Info
 INF_HEALTH_X		=500
 INF_HEALTH_Y		=450
+
+; Splash screens
+SPL_MAIN			=1

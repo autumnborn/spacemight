@@ -117,3 +117,10 @@ struct ANIMTYPE
 	pimg dd ?
 	size POINT	; sequence img size
 ends
+
+struct SPLASH
+	timer dd ?
+	counter dd ?
+	p POINT ?
+	anim ANIM ?
+ends
