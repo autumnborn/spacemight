@@ -42,7 +42,7 @@ proc spl_showMain uses ebx ecx edx, uID, uMsg, pSpl, dw1, dw2
 	jnz .exit
 
 	lea eax, [ebx+SPLASH.anim] 
-	stdcall anim_draw, eax, [ebx+SPLASH.p.x], [ebx+SPLASH.p.y], 0
+	stdcall anim_drawNext, eax, [ebx+SPLASH.p.x], [ebx+SPLASH.p.y]
 	test eax, eax
 	jnz .cont
 

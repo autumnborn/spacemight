@@ -11,6 +11,8 @@ proc anim_init uses ebx ecx edx, pAnim:DWORD, pType:DWORD
 	mov ebx, [pAnim]
 	mov eax, [pType]
 
+	mov [ebx+ANIM.frmNext], 0
+
 	mov [ebx+ANIM.pType], eax
 
 	mov ecx, [eax+ANIMTYPE.frmCount]
@@ -92,5 +94,16 @@ proc anim_draw uses ebx ecx edx, pAnim:DWORD, x:DWORD, y:DWORD, idx:DWORD
 	pop eax
 
   @@:
+	ret
+endp
+
+; Draws frame and store next index for next call
+; pAnim - ptr to instance of ANIM
+; x, y - coords
+; return index of next frame
+proc anim_drawNext uses ebx ecx, pAnim:DWORD, x:DWORD, y:DWORD
+	mov ebx, [pAnim]
+	stdcall anim_draw, ebx, [x], [y], [ebx+ANIM.frmNext]
+	mov [ebx+ANIM.frmNext], eax
 	ret
 endp

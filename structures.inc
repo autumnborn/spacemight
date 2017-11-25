@@ -108,6 +108,7 @@ ends
 struct ANIM
 	pType dd ?
 	frmCount dd ?
+	frmNext dd ?
 	size POINT	; frame size
 	img DIBINFO
 ends
