@@ -26,6 +26,7 @@ section '.data' data readable writeable
 	anim ANIM
 
 	errmsg db "Error", 0
+	szStart db "START", 0
 	szLevel db "LEVEL ", 0
 	szPause db "PAUSE", 0
 	szEnd db "Congratulations, you did it!", 0Dh, 0Ah, "The End", 0
@@ -45,16 +46,16 @@ section '.code' code readable executable
   	mov [player.p.x], 304
   	mov [player.p.y], 224
  
-
   	stdcall plr_init, player, plrtype
   	stdcall inf_init, infout
   	stdcall wdc_init, wdctrl, player
-  	
   	stdcall anim_init, anim, animtype_1
-
 
   	stdcall plr_wakeup, player
   	stdcall wdc_wakeup, wdctrl
+
+  	stdcall _bgPaint
+  	stdcall _pause, szStart, 300, 220, 0FFFFFFh
 
   .msg_loop:
     invoke GetMessage, msg, NULL, 0, 0
