@@ -8,9 +8,10 @@ include 'macro.inc'
 include 'structures.inc'
 
 section '.data' data readable writeable
-	wClass db "SpaceMightWindow", 0
-	wTitle db "Space Might", 0
-	wc WNDCLASS 0,WindowProc,0,0,0,0,0,COLOR_BTNFACE+1,0,wClass
+	szWndClass db "SpaceMightWindow", 0
+	szWndTitle db "Space Might", 0
+	dwWndStyle dd WS_OVERLAPPEDWINDOW+WS_VISIBLE-WS_THICKFRAME-WS_MAXIMIZEBOX
+	wc WNDCLASS 0, WindowProc, 0, 0, 0, 0, 0, COLOR_BTNFACE+1, 0, szWndClass
 	hwnd dd ?
 	msg MSG
 	hdc dd ?

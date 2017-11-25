@@ -13,7 +13,7 @@
     jmp exit
 
   @@:
-    invoke CreateWindowEx, WS_EX_APPWINDOW, wClass, wTitle, WS_OVERLAPPEDWINDOW+WS_VISIBLE, 50, 50, 640, 480, 0, 0, [wc.hInstance], 0
+    invoke CreateWindowEx, WS_EX_APPWINDOW, szWndClass, szWndTitle, [dwWndStyle], 50, 50, 640, 480, 0, 0, [wc.hInstance], 0
 
     test eax, eax
     jne @F
