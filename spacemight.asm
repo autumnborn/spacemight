@@ -51,8 +51,8 @@ section '.code' code readable executable
   	stdcall wdc_init, wdctrl, player
   	stdcall anim_init, anim, animtype_1
 
-  	stdcall plr_wakeup, player
-  	stdcall wdc_wakeup, wdctrl
+  	;stdcall plr_wakeup, player
+  	;stdcall wdc_wakeup, wdctrl
 
   	stdcall _bgPaint
   	stdcall _pause, szStart, 300, 220, 0FFFFFFh
