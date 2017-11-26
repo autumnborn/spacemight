@@ -21,6 +21,7 @@ section '.data' data readable writeable
 	szLevel db "LEVEL ", 0
 	szPause db "PAUSE", 0
 	szEnd db "Congratulations, you did it!", 0Dh, 0Ah, "The End", 0
+	szCred	db "Autumnborn", 0
 	szOver db "GAME OVER", 0
 
 section '.bss' data readable writeable

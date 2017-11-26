@@ -123,7 +123,7 @@ proc wdc_defLevel uses eax ebx edx, pWdc:DWORD, pPlr:DWORD
 	mov eax, [eax+PLAYER.score]
 	mov dl, [ebx+WORLDCTRL.level]
 
-	.if eax>LEVELEND & dl=1;9
+	.if eax>LEVELEND & dl=10
 		stdcall wdc_theEnd
 
 	.elseif eax>LEVEL10 & dl=9
@@ -204,7 +204,8 @@ endp
 proc wdc_theEnd uses ebx ecx
 	stdcall _restart
 	stdcall _bgPaint
-	stdcall _pause, szEnd, 250, 220, 0FFFFFFh
+	stdcall inf_drawText, infout, szEnd, 232, 220, 0FF00h 
+	stdcall _pause, szCred, 520, 450, 0FFFFFFh
 	ret
 endp
 

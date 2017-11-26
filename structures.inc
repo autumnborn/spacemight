@@ -37,7 +37,6 @@ ARRAY WPNARR, 10, WEAPON
 struct PLAYER
 	pType dd ?
 	speed db ?
-	weapon db ? ;(?)
 	wpnDirect db ?
 	health dw ?
 	score dd ?
@@ -57,7 +56,6 @@ struct ENEMY
 	type db ?
 	pType dd ?
 	speed db ?
-	weapon db ?
 	wpnDirect db ?
 	health dw ?
 	isExist db ?

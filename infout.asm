@@ -86,7 +86,10 @@ proc inf_drawText uses eax ebx ecx edx, pInf:DWORD, pszBuff:DWORD, x:DWORD, y:DW
 	invoke SetBkMode, [hdc], TRANSPARENT
 	invoke SetTextColor, [hdc], [color]
 	lea eax, [ebx+INFOUT.rect]
-	invoke DrawText, [hdc], [pszBuff], -1, eax, DT_NOCLIP
+	push eax
+	invoke DrawText, [hdc], [pszBuff], -1, eax, DT_CALCRECT
+	pop eax
+	invoke DrawText, [hdc], [pszBuff], -1, eax, DT_CENTER
 	invoke EndPaint, [hwnd], paint
 	ret
 endp
