@@ -52,8 +52,6 @@ section '.code' code readable executable
   	stdcall wdc_init, wdctrl, player
   	stdcall anim_init, anim, atExp1
 
-  	;stdcall plr_wakeup, player
-  	;stdcall wdc_wakeup, wdctrl
   	stdcall spl_show, splash, SPL_MAIN
 
   	stdcall _bgPaint
