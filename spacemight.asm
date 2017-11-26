@@ -7,16 +7,27 @@ include 'equates.inc'
 include 'macro.inc'
 include 'structures.inc'
 
+section '.rdata' data readable
+	include 'objdesc.inc'
+
 section '.data' data readable writeable
 	szWndClass db "SpaceMightWindow", 0
 	szWndTitle db "Space Might", 0
 	dwWndStyle dd WS_OVERLAPPEDWINDOW+WS_VISIBLE-WS_THICKFRAME-WS_MAXIMIZEBOX
 	wc WNDCLASS 0, WindowProc, 0, 0, 0, 0, 0, COLOR_BTNFACE+1, 0, szWndClass
+	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
+	errmsg db "Error", 0
+	szStart db "START", 0
+	szLevel db "LEVEL ", 0
+	szPause db "PAUSE", 0
+	szEnd db "Congratulations, you did it!", 0Dh, 0Ah, "The End", 0
+	szOver db "GAME OVER", 0
+
+section '.bss' data readable writeable
 	hwnd dd ?
 	msg MSG
 	hdc dd ?
 	rndSeed dd ?
-	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
 	paused db ?
 	paint PAINTSTRUCT
 	player PLAYER
@@ -25,15 +36,7 @@ section '.data' data readable writeable
 	infout INFOUT
 	anim ANIM
 	splash SPLASH
-
-	errmsg db "Error", 0
-	szStart db "START", 0
-	szLevel db "LEVEL ", 0
-	szPause db "PAUSE", 0
-	szEnd db "Congratulations, you did it!", 0Dh, 0Ah, "The End", 0
-	szOver db "GAME OVER", 0
 	szBuff db 255 dup(0)
-	include 'objdesc.inc'
 
 section '.code' code readable executable
   	
