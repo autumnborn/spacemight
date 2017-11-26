@@ -15,8 +15,11 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 
 	mov ebx, [pPlr]
 
+
 	mov [ebx+PLAYER.isAnim], 0
 	mov [ebx+PLAYER.animDelay], PLR_ANIM_DELAY_T
+	mov [ebx+PLAYER.p.x], PLR_START_X
+	mov [ebx+PLAYER.p.y], PLR_START_Y
 
 	mov eax, [pType]
 	mov [ebx+PLAYER.pType], eax

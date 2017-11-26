@@ -31,7 +31,6 @@ section '.bss' data readable writeable
 	paused db ?
 	paint PAINTSTRUCT
 	player PLAYER
-	enemy ENEMY
 	wdctrl WORLDCTRL
 	infout INFOUT
 	anim ANIM
@@ -46,18 +45,15 @@ section '.code' code readable executable
   	stdcall _configWnd
     stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
     mov [screen.dib], eax
-    ; Player start position
-  	mov [player.p.x], 304
-  	mov [player.p.y], 224
  
   	stdcall plr_init, player, plrtype
   	stdcall inf_init, infout
   	stdcall wdc_init, wdctrl, player
   	stdcall anim_init, anim, atExp1
 
+  	stdcall _bgPaint
   	stdcall spl_show, splash, SPL_MAIN
 
-  	stdcall _bgPaint
   	stdcall _pause, szStart, 300, 220, 0FFFFFFh
 
   .msg_loop:

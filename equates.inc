@@ -5,6 +5,9 @@ DBG 				=1
 SCR_WIDTH			=640
 SCR_HEIGHT			=480
 
+PLR_START_X			=304
+PLR_START_Y			=224
+
 ; Color
 DIB_RGB_COLORS 		=0
 
