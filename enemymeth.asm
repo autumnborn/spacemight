@@ -219,7 +219,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 	
 	mov ebx, [pEnm]
 
-	.if ~[ebx+ENEMY.fireSleep]
+	.if ~[ebx+ENEMY.isFireSleep]
 		movzx ecx, [ebx+ENEMY.wpnDirect]
 		mov [wpnDirect], ecx
 
@@ -234,7 +234,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 			invoke timeSetEvent, ENM_FIRE_DELAY, ENM_FIRE_RESOL, enm_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx
 			test eax, eax
-			setne [ebx+ENEMY.fireSleep]
+			setne [ebx+ENEMY.isFireSleep]
 			jmp @F
 		.endif
 		inc ecx
@@ -249,7 +249,7 @@ endp
 ; Fire delay expiration callback
 proc enm_TimeFireProc uses eax ebx ecx edx, uID, uMsg, pEnm, dw1, dw2
 	mov ebx, [pEnm]
-	mov byte [ebx+ENEMY.fireSleep], 0
+	mov byte [ebx+ENEMY.isFireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp

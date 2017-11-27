@@ -192,7 +192,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 	.endif
 
 
-	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.fireSleep]
+	.if [ebx+PLAYER.act.fire] & ~[ebx+PLAYER.isFireSleep]
 		movzx ecx, [ebx+PLAYER.wpnDirect]
 		mov [wpnDirect], ecx
 
@@ -207,7 +207,7 @@ proc plr_TimeProc uses eax ebx ecx edx, uID, uMsg, pPlr, dw1, dw2
 			invoke timeSetEvent, PLR_FIRE_DELAY, PLR_FIRE_RESOL, plr_TimeFireProc, ebx, TIME_ONESHOT
 			pop ebx
 			test eax, eax
-			setne [ebx+PLAYER.fireSleep]
+			setne [ebx+PLAYER.isFireSleep]
 			jmp @F
 		.endif
 		inc ecx
@@ -227,7 +227,7 @@ endp
 ; Fire delay expiration callback
 proc plr_TimeFireProc, uID, uMsg, pPlr, dw1, dw2
 	mov ebx, [pPlr]
-	mov byte [ebx+PLAYER.fireSleep], 0
+	mov byte [ebx+PLAYER.isFireSleep], 0
 	invoke timeKillEvent, [uID]
 	ret
 endp

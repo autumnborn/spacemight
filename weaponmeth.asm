@@ -12,7 +12,7 @@ end if
 proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:BYTE
 	mov ebx, [pWpn]
 	mov ecx, [pParent]
-	mov [ebx+WEAPON.parent], ecx
+	mov [ebx+WEAPON.pParent], ecx
 
 	mov cl, [direct]
 	mov [ebx+WEAPON.direct], cl

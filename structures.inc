@@ -22,63 +22,84 @@ struct ACTIONFLAGS
 ends
 
 struct WEAPON
-	parent dd ?
-	type db ?	
-	damage dw ?
-	direct db ?
-	isExist db ?
-	p POINT
-	size POINT
-	img DIBINFO
+	pParent dd ?		; pointer to parent instance
+	type db ?			; number of enemy type (del?)
+	damage dw ?			; weapon demage
+	direct db ?			; direction
+	isExist db ?		; existence flag
+	p POINT				; weapon coords
+	size POINT			; weapon size (uses for drawing and collisions checking)
+	img DIBINFO			; image
 ends
 
 ARRAY WPNARR, 10, WEAPON
 
 struct PLAYER
-	pType dd ?
-	speed db ?
-	wpnDirect db ?
-	health dw ?
-	score dd ?
-	timer dd ?
-	fireSleep db ?
-	isAnim db ?
-	animDelay db ?
-	animFrmIdx dd ?
-	p POINT
-	size POINT
-	act ACTIONFLAGS
-	wpn WPNARR
-	img DIBINFO
+	pType dd ?			; pointer to UNITTYPE
+	speed db ?			; moving pixels shift
+	wpnDirect db ?		; weapon direction
+	health dw ?			; player health
+	score dd ?			; player score (uses to define level)
+	timer dd ?			; timer handle
+	isFireSleep db ?	; delay before next shot flag 
+	isAnim db ?			; die animation running flag
+	animDelay db ?		; animation next frame drawing delay (ticks)
+	animFrmIdx dd ?		; animation frame index	store
+	p POINT				; player coords
+	size POINT			; player size (uses for drawing and collisions checking)
+	act ACTIONFLAGS		; player action flags
+	wpn WPNARR			; array of WEAPON instances
+	img DIBINFO			; image
 ends
 
 struct ENEMY
-	type db ?
-	pType dd ?
-	speed db ?
-	wpnDirect db ?
-	health dw ?
-	isExist db ?
-	fireSleep db ?
-	isAnim db ?
-	animDelay db ?
-	animFrmIdx dd ?
-	pPlayer dd ?
-	p POINT
-	size POINT
-	wpn WPNARR
-	img DIBINFO
+	type db ?			; number of enemy type (enm_behavior) (del?)
+	pType dd ?			; pointer to UNITTYPE
+	speed db ?			; moving pixels shift
+	wpnDirect db ?		; weapon direction
+	health dw ?			; enemy health
+	isExist db ?		; existence flag
+	isFireSleep db ?	; delay before next shot flag	
+	isAnim db ?			; die animation running flag
+	animDelay db ?		; animation next frame drawing delay (ticks)
+	animFrmIdx dd ?		; animation frame index	store
+	pPlayer dd ?		; pointer to PLAYER instance
+	p POINT				; enemy coords
+	size POINT			; enemy size (uses for drawing and collisions checking)
+	wpn WPNARR			; array of WEAPON instances
+	img DIBINFO			; image
 ends
 
 ARRAY ENMARR, 3, ENEMY
 
 struct WORLDCTRL
-	timer dd ?
-	level db ?
-	pPlayer dd ?
-	enmDelay db ?
-	enemies ENMARR
+	timer dd ?			; timer handle
+	level db ?			; current game level number
+	pPlayer dd ?		; pointer to PLAYER instance
+	enmDelay db ?		; next enemy delay
+	enemies ENMARR		; array of ENEMY instances
 ends
+
+struct INFOUT			; information output
+	rect RECT
+	img DIBINFO
+ends
+
+struct ANIM
+	pType dd ?			; pointer to ANIMTYPE
+	frmCount dd ?		; number of frames
+	frmNext dd ?		; number of next frame storage (anim_drawNext)
+	size POINT			; frame size
+	img DIBINFO			; animation sequence
+ends
+
+struct SPLASH
+	timer dd ?			; timer handle
+	counter dd ?		; tick counter
+	p POINT ?			; coords
+	anim ANIM ?			; instance of ANIM
+ends
+
 
 struct UNITTYPE
 	type db ?
@@ -98,28 +119,8 @@ struct WPNTYPE
 	size POINT	
 ends
 
-struct INFOUT
-	rect RECT
-	img DIBINFO
-ends
-
-struct ANIM
-	pType dd ?
-	frmCount dd ?
-	frmNext dd ?
-	size POINT	; frame size
-	img DIBINFO
-ends
-
 struct ANIMTYPE
 	frmCount dd ?
 	pimg dd ?
-	size POINT	; sequence img size
-ends
-
-struct SPLASH
-	timer dd ?
-	counter dd ?
-	p POINT ?
-	anim ANIM ?
+	size POINT			; sequence img size
 ends

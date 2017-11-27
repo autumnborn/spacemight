@@ -21,6 +21,7 @@ macro DIM var, size, type
   var var#size ?
 }
 
+; Gets array index address
 macro GetDimIndexAddr var, type, index
 {
   mov eax, sizeof.#type
@@ -28,6 +29,7 @@ macro GetDimIndexAddr var, type, index
   lea eax, [var+eax]
 }
 
+; Gets array field address
 macro GetDimFieldAddr var, type, index, field
 {
   mov eax, sizeof.#type
@@ -73,7 +75,7 @@ macro IMG_MEMCOPY pDest, pSrc, bCount
   	  
 }
 
-; Image aligned coord
+; Gets image aligned coord
 macro GetAlign size1, size2, coord
 {
   mov eax, #size1
