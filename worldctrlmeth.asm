@@ -93,12 +93,13 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, pWdc, dw1, dw2
 	push ecx
 	mov ecx, [ebx+WORLDCTRL.pPlayer]
 	stdcall wdc_enemyCollision, eax, ecx
-	stdcall wdc_playerCollision, ecx, eax
+	; stdcall wdc_playerCollision, ecx, eax
 	stdcall wdc_defLevel, ebx, ecx
 	pop ecx
 
   .cont:
   	GetDimIndexAddr edx, ENEMY, ecx
+	stdcall wdc_playerCollision, [ebx+WORLDCTRL.pPlayer], eax ;enemy's ghost weapon fix
   	stdcall enm_updateWpns, eax	;weapon updating independent of enemy die 
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
@@ -218,6 +219,7 @@ if DBG
 end if
 
 ; Enemies collisions handler
+; (player, player's weapon)
 proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	locals 
 		enmX1 dd ?
@@ -307,6 +309,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 endp
 
 ; Player collisions handler
+; (enemy's weapon)
 proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	locals 
 		plrX1 dd ?
