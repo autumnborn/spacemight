@@ -16,7 +16,7 @@ section '.data' data readable writeable
 	dwWndStyle dd WS_OVERLAPPEDWINDOW+WS_VISIBLE-WS_THICKFRAME-WS_MAXIMIZEBOX
 	wc WNDCLASS 0, WindowProc, 0, 0, 0, 0, 0, COLOR_BTNFACE+1, 0, szWndClass
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
-	errmsg db "Error", 0
+	szErr db "Error", 0
 	szStart db "START", 0
 	szLevel db "LEVEL ", 0
 	szPause db "PAUSE", 0
@@ -221,31 +221,31 @@ section '.code' code readable executable
 
 	; Random number from 0 to top-1
 	proc _rnd uses ecx edx, top:DWORD
-		mov     eax,[rndSeed]
+		mov eax,[rndSeed]
 		; if rndSeed = 0
-		or      eax,eax
-		jnz     @F
+		or eax,eax
+		jnz @F
 		; init rnd gen
 		rdtsc
-		xor     eax,edx
-		mov     [rndSeed],eax
+		xor eax,edx
+		mov [rndSeed],eax
 	  @@:
-		xor     edx,edx
-		mov     ecx,127773
-		div     ecx
-		mov     ecx,eax
-		mov     eax,16807
-		mul     edx
-		mov     edx,ecx
-		mov     ecx,eax
-		mov     eax,2836
-		mul     edx
-		sub     ecx,eax
-		xor     edx,edx
-		mov     eax,ecx
-		mov     [rndSeed],ecx
-		mov     ecx,100000
-		div     ecx
+		xor edx,edx
+		mov ecx,127773
+		div ecx
+		mov ecx,eax
+		mov eax,16807
+		mul edx
+		mov edx,ecx
+		mov ecx,eax
+		mov eax,2836
+		mul edx
+		sub ecx,eax
+		xor edx,edx
+		mov eax,ecx
+		mov [rndSeed],ecx
+		mov ecx,100000
+		div ecx
 		mov eax, edx
 		xor edx, edx
 		div [top]
@@ -253,9 +253,9 @@ section '.code' code readable executable
 		ret
 	endp
 
-	;	Cover for convert v2d unsigned
-	;	iVal - dword value
-	;	pBuf - dword ptr to  str buffer
+	; Cover for convert v2d unsigned
+	; iVal - dword value
+	; pBuf - dword ptr to  str buffer
 	proc _val2dsu uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
 		mov eax, [iVal]
 		mov edi, [pBuf]
@@ -264,9 +264,9 @@ section '.code' code readable executable
 		ret
 	endp
 
-	;	Cover for convert v2d signed
-	;	iVal - dword value
-	;	pBuf - dword ptr to str buffer
+	; Cover for convert v2d signed
+	; iVal - dword value
+	; pBuf - dword ptr to str buffer
 	proc _val2dss uses eax ebx ecx edx esi edi, iVal:DWORD, pBuf:DWORD
 		mov eax, [iVal]
 		mov edi, [pBuf]
