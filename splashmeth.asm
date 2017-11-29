@@ -26,7 +26,7 @@ proc spl_show uses ebx ecx edx, pSpl:DWORD, splScr:BYTE
 	
 	invoke timeSetEvent, SPL_TIMER_DELAY, SPL_TIMER_RESOL, edx, ebx, TIME_PERIODIC 
 	mov [ebx+SPLASH.timer], eax
-  
+
   .exit:
 	ret	
 endp
@@ -49,7 +49,7 @@ proc spl_showMain uses ebx ecx edx, uID, uMsg, pSpl, dw1, dw2
 	invoke timeKillEvent, [ebx+SPLASH.timer]
 	lea eax, [ebx+SPLASH.anim]
 	stdcall anim_destructor, eax
-  	jmp .exit
+	jmp .exit
 
   .cont:		
 	mov eax, [ebx+SPLASH.anim.size.x]

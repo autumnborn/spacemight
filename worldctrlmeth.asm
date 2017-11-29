@@ -23,9 +23,9 @@ endp
 ; pPlr - ptr to PLAYER instance
 proc wdc_initEnms uses ebx ecx edx, pEnmArr:DWORD, pEnmType:DWORD, pPlr:DWORD
 	mov edx, [pEnmArr]
-   	xor ecx, ecx
+	xor ecx, ecx
   @@:  
- 	GetDimIndexAddr edx, ENEMY, ecx
+	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_init, eax, [pEnmType], [pPlr]
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
@@ -62,33 +62,33 @@ endp
 proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, pWdc, dw1, dw2
 	mov ebx, [pWdc]
 	dec byte [ebx+WORLDCTRL.enmDelay]
- 
- 	lea edx, [ebx+WORLDCTRL.enemies]
-    xor ecx, ecx
-  
+
+	lea edx, [ebx+WORLDCTRL.enemies]
+	xor ecx, ecx
+
   @@:  
   	GetDimFieldAddr edx, ENEMY, ecx, isExist
-  	mov al, byte [eax]
-  	test al, al
-  	jnz .upd
+	mov al, byte [eax]
+	test al, al
+	jnz .upd
 
-  	mov ebx, [pWdc]
-  	mov al, [ebx+WORLDCTRL.enmDelay]
-  	test al, al
-  	jnz .cont
-  	mov byte [ebx+WORLDCTRL.enmDelay], WDC_ENM_DELAY_T
+	mov ebx, [pWdc]
+	mov al, [ebx+WORLDCTRL.enmDelay]
+	test al, al
+	jnz .cont
+	mov byte [ebx+WORLDCTRL.enmDelay], WDC_ENM_DELAY_T
 
- 	GetDimIndexAddr edx, ENEMY, ecx
- 	inc byte [eax+ENEMY.isExist]
- 	push edx
- 	xchg edx, eax
+	GetDimIndexAddr edx, ENEMY, ecx
+	inc byte [eax+ENEMY.isExist]
+	push edx
+	xchg edx, eax
 	stdcall _rnd, SCR_WIDTH
 	mov [edx+ENEMY.p.x], eax
 	mov [edx+ENEMY.p.y], 0
 	pop edx
 
   .upd:	
- 	GetDimIndexAddr edx, ENEMY, ecx
+	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_update, eax
 	push ecx
 	mov ecx, [ebx+WORLDCTRL.pPlayer]
@@ -98,9 +98,9 @@ proc wdc_TimeProc uses eax ebx ecx edx, uID, uMsg, pWdc, dw1, dw2
 	pop ecx
 
   .cont:
-  	GetDimIndexAddr edx, ENEMY, ecx
+	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall wdc_playerCollision, [ebx+WORLDCTRL.pPlayer], eax ;enemy's ghost weapon fix
-  	stdcall enm_updateWpns, eax	;weapon updating independent of enemy die 
+	stdcall enm_updateWpns, eax	;weapon updating independent of enemy die 
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]
 	jnz @B
@@ -241,19 +241,19 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	
 	;player weapon collision
 	mov eax, [pPlr]
- 	lea edx, [eax+PLAYER.wpn]
+	lea edx, [eax+PLAYER.wpn]
 
-    xor ecx, ecx
+	xor ecx, ecx
 
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, isExist
-  	mov al, byte [eax]
-  	test al, al
-  	jz .skip
+	GetDimFieldAddr edx, WEAPON, ecx, isExist
+	mov al, byte [eax]
+	test al, al
+	jz .skip
 
 	GetDimFieldAddr edx, WEAPON, ecx, size.x
 	mov ebx, [eax]
- 	GetDimFieldAddr edx, WEAPON, ecx, p.x
+	GetDimFieldAddr edx, WEAPON, ecx, p.x
 	add ebx, [eax]
 	mov eax, [eax]
 	
@@ -261,9 +261,9 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 		jmp .skip
 	.endif
 
- 	GetDimFieldAddr edx, WEAPON, ecx, size.y
+	GetDimFieldAddr edx, WEAPON, ecx, size.y
 	mov ebx, [eax]
- 	GetDimFieldAddr edx, WEAPON, ecx, p.y
+	GetDimFieldAddr edx, WEAPON, ecx, p.y
 	add ebx, [eax]
 	mov eax, [eax]
 
@@ -305,7 +305,7 @@ proc wdc_enemyCollision uses eax ebx ecx edx, pEnm:DWORD, pPlr:DWORD
 	stdcall plr_die, [pPlr]
 	
   .exit:
- 	ret
+	ret
 endp
 
 ; Player collisions handler
@@ -331,19 +331,19 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 	
 	;enemy weapon collision
 	mov eax, [pEnm]
- 	lea edx, [eax+ENEMY.wpn]
+	lea edx, [eax+ENEMY.wpn]
 
-    xor ecx, ecx
+	xor ecx, ecx
 
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, isExist
-  	mov al, byte [eax]
-  	test al, al
-  	jz .skip
+	GetDimFieldAddr edx, WEAPON, ecx, isExist
+	mov al, byte [eax]
+	test al, al
+	jz .skip
 
 	GetDimFieldAddr edx, WEAPON, ecx, size.x
 	mov ebx, [eax]
- 	GetDimFieldAddr edx, WEAPON, ecx, p.x
+	GetDimFieldAddr edx, WEAPON, ecx, p.x
 	add ebx, [eax]
 	mov eax, [eax]
 	
@@ -351,9 +351,9 @@ proc wdc_playerCollision uses eax ebx ecx edx, pPlr:DWORD, pEnm:DWORD
 		jmp .skip
 	.endif
 
- 	GetDimFieldAddr edx, WEAPON, ecx, size.y
+	GetDimFieldAddr edx, WEAPON, ecx, size.y
 	mov ebx, [eax]
- 	GetDimFieldAddr edx, WEAPON, ecx, p.y
+	GetDimFieldAddr edx, WEAPON, ecx, p.y
 	add ebx, [eax]
 	mov eax, [eax]
 
@@ -376,9 +376,9 @@ endp
 ; !!!
 proc wdc_delEnms uses ebx ecx edx, pEnmArr:DWORD
 	mov edx, [pEnmArr]
-   	xor ecx, ecx
+	xor ecx, ecx
   @@:  
- 	GetDimIndexAddr edx, ENEMY, ecx
+	GetDimIndexAddr edx, ENEMY, ecx
 	stdcall enm_destructor, eax
 	inc ecx
 	cmp ecx, [edx+ENMARR.length]

@@ -31,10 +31,10 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	mov [wpnDirect], ecx
 
 	mov cl, [eax+UNITTYPE.speed]
-    mov [ebx+PLAYER.speed], cl
+	mov [ebx+PLAYER.speed], cl
 
 	mov cx, [eax+UNITTYPE.health]
-    mov [ebx+PLAYER.health], cx
+	mov [ebx+PLAYER.health], cx
 	
 	mov ecx, [eax+UNITTYPE.size.x]
 	mov [ebx+PLAYER.size.x], ecx
@@ -56,15 +56,15 @@ proc plr_init uses ebx ecx edx, pPlr:DWORD, pType:DWORD
 	mov [ebx+PLAYER.img.dib], eax
 
 	mov eax, [pType]
-    mov ecx, [eax+UNITTYPE.pimg]
+	mov ecx, [eax+UNITTYPE.pimg]
 	mov edx, [ebx+PLAYER.size.x]
-    imul edx, [ebx+PLAYER.size.y]
-    IMG_MEMCOPY [ebx+PLAYER.img.pvBits], ecx, edx
+	imul edx, [ebx+PLAYER.size.y]
+	IMG_MEMCOPY [ebx+PLAYER.img.pvBits], ecx, edx
 
- 	lea edx, [ebx+PLAYER.wpn]
-    xor ecx, ecx
+	lea edx, [ebx+PLAYER.wpn]
+	xor ecx, ecx
   @@:  
- 	GetDimIndexAddr edx, WEAPON, ecx
+	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_init, eax, [pWpnType], ebx, [wpnDirect]
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
@@ -76,9 +76,9 @@ endp
 proc plr_clear uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
-    
-    mov ecx, [ebx+PLAYER.p.x]
-    mov edx, [ebx+PLAYER.p.y]
+
+	mov ecx, [ebx+PLAYER.p.x]
+	mov edx, [ebx+PLAYER.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+PLAYER.size.x], [ebx+PLAYER.size.y], [screen.memDC], ecx, edx, SRCCOPY
 
 	invoke EndPaint, [hwnd], paint
@@ -90,8 +90,8 @@ proc plr_draw uses ebx ecx edx, pPlr:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pPlr]
 
-    mov ecx, [ebx+PLAYER.p.x]
-    mov edx, [ebx+PLAYER.p.y]
+	mov ecx, [ebx+PLAYER.p.x]
+	mov edx, [ebx+PLAYER.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+PLAYER.size.x], [ebx+PLAYER.size.y], [ebx+PLAYER.img.memDC], 0, 0, SRCCOPY
 
 
@@ -133,7 +133,7 @@ proc plr_destructor uses ebx, pPlr:DWORD
 	stdcall _delWpns, eax
 	
 	stdcall _deleteDIB, [ebx+PLAYER.img.dib], [ebx+PLAYER.img.memDC]
-  	ret
+	ret
 endp
 
 ; Updates player by timer
@@ -235,15 +235,15 @@ endp
 ; Updates instances of WEAPON with isExist flag
 proc plr_updateWpns uses ebx ecx edx, pPlr:DWORD
 	mov ebx, [pPlr]
- 	lea edx, [ebx+PLAYER.wpn]
-    xor ecx, ecx
-  
+	lea edx, [ebx+PLAYER.wpn]
+	xor ecx, ecx
+
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, isExist
-  	mov al, byte [eax]
-  	test al, al
-  	jz .skip
- 	GetDimIndexAddr edx, WEAPON, ecx
+	GetDimFieldAddr edx, WEAPON, ecx, isExist
+	mov al, byte [eax]
+	test al, al
+	jz .skip
+	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_update, eax
 
   .skip:	

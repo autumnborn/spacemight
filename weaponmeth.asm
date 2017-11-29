@@ -43,10 +43,10 @@ proc wpn_init uses ebx ecx edx, pWpn:DWORD, pType:DWORD, pParent:DWORD, direct:B
 	mov [ebx+WEAPON.img.dib], eax
 
 	mov eax, [pType]
-    mov ecx, [eax+WPNTYPE.pimg]
+	mov ecx, [eax+WPNTYPE.pimg]
 	mov edx, [ebx+WEAPON.size.x]
-    imul edx, [ebx+WEAPON.size.y]
-    IMG_MEMCOPY [ebx+WEAPON.img.pvBits], ecx, edx
+	imul edx, [ebx+WEAPON.size.y]
+	IMG_MEMCOPY [ebx+WEAPON.img.pvBits], ecx, edx
 
 	ret
 endp
@@ -55,9 +55,9 @@ endp
 proc wpn_clear uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pWpn]
-    
-    mov ecx, [ebx+WEAPON.p.x]
-    mov edx, [ebx+WEAPON.p.y]
+
+	mov ecx, [ebx+WEAPON.p.x]
+	mov edx, [ebx+WEAPON.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+WEAPON.size.x], [ebx+WEAPON.size.y], [screen.memDC], ecx, edx, SRCCOPY
 
 	invoke EndPaint, [hwnd], paint
@@ -69,7 +69,7 @@ proc wpn_draw uses ebx ecx edx, pWpn:DWORD
 	invoke BeginPaint, [hwnd], paint
 
 	mov ecx, [ebx+WEAPON.p.x]
-    mov edx, [ebx+WEAPON.p.y]
+	mov edx, [ebx+WEAPON.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+WEAPON.size.x], [ebx+WEAPON.size.y], [ebx+WEAPON.img.memDC], 0, 0, SRCCOPY
 
 	invoke EndPaint, [hwnd], paint
@@ -116,7 +116,7 @@ proc wpn_destructor uses ebx ecx, pWpn:DWORD
 	mov ebx, [pWpn]
 	stdcall wpn_stop, ebx
 	stdcall _deleteDIB, [ebx+WEAPON.img.dib], [ebx+WEAPON.img.memDC]
-  	ret
+	ret
 endp
 
 ; Updates weapon

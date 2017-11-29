@@ -22,7 +22,7 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.pPlayer], eax
 
 	mov eax, [pType]
-    mov [ebx+ENEMY.pType], eax
+	mov [ebx+ENEMY.pType], eax
 	mov ecx, [eax+UNITTYPE.pWpnType]
 	mov [pWpnType], ecx 
 
@@ -31,22 +31,22 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [wpnDirect], ecx
 
 	mov cl, [eax+UNITTYPE.type]
-    mov [ebx+ENEMY.type], cl
+	mov [ebx+ENEMY.type], cl
 
 	mov cl, [eax+UNITTYPE.speed]
-    mov [ebx+ENEMY.speed], cl
+	mov [ebx+ENEMY.speed], cl
 
-    mov cx, [eax+UNITTYPE.health]
-    mov [ebx+ENEMY.health], cx
-	
+	mov cx, [eax+UNITTYPE.health]
+	mov [ebx+ENEMY.health], cx
+
 	mov ecx, [eax+UNITTYPE.size.x]
 	mov [ebx+ENEMY.size.x], ecx
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biWidth], ecx
-	
+
 	mov ecx, [eax+UNITTYPE.size.y]
 	mov [ebx+ENEMY.size.y], ecx
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biHeight], ecx
-	
+
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biSize], sizeof.BITMAPINFOHEADER
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biPlanes], 1
 	mov [ebx+ENEMY.img.bmInfo.bmiHeader.biBitCount], 32
@@ -58,17 +58,17 @@ proc enm_init uses ebx ecx edx, pEnm:DWORD, pType:DWORD, pPlr: DWORD
 	mov [ebx+ENEMY.img.dib], eax
 
 
-    mov eax, [pType]
-    mov ecx, [eax+UNITTYPE.pimg]
+	mov eax, [pType]
+	mov ecx, [eax+UNITTYPE.pimg]
 	mov edx, [ebx+ENEMY.size.x]
-    imul edx, [ebx+ENEMY.size.y]
-    IMG_MEMCOPY [ebx+ENEMY.img.pvBits], ecx, edx
+	imul edx, [ebx+ENEMY.size.y]
+	IMG_MEMCOPY [ebx+ENEMY.img.pvBits], ecx, edx
 
 
- 	lea edx, [ebx+ENEMY.wpn]
-    xor ecx, ecx
+	lea edx, [ebx+ENEMY.wpn]
+	xor ecx, ecx
   @@:  
- 	GetDimIndexAddr edx, WEAPON, ecx
+	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_init, eax, [pWpnType], ebx, [wpnDirect]
 	inc ecx
 	cmp ecx, [edx+WPNARR.length]
@@ -80,8 +80,8 @@ endp
 proc enm_clear uses ebx ecx edx, pEnm:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pEnm]
-    mov ecx, [ebx+ENEMY.p.x]
-    mov edx, [ebx+ENEMY.p.y]
+	mov ecx, [ebx+ENEMY.p.x]
+	mov edx, [ebx+ENEMY.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+ENEMY.size.x], [ebx+ENEMY.size.y], [screen.memDC], ecx, edx, SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -91,8 +91,8 @@ endp
 proc enm_draw uses ebx ecx edx, pEnm:DWORD
 	invoke BeginPaint, [hwnd], paint
 	mov ebx, [pEnm]
-    mov ecx, [ebx+ENEMY.p.x]
-    mov edx, [ebx+ENEMY.p.y]
+	mov ecx, [ebx+ENEMY.p.x]
+	mov edx, [ebx+ENEMY.p.y]
 	invoke BitBlt, [hdc], ecx, edx, [ebx+ENEMY.size.x], [ebx+ENEMY.size.y], [ebx+ENEMY.img.memDC], 0, 0, SRCCOPY
 	invoke EndPaint, [hwnd], paint
 	ret
@@ -122,7 +122,7 @@ proc enm_destructor uses ebx ecx edx, pEnm:DWORD
 	stdcall _delWpns, eax
 
 	stdcall _deleteDIB, [ebx+ENEMY.img.dib], [ebx+ENEMY.img.memDC]
-  	ret
+	ret
 endp
 
 ; Updates enemy
@@ -144,15 +144,15 @@ endp
 ; Updates existed instances of WEAPON
 proc enm_updateWpns uses ebx ecx edx, pEnm:DWORD
 	mov ebx, [pEnm]
- 	lea edx, [ebx+ENEMY.wpn]
-    xor ecx, ecx
-  
+	lea edx, [ebx+ENEMY.wpn]
+	xor ecx, ecx
+
   @@:  
-  	GetDimFieldAddr edx, WEAPON, ecx, isExist
-  	mov al, byte [eax]
-  	test al, al
-  	jz .skip
- 	GetDimIndexAddr edx, WEAPON, ecx
+	GetDimFieldAddr edx, WEAPON, ecx, isExist
+	mov al, byte [eax]
+	test al, al
+	jz .skip
+	GetDimIndexAddr edx, WEAPON, ecx
 	stdcall wpn_update, eax
 
   .skip:	
@@ -206,9 +206,9 @@ proc enm_behavior uses ebx ecx edx, pEnm:DWORD
 	sub ecx, edx
 	jmp @F
   .fire:
-  	stdcall enm_fire, ebx	
+	stdcall enm_fire, ebx	
   @@:
-  	mov [ebx+ENEMY.p.x], ecx
+	mov [ebx+ENEMY.p.x], ecx
   .exit:	
 	ret
 endp
@@ -243,7 +243,7 @@ proc enm_fire uses ebx ecx edx, pEnm:DWORD
 
 	.endif	
   @@:
-  	ret
+	ret
 endp
 
 ; Fire delay expiration callback
@@ -319,5 +319,5 @@ proc enm_die uses eax ebx ecx edx, pEnm:DWORD
 	stdcall enm_clear, ebx
 
   @@:
-  	ret
+	ret
 endp

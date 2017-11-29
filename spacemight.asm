@@ -12,7 +12,7 @@ section '.rdata' data readable
 
 section '.data' data readable writeable
 	szWndClass db "SpaceMightWindow", 0
-	szWndTitle db "Space Might", 0
+	szWndTitle db "SpaceMight", 0
 	dwWndStyle dd WS_OVERLAPPEDWINDOW+WS_VISIBLE-WS_THICKFRAME-WS_MAXIMIZEBOX
 	wc WNDCLASS 0, WindowProc, 0, 0, 0, 0, 0, COLOR_BTNFACE+1, 0, szWndClass
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
@@ -39,52 +39,52 @@ section '.bss' data readable writeable
 	szBuff db 255 dup(0)
 
 section '.code' code readable executable
-  	
+	
   start:
-  	include 'form.asm'
+	include 'form.asm'
 
-  	stdcall _configWnd
-    stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
-    mov [screen.dib], eax
- 
-  	stdcall plr_init, player, plrtype
-  	stdcall inf_init, infout
-  	stdcall wdc_init, wdctrl, player
-  	stdcall anim_init, anim, atExp1
+	stdcall _configWnd
+	stdcall _createDIB, screen.bmInfo, screen.pvBits, screen.memDC
+	mov [screen.dib], eax
 
-  	stdcall _bgPaint
-  	stdcall spl_show, splash, SPL_MAIN
+	stdcall plr_init, player, plrtype
+	stdcall inf_init, infout
+	stdcall wdc_init, wdctrl, player
+	stdcall anim_init, anim, atExp1
 
-  	stdcall _pause, szStart, 300, 220, 0FFFFFFh
+	stdcall _bgPaint
+	stdcall spl_show, splash, SPL_MAIN
+
+	stdcall _pause, szStart, 300, 220, 0FFFFFFh
 
   .msg_loop:
-    invoke GetMessage, msg, NULL, 0, 0
-    cmp eax,0
-    je exit
+	invoke GetMessage, msg, NULL, 0, 0
+	cmp eax,0
+	je exit
 
-    stdcall _control
+	stdcall _control
 
-    invoke TranslateMessage, msg
-    invoke DispatchMessage, msg
-    jmp .msg_loop
+	invoke TranslateMessage, msg
+	invoke DispatchMessage, msg
+	jmp .msg_loop
 
 
   exit:
-  	stdcall plr_destructor, player
-  	stdcall wdc_destructor, wdctrl
-  	stdcall inf_destructor, infout
-  	stdcall anim_destructor, anim
-   	stdcall _deleteDIB, [screen.dib], [screen.memDC]
-  	invoke ExitProcess, 0
+	stdcall plr_destructor, player
+	stdcall wdc_destructor, wdctrl
+	stdcall inf_destructor, infout
+	stdcall anim_destructor, anim
+	stdcall _deleteDIB, [screen.dib], [screen.memDC]
+	invoke ExitProcess, 0
 
-  	include 'formproc.asm'
-  	include 'infout.asm'
-  	include 'enemymeth.asm'
-  	include 'playermeth.asm'
-  	include 'weaponmeth.asm'
-  	include 'worldctrlmeth.asm'
-  	include 'animmeth.asm'
-  	include 'splashmeth.asm'
+	include 'formproc.asm'
+	include 'infout.asm'
+	include 'enemymeth.asm'
+	include 'playermeth.asm'
+	include 'weaponmeth.asm'
+	include 'worldctrlmeth.asm'
+	include 'animmeth.asm'
+	include 'splashmeth.asm'
 
 	; Keyboard handler
 	proc _control uses ebx ecx edx 
@@ -179,7 +179,7 @@ section '.code' code readable executable
 		ret
 	endp
  
- 	; Creates compatible device context and DIB section
+	; Creates compatible device context and DIB section
 	; bmInfo - ptr to BITMAPINFO
 	; pvBits - ptr to var for ptr to bitmap bits
 	; memDC  - ptr to var for handle to a memory device context
@@ -210,7 +210,7 @@ section '.code' code readable executable
 		mov ebx, [pWpnArr]
 		xor ecx, ecx
 	  @@:  
-	 	GetDimIndexAddr ebx, WEAPON, ecx
+		GetDimIndexAddr ebx, WEAPON, ecx
 		stdcall wpn_destructor, eax
 		inc ecx
 		cmp ecx, [ebx+WPNARR.length]
