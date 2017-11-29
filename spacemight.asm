@@ -12,7 +12,7 @@ section '.rdata' data readable
 
 section '.data' data readable writeable
 	szWndClass db "SpaceMightWindow", 0
-	szWndTitle db "Space Might", 0
+	szWndTitle db "SpaceMight", 0
 	dwWndStyle dd WS_OVERLAPPEDWINDOW+WS_VISIBLE-WS_THICKFRAME-WS_MAXIMIZEBOX
 	wc WNDCLASS 0, WindowProc, 0, 0, 0, 0, 0, COLOR_BTNFACE+1, 0, szWndClass
 	screen DIBINFO ?, ?, ?, <<sizeof.BITMAPINFOHEADER, SCR_WIDTH, SCR_HEIGHT, 1, 32>>
